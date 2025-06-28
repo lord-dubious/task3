@@ -103,14 +103,6 @@ function App() {
           },
         }}
       />
-        toastOptions={{
-          style: {
-            background: 'rgb(17, 24, 39)',
-            border: '1px solid rgb(55, 65, 81)',
-            color: 'rgb(243, 244, 246)',
-          },
-        }}
-      />
     </AuthGuard>
   );
 }
