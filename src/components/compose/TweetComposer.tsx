@@ -5,7 +5,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { MediaUpload } from './MediaUpload';
-import { ScheduleModal } from '../scheduling/ScheduleModal';
+import { InlineSchedulePicker } from './InlineSchedulePicker';
 import { useAI } from '../../hooks/useAI';
 import { useAgents } from '../../hooks/useAgents';
 import { useSupabaseStorage } from '../../hooks/useSupabaseStorage';
@@ -21,7 +21,8 @@ export function TweetComposer() {
   const [showMediaUpload, setShowMediaUpload] = useState(false);
   const [mediaAnalysis, setMediaAnalysis] = useState<string[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [showSchedulePicker, setShowSchedulePicker] = useState(false);
+  const [scheduledDateTime, setScheduledDateTime] = useState<string | null>(null);
   
   const { generateTweet, improveTweet, analyzeMedia, isLoading, error } = useAI();
   const { agents } = useAgents();
@@ -180,7 +181,7 @@ export function TweetComposer() {
   };
 
   const handleScheduleTweet = async (scheduleData: {
-    scheduledFor: string;
+    scheduledFor: string | null;
     twitterAccountId?: string;
     agentId?: string;
   }) => {
@@ -201,7 +202,7 @@ export function TweetComposer() {
       console.log('Scheduled tweet data:', {
         content,
         mediaUrls,
-        scheduledFor: scheduleData.scheduledFor,
+        scheduledFor: scheduleData.scheduledFor || scheduledDateTime,
         agentId: scheduleData.agentId || selectedAgent?.id,
         twitterAccountId: scheduleData.twitterAccountId,
       });
@@ -211,9 +212,14 @@ export function TweetComposer() {
       setMediaFiles([]);
       setAiPrompt('');
       setMediaAnalysis([]);
-      setShowScheduleModal(false);
+      setShowSchedulePicker(false);
+      setScheduledDateTime(null);
       
-      showSuccess('Tweet scheduled', 'Your tweet has been scheduled successfully');
+      if (scheduleData.scheduledFor || scheduledDateTime) {
+        showSuccess('Tweet scheduled', 'Your tweet has been scheduled successfully');
+      } else {
+        showSuccess('Tweet saved', 'Your tweet has been saved as a draft');
+      }
     } catch (error) {
       showError('Failed to schedule tweet', 'Please try again');
     }
@@ -267,6 +273,15 @@ export function TweetComposer() {
             />
           )}
 
+          {/* Inline Schedule Picker */}
+          {showSchedulePicker && (
+            <InlineSchedulePicker
+              scheduledDateTime={scheduledDateTime}
+              onScheduleChange={setScheduledDateTime}
+              onClose={() => setShowSchedulePicker(false)}
+            />
+          )}
+
           <div className="flex items-center justify-between pt-4 border-t border-gray-700">
             <div className="flex items-center space-x-3">
               <Button 
@@ -280,13 +295,26 @@ export function TweetComposer() {
               <Button 
                 variant="ghost" 
                 size="sm"
-                onClick={() => setShowScheduleModal(true)}
+                onClick={() => setShowSchedulePicker(!showSchedulePicker)}
+                className={showSchedulePicker ? 'text-purple-400' : ''}
               >
                 <Calendar className="w-5 h-5" />
               </Button>
             </div>
             
             <div className="flex items-center space-x-3">
+              {scheduledDateTime && (
+                <div className="text-xs text-purple-400 flex items-center space-x-1">
+                  <Calendar className="w-3 h-3" />
+                  <span>
+                    {new Date(scheduledDateTime).toLocaleDateString()} at{' '}
+                    {new Date(scheduledDateTime).toLocaleTimeString([], { 
+                      hour: '2-digit', 
+                      minute: '2-digit' 
+                    })}
+                  </span>
+                </div>
+              )}
               <Button 
                 variant="ghost" 
                 size="sm" 
@@ -299,11 +327,17 @@ export function TweetComposer() {
               <Button 
                 variant="primary" 
                 disabled={!content.trim() || isOverLimit || uploading}
-                onClick={handleTweet}
+                onClick={() => {
+                  if (scheduledDateTime) {
+                    handleScheduleTweet({ scheduledFor: scheduledDateTime });
+                  } else {
+                    handleTweet();
+                  }
+                }}
                 isLoading={uploading}
               >
                 <Send className="w-4 h-4 mr-2" />
-                Tweet
+                {scheduledDateTime ? 'Schedule' : 'Tweet'}
               </Button>
             </div>
           </div>
@@ -465,14 +499,6 @@ export function TweetComposer() {
           </div>
         </div>
       </Card>
-
-      {/* Schedule Modal */}
-      <ScheduleModal
-        isOpen={showScheduleModal}
-        onClose={() => setShowScheduleModal(false)}
-        onSchedule={handleScheduleTweet}
-        isLoading={uploading}
-      />
     </div>
   );
 }
