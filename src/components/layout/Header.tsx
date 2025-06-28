@@ -14,7 +14,7 @@ export function Header({ title, subtitle }: HeaderProps) {
   const { user, signOut } = useAuth();
 
   return (
-    <header className="bg-gray-900/50 backdrop-blur-sm border-b border-gray-700 px-6 py-4">
+    <header className="bg-gray-900/50 backdrop-blur-sm border-b border-gray-700 px-6 py-4 relative z-[100]">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-white">{title}</h1>
