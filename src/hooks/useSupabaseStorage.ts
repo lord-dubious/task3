@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 
 export function useSupabaseStorage() {
   const [uploading, setUploading] = useState(false);
@@ -56,7 +57,7 @@ export function useSupabaseStorage() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to upload file';
       setError(errorMessage);
-      console.error('R2 upload error:', err);
+      toast.error('Upload failed', { description: errorMessage });
       return null;
     } finally {
       setUploading(false);
@@ -104,7 +105,7 @@ export function useSupabaseStorage() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete file';
       setError(errorMessage);
-      console.error('R2 delete error:', err);
+      toast.error('Delete failed', { description: errorMessage });
       return false;
     }
   };

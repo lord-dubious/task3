@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { GoogleGenAI } from '@google/genai';
+import { toast } from 'sonner';
 
 export interface GoogleAIModel {
   name: string;
@@ -57,7 +58,7 @@ export function useGoogleAI() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch models';
       setError(errorMessage);
-      console.error('Error fetching Google AI models:', err);
+      toast.warning('Model fetch failed', { description: 'Using fallback models' });
       
       // Return fallback models if API fails
       const fallbackModels: GoogleAIModel[] = [

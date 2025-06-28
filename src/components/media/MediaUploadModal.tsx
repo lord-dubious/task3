@@ -5,6 +5,7 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { MediaLibraryItem } from '../../hooks/useMediaLibrary';
 import { MediaOptimizer, OptimizedMedia } from '../../utils/mediaOptimization';
+import { useNotifications } from '../../hooks/useNotifications';
 
 interface MediaUploadModalProps {
   isOpen: boolean;
@@ -26,6 +27,7 @@ export function MediaUploadModal({
   const [optimizationPreviews, setOptimizationPreviews] = useState<OptimizedMedia[]>([]);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { showSuccess, showError } = useNotifications();
 
   const handleFileSelect = async (files: FileList | null) => {
     if (!files) return;
@@ -50,7 +52,7 @@ export function MediaUploadModal({
       }
       setOptimizationPreviews(previews);
     } catch (error) {
-      console.error('Error optimizing files:', error);
+      showError('Optimization failed', 'Some files could not be optimized');
     } finally {
       setIsOptimizing(false);
     }
@@ -66,14 +68,21 @@ export function MediaUploadModal({
     if (selectedFiles.length === 0) return;
 
     const tagArray = tags.split(',').map(tag => tag.trim()).filter(tag => tag);
-    await onUpload(selectedFiles, folder, tagArray);
     
-    // Reset form
-    setSelectedFiles([]);
-    setOptimizationPreviews([]);
-    setTags('');
-    setFolder('general');
-    onClose();
+    try {
+      await onUpload(selectedFiles, folder, tagArray);
+      
+      showSuccess('Upload complete', `${selectedFiles.length} file(s) uploaded successfully`);
+      
+      // Reset form
+      setSelectedFiles([]);
+      setOptimizationPreviews([]);
+      setTags('');
+      setFolder('general');
+      onClose();
+    } catch (error) {
+      showError('Upload failed', 'Some files could not be uploaded');
+    }
   };
 
   const removeFile = (index: number) => {

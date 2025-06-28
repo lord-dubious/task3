@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { GoogleGenAI } from '@google/genai';
 import { useLocalStorage } from './useLocalStorage';
+import { toast } from 'sonner';
 import { Agent, MediaFile } from '../types';
 
 export function useAI() {
@@ -34,6 +35,11 @@ export function useAI() {
     modelName?: string
   ): Promise<string[]> => {
     if (!apiKey || mediaFiles.length === 0) return [];
+
+    if (!apiKey) {
+      toast.error('API Key Required', { description: 'Please set your Google AI API key in settings' });
+      return [];
+    }
 
     try {
       const genAI = new GoogleGenAI({ apiKey });
@@ -99,7 +105,7 @@ export function useAI() {
     mediaFiles?: MediaFile[]
   ) => {
     if (!apiKey) {
-      setError('Google AI API key is required');
+      toast.error('API Key Required', { description: 'Google AI API key is required' });
       return null;
     }
 
@@ -221,6 +227,7 @@ export function useAI() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to generate tweet';
       setError(errorMessage);
+      toast.error('Generation Failed', { description: errorMessage });
       return null;
     } finally {
       setIsLoading(false);
@@ -236,7 +243,7 @@ export function useAI() {
     mediaFiles?: MediaFile[]
   ) => {
     if (!apiKey) {
-      setError('Google AI API key is required');
+      toast.error('API Key Required', { description: 'Google AI API key is required' });
       return null;
     }
 
@@ -322,6 +329,7 @@ export function useAI() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to improve tweet';
       setError(errorMessage);
+      toast.error('Improvement Failed', { description: errorMessage });
       return null;
     } finally {
       setIsLoading(false);

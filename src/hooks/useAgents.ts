@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { Agent } from '../types';
 import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 
 export function useAgents() {
   const [agents, setAgents] = useState<Agent[]>([]);
@@ -58,6 +59,7 @@ export function useAgents() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to create agent';
       setError(errorMessage);
+      toast.error('Failed to create agent', { description: errorMessage });
       throw new Error(errorMessage);
     }
   };
@@ -83,6 +85,7 @@ export function useAgents() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to update agent';
       setError(errorMessage);
+      toast.error('Failed to update agent', { description: errorMessage });
       throw new Error(errorMessage);
     }
   };
@@ -105,6 +108,7 @@ export function useAgents() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete agent';
       setError(errorMessage);
+      toast.error('Failed to delete agent', { description: errorMessage });
       throw new Error(errorMessage);
     }
   };

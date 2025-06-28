@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 import { TwitterAccount, TwitterOAuthTokens } from '../types';
+import { toast } from 'sonner';
 
 export function useTwitterAuth() {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +39,9 @@ export function useTwitterAuth() {
       }, 1000);
 
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to authenticate with Twitter');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to authenticate with Twitter';
+      setError(errorMessage);
+      toast.error('Twitter authentication failed', { description: errorMessage });
     } finally {
       setIsLoading(false);
     }

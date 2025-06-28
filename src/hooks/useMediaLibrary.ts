@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from './useAuth';
 import { useSupabaseStorage } from './useSupabaseStorage';
 import { MediaOptimizer, OptimizedMedia } from '../utils/mediaOptimization';
+import { toast } from 'sonner';
 
 export interface MediaLibraryItem {
   id: string;
@@ -110,6 +111,7 @@ export function useMediaLibrary() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to add media';
       setError(errorMessage);
+      toast.error('Upload failed', { description: errorMessage });
       return null;
     } finally {
       setUploading(false);
@@ -163,6 +165,7 @@ export function useMediaLibrary() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete media';
       setError(errorMessage);
+      toast.error('Delete failed', { description: errorMessage });
       return false;
     }
   };
@@ -191,6 +194,7 @@ export function useMediaLibrary() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to update tags';
       setError(errorMessage);
+      toast.error('Update failed', { description: errorMessage });
       return false;
     }
   };

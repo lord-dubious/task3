@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
+import { toast } from 'sonner';
 
 export interface AuthState {
   user: User | null;
@@ -86,6 +87,7 @@ export function useAuth() {
 
       if (error) {
         setAuthState(prev => ({ ...prev, error: error.message, loading: false }));
+        toast.error('Authentication Error', { description: error.message });
       }
     } catch (error) {
       setAuthState(prev => ({
@@ -93,6 +95,9 @@ export function useAuth() {
         error: error instanceof Error ? error.message : 'An error occurred',
         loading: false,
       }));
+      toast.error('Sign In Failed', { 
+        description: error instanceof Error ? error.message : 'An error occurred' 
+      });
     }
   };
 
@@ -107,6 +112,7 @@ export function useAuth() {
 
       if (error) {
         setAuthState(prev => ({ ...prev, error: error.message, loading: false }));
+        toast.error('Sign In Failed', { description: error.message });
       }
     } catch (error) {
       setAuthState(prev => ({
@@ -114,6 +120,9 @@ export function useAuth() {
         error: error instanceof Error ? error.message : 'An error occurred',
         loading: false,
       }));
+      toast.error('Sign In Failed', { 
+        description: error instanceof Error ? error.message : 'An error occurred' 
+      });
     }
   };
 
@@ -133,6 +142,7 @@ export function useAuth() {
 
       if (error) {
         setAuthState(prev => ({ ...prev, error: error.message, loading: false }));
+        toast.error('Sign Up Failed', { description: error.message });
       }
     } catch (error) {
       setAuthState(prev => ({
@@ -140,6 +150,9 @@ export function useAuth() {
         error: error instanceof Error ? error.message : 'An error occurred',
         loading: false,
       }));
+      toast.error('Sign Up Failed', { 
+        description: error instanceof Error ? error.message : 'An error occurred' 
+      });
     }
   };
 
@@ -151,6 +164,7 @@ export function useAuth() {
 
       if (error) {
         setAuthState(prev => ({ ...prev, error: error.message, loading: false }));
+        toast.error('Sign Out Failed', { description: error.message });
       }
     } catch (error) {
       setAuthState(prev => ({
@@ -158,6 +172,9 @@ export function useAuth() {
         error: error instanceof Error ? error.message : 'An error occurred',
         loading: false,
       }));
+      toast.error('Sign Out Failed', { 
+        description: error instanceof Error ? error.message : 'An error occurred' 
+      });
     }
   };
 
@@ -171,8 +188,12 @@ export function useAuth() {
 
       if (error) {
         setAuthState(prev => ({ ...prev, error: error.message, loading: false }));
+        toast.error('Password Reset Failed', { description: error.message });
       } else {
         setAuthState(prev => ({ ...prev, loading: false }));
+        toast.success('Password Reset Email Sent', { 
+          description: 'Check your email for password reset instructions' 
+        });
       }
     } catch (error) {
       setAuthState(prev => ({
@@ -180,6 +201,9 @@ export function useAuth() {
         error: error instanceof Error ? error.message : 'An error occurred',
         loading: false,
       }));
+      toast.error('Password Reset Failed', { 
+        description: error instanceof Error ? error.message : 'An error occurred' 
+      });
     }
   };
 

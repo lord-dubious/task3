@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 
 export interface Tweet {
   id: string;
@@ -84,6 +85,7 @@ export function useTweets() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to create tweet';
       setError(errorMessage);
+      toast.error('Failed to create tweet', { description: errorMessage });
       throw new Error(errorMessage);
     }
   };
@@ -109,6 +111,7 @@ export function useTweets() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to update tweet';
       setError(errorMessage);
+      toast.error('Failed to update tweet', { description: errorMessage });
       throw new Error(errorMessage);
     }
   };
@@ -131,6 +134,7 @@ export function useTweets() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete tweet';
       setError(errorMessage);
+      toast.error('Failed to delete tweet', { description: errorMessage });
       throw new Error(errorMessage);
     }
   };
