@@ -99,6 +99,15 @@ function App() {
             background: 'rgb(17, 24, 39)',
             border: '1px solid rgb(55, 65, 81)',
             color: 'rgb(243, 244, 246)',
+            zIndex: 10000,
+          },
+        }}
+      />
+        toastOptions={{
+          style: {
+            background: 'rgb(17, 24, 39)',
+            border: '1px solid rgb(55, 65, 81)',
+            color: 'rgb(243, 244, 246)',
           },
         }}
       />

@@ -52,6 +52,12 @@ export default {
       backdropBlur: {
         'xs': '2px',
       },
+      zIndex: {
+        'dropdown': '9999',
+        'modal': '9990',
+        'toast': '10000',
+        'tooltip': '9980',
+      },
       boxShadow: {
         'purple-glow': '0 0 20px rgba(168, 85, 247, 0.3)',
         'inner-light': 'inset 0 2px 4px 0 rgba(255, 255, 255, 0.05)',
