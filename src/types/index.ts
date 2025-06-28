@@ -68,15 +68,6 @@ export interface Agent extends Character {
   updated_at: string | Date;
 }
 
-export interface AIAgent {
-  id: string;
-  name: string;
-  personality: string;
-  tone: 'professional' | 'casual' | 'humorous' | 'inspirational' | 'educational';
-  topics: string[];
-  isActive: boolean;
-}
-
 export interface TwitterAccount {
   id: string;
   username: string;

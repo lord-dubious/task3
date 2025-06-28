@@ -162,7 +162,7 @@ export function SchedulingView() {
           </p>
         </div>
         <Button
-          onClick={() => setShowScheduleModal(true)}
+          onClick={() => setShowSchedulePicker(true)}
           leftIcon={<Plus className="w-4 h-4" />}
         >
           Schedule Tweet
@@ -183,6 +183,15 @@ export function SchedulingView() {
         ))}
       </div>
 
+      {/* Inline Schedule Picker */}
+      {showSchedulePicker && (
+        <InlineSchedulePicker
+          scheduledDateTime={scheduledDateTime}
+          onScheduleChange={setScheduledDateTime}
+          onClose={() => setShowSchedulePicker(false)}
+        />
+      )}
+
       {/* Calendar */}
       <TweetCalendar
         tweets={tweets}
@@ -192,12 +201,31 @@ export function SchedulingView() {
       />
 
       {/* Modals */}
-      <ScheduleModal
-        isOpen={showScheduleModal}
-        onClose={() => setShowScheduleModal(false)}
-        onSchedule={handleScheduleTweet}
-        isLoading={isSubmitting}
-      />
+      {scheduledDateTime && (
+        <div className="fixed bottom-4 right-4 z-50">
+          <div className="bg-gray-900 border border-gray-700 rounded-lg p-4 shadow-xl">
+            <p className="text-white text-sm mb-2">
+              Ready to schedule for {new Date(scheduledDateTime).toLocaleString()}
+            </p>
+            <div className="flex space-x-2">
+              <Button
+                size="sm"
+                onClick={handleScheduleTweet}
+                isLoading={isSubmitting}
+              >
+                Schedule
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setScheduledDateTime(null)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <TweetEditModal
         isOpen={showEditModal}

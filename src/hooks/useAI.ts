@@ -99,7 +99,6 @@ export function useAI() {
 
   const generateTweet = async (
     prompt: string, 
-    apiKey?: string, 
     modelName?: string,
     agent?: Agent | null,
     mediaFiles?: MediaFile[]

@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     include: ['@google/genai', 'fast-xml-parser'],
-    exclude: ['lucide-react', '@aws-sdk/client-s3'],
+    exclude: ['lucide-react', '@aws-sdk/client-s3']
   },
   build: {
     rollupOptions: {

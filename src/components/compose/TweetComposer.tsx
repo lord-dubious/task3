@@ -15,7 +15,6 @@ import { MediaFile, Agent } from '../../types';
 export function TweetComposer() {
   const [content, setContent] = useState('');
   const [aiPrompt, setAiPrompt] = useState('');
-  const [tone, setTone] = useState('professional');
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
   const [showMediaUpload, setShowMediaUpload] = useState(false);
