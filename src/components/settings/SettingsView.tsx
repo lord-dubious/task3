@@ -3,6 +3,7 @@ import { Save } from 'lucide-react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { useNotifications } from '../../hooks/useNotifications';
 import { TwitterIntegration } from './TwitterIntegration';
 import { GoogleAISettings } from './GoogleAISettings';
 import { CloudflareR2Settings } from './CloudflareR2Settings';
@@ -21,10 +22,11 @@ export function SettingsView() {
     accessToken: false,
     accessSecret: false
   });
+  const { showSuccess } = useNotifications();
 
   const handleSave = () => {
     // Settings are automatically saved via useLocalStorage
-    alert('Settings saved successfully!');
+    showSuccess('Settings saved', 'Your settings have been saved successfully');
   };
 
   return (

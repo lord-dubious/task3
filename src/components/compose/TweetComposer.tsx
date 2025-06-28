@@ -9,6 +9,7 @@ import { ScheduleModal } from '../scheduling/ScheduleModal';
 import { useAI } from '../../hooks/useAI';
 import { useAgents } from '../../hooks/useAgents';
 import { useSupabaseStorage } from '../../hooks/useSupabaseStorage';
+import { useNotifications } from '../../hooks/useNotifications';
 import { MediaFile, Agent } from '../../types';
 
 export function TweetComposer() {
@@ -25,6 +26,7 @@ export function TweetComposer() {
   const { generateTweet, improveTweet, analyzeMedia, isLoading, error } = useAI();
   const { agents } = useAgents();
   const { uploadMultipleFiles, uploading } = useSupabaseStorage();
+  const { showSuccess, showError, showWarning } = useNotifications();
 
   const characterCount = content.length;
   const maxCharacters = 280;
@@ -65,7 +67,7 @@ export function TweetComposer() {
     
     const apiKey = JSON.parse(localStorage.getItem('googleAI_apiKey') || '""');
     if (!apiKey) {
-      alert('Please set your Google AI API key in settings first');
+      showError('API Key Required', 'Please set your Google AI API key in settings first');
       return;
     }
 
@@ -82,7 +84,7 @@ export function TweetComposer() {
   const handleAIGenerate = async () => {
     const apiKey = JSON.parse(localStorage.getItem('googleAI_apiKey') || '""');
     if (!apiKey) {
-      alert('Please set your Google AI API key in settings first');
+      showError('API Key Required', 'Please set your Google AI API key in settings first');
       return;
     }
 
@@ -102,7 +104,7 @@ export function TweetComposer() {
     
     const apiKey = JSON.parse(localStorage.getItem('googleAI_apiKey') || '""');
     if (!apiKey) {
-      alert('Please set your Google AI API key in settings first');
+      showError('API Key Required', 'Please set your Google AI API key in settings first');
       return;
     }
 
@@ -171,10 +173,9 @@ export function TweetComposer() {
       setAiPrompt('');
       setMediaAnalysis([]);
       
-      alert('Tweet saved successfully!');
+      showSuccess('Tweet saved', 'Your tweet has been saved successfully');
     } catch (error) {
-      console.error('Failed to save tweet:', error);
-      alert('Failed to save tweet. Please try again.');
+      showError('Failed to save tweet', 'Please try again');
     }
   };
 
@@ -212,10 +213,9 @@ export function TweetComposer() {
       setMediaAnalysis([]);
       setShowScheduleModal(false);
       
-      alert('Tweet scheduled successfully!');
+      showSuccess('Tweet scheduled', 'Your tweet has been scheduled successfully');
     } catch (error) {
-      console.error('Failed to schedule tweet:', error);
-      alert('Failed to schedule tweet. Please try again.');
+      showError('Failed to schedule tweet', 'Please try again');
     }
   };
 

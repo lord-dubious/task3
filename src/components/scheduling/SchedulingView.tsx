@@ -8,6 +8,7 @@ import { ScheduleModal } from './ScheduleModal';
 import { TweetEditModal } from './TweetEditModal';
 import { useTweets, Tweet } from '../../hooks/useTweets';
 import { StatsCard } from '../dashboard/StatsCard';
+import { useNotifications } from '../../hooks/useNotifications';
 
 export function SchedulingView() {
   const {
@@ -25,6 +26,7 @@ export function SchedulingView() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingTweet, setEditingTweet] = useState<Tweet | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showSuccess, showError, showPromise } = useNotifications();
 
   const scheduledTweets = getScheduledTweets();
   const postedTweets = getPostedTweets();
@@ -48,8 +50,9 @@ export function SchedulingView() {
       });
 
       setShowScheduleModal(false);
+      showSuccess('Tweet scheduled', 'Your tweet has been scheduled successfully');
     } catch (error) {
-      console.error('Failed to schedule tweet:', error);
+      showError('Failed to schedule tweet', error instanceof Error ? error.message : 'Unknown error');
     } finally {
       setIsSubmitting(false);
     }
@@ -66,21 +69,23 @@ export function SchedulingView() {
       await updateTweet(tweetId, updates);
       setShowEditModal(false);
       setEditingTweet(null);
+      showSuccess('Tweet updated', 'Your tweet has been updated successfully');
     } catch (error) {
-      console.error('Failed to update tweet:', error);
+      showError('Failed to update tweet', error instanceof Error ? error.message : 'Unknown error');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleDeleteTweet = async (tweetId: string) => {
-    if (confirm('Are you sure you want to delete this tweet?')) {
-      try {
-        await deleteTweet(tweetId);
-      } catch (error) {
-        console.error('Failed to delete tweet:', error);
+    showPromise(
+      deleteTweet(tweetId),
+      {
+        loading: 'Deleting tweet...',
+        success: 'Tweet deleted successfully',
+        error: 'Failed to delete tweet',
       }
-    }
+    );
   };
 
   const handleRetryTweet = async (tweetId: string) => {
@@ -90,8 +95,9 @@ export function SchedulingView() {
         failure_reason: null,
         retry_count: 0,
       });
+      showSuccess('Tweet retry scheduled', 'Your tweet has been rescheduled for posting');
     } catch (error) {
-      console.error('Failed to retry tweet:', error);
+      showError('Failed to retry tweet', error instanceof Error ? error.message : 'Unknown error');
     }
   };
 

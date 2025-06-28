@@ -4,6 +4,7 @@ import { Cloud, Key, Eye, EyeOff, CheckCircle, AlertCircle, Database } from 'luc
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+import { useNotifications } from '../../hooks/useNotifications';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 
 export function CloudflareR2Settings() {
@@ -22,6 +23,7 @@ export function CloudflareR2Settings() {
   
   const [isValidating, setIsValidating] = useState(false);
   const [validationStatus, setValidationStatus] = useState<'idle' | 'valid' | 'invalid'>('idle');
+  const { showSuccess, showError } = useNotifications();
 
   const handleConfigChange = (field: string, value: string) => {
     setR2Config(prev => ({ ...prev, [field]: value }));
@@ -56,9 +58,10 @@ export function CloudflareR2Settings() {
 
       await s3Client.send(command);
       setValidationStatus('valid');
+      showSuccess('R2 Connection Valid', 'Successfully connected to Cloudflare R2 storage');
     } catch (error) {
-      console.error('R2 validation error:', error);
       setValidationStatus('invalid');
+      showError('R2 Connection Failed', 'Failed to connect to Cloudflare R2. Please check your credentials');
     } finally {
       setIsValidating(false);
     }

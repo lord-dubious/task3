@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Toaster } from 'sonner';
 import { AuthGuard } from './components/auth/AuthGuard';
 import { Sidebar } from './components/layout/Sidebar';
 import { Header } from './components/layout/Header';
@@ -85,6 +86,22 @@ function App() {
           </main>
         </div>
       </div>
+      
+      {/* Toast Notifications */}
+      <Toaster 
+        theme="dark"
+        position="top-right"
+        expand={true}
+        richColors={true}
+        closeButton={true}
+        toastOptions={{
+          style: {
+            background: 'rgb(17, 24, 39)',
+            border: '1px solid rgb(55, 65, 81)',
+            color: 'rgb(243, 244, 246)',
+          },
+        }}
+      />
     </AuthGuard>
   );
 }

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Bell, User, Settings, LogOut, Bot, Zap, Palette } from 'lucide-react';
+import { User, LogOut } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { QuickSettingsDropdown } from './QuickSettingsDropdown';
+import { NotificationDropdown } from './NotificationDropdown';
 import { useAuth } from '../../hooks/useAuth';
 
 interface HeaderProps {
@@ -21,9 +22,7 @@ export function Header({ title, subtitle }: HeaderProps) {
         </div>
         
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="sm">
-            <Bell className="w-5 h-5" />
-          </Button>
+          <NotificationDropdown />
           
           <QuickSettingsDropdown />
           

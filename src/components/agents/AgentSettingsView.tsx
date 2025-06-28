@@ -6,6 +6,7 @@ import { AgentList } from './AgentList';
 import { AgentForm } from './AgentForm';
 import { AgentImportExport } from './AgentImportExport';
 import { useAgents } from '../../hooks/useAgents';
+import { useNotifications } from '../../hooks/useNotifications';
 import { Agent } from '../../types';
 
 export function AgentSettingsView() {
@@ -15,6 +16,7 @@ export function AgentSettingsView() {
   const [showForm, setShowForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showImportExport, setShowImportExport] = useState(false);
+  const { showSuccess, showError } = useNotifications();
 
   const handleCreateNew = () => {
     setEditingAgent(null);
@@ -32,14 +34,16 @@ export function AgentSettingsView() {
       
       if (editingAgent) {
         await updateAgent(editingAgent.id, agentData);
+        showSuccess('Agent updated', `${agentData.name} has been updated successfully`);
       } else {
         await createAgent(agentData);
+        showSuccess('Agent created', `${agentData.name} has been created successfully`);
       }
       
       setShowForm(false);
       setEditingAgent(null);
     } catch (error) {
-      console.error('Failed to save agent:', error);
+      showError('Failed to save agent', error instanceof Error ? error.message : 'Unknown error');
     } finally {
       setIsSubmitting(false);
     }
