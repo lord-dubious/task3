@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { GoogleGenAI } from '@google/genai';
 import { toast } from 'sonner';
+import { useLocalStorage } from './useLocalStorage';
 
 export interface GoogleAIModel {
   name: string;
@@ -15,9 +16,10 @@ export function useGoogleAI() {
   const [models, setModels] = useState<GoogleAIModel[]>([]);
   const [isLoadingModels, setIsLoadingModels] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [lastFetchedKey, setLastFetchedKey] = useState<string>('');
 
   const fetchAvailableModels = useCallback(async (apiKey: string) => {
-    if (!apiKey) {
+    if (!apiKey || apiKey === lastFetchedKey) {
       setError('API key is required');
       return [];
     }
@@ -54,6 +56,7 @@ export function useGoogleAI() {
         .sort((a: GoogleAIModel, b: GoogleAIModel) => a.displayName.localeCompare(b.displayName));
 
       setModels(availableModels);
+      setLastFetchedKey(apiKey);
       return availableModels;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch models';
@@ -84,7 +87,7 @@ export function useGoogleAI() {
     } finally {
       setIsLoadingModels(false);
     }
-  }, []);
+  }, [lastFetchedKey]);
 
   const validateApiKey = useCallback(async (apiKey: string) => {
     if (!apiKey) return false;
