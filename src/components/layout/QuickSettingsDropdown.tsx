@@ -201,3 +201,5 @@ export function QuickSettingsDropdown() {
     </div>
   );
 }
+
+export { QuickSettingsDropdown }
