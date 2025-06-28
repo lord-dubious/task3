@@ -6,6 +6,8 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useGoogleAI, GoogleAIModel } from '../../hooks/useGoogleAI';
+import { useAuth } from '../../hooks/useAuth';
+import { supabase } from '../../lib/supabase';
 
 export function GoogleAISettings() {
   const [googleAIKey, setGoogleAIKey] = useLocalStorage('googleAI_apiKey', '');
@@ -13,8 +15,10 @@ export function GoogleAISettings() {
   const [showKey, setShowKey] = useState(false);
   const [keyValidated, setKeyValidated] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   
   const { models, isLoadingModels, error, fetchAvailableModels, validateApiKey } = useGoogleAI();
+  const { user } = useAuth();
 
   useEffect(() => {
     if (googleAIKey && models.length === 0) {
@@ -22,9 +26,42 @@ export function GoogleAISettings() {
     }
   }, [googleAIKey, models.length, fetchAvailableModels]);
 
+  // Load API key from user settings on mount
+  useEffect(() => {
+    const loadUserSettings = async () => {
+      if (!user) return;
+
+      try {
+        const { data, error } = await supabase
+          .from('user_settings')
+          .select('google_ai_api_key')
+          .eq('user_id', user.id)
+          .single();
+
+        if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
+          console.error('Error loading user settings:', error);
+          return;
+        }
+
+        if (data?.google_ai_api_key) {
+          setGoogleAIKey(data.google_ai_api_key);
+        }
+      } catch (err) {
+        console.error('Error loading user settings:', err);
+      }
+    };
+
+    loadUserSettings();
+  }, [user, setGoogleAIKey]);
+
   const handleApiKeyChange = async (newKey: string) => {
     setGoogleAIKey(newKey);
     setKeyValidated(false);
+    
+    // Save to database if user is authenticated
+    if (user && newKey.trim()) {
+      await saveApiKeyToDatabase(newKey);
+    }
     
     if (newKey.trim()) {
       setIsValidating(true);
@@ -35,6 +72,28 @@ export function GoogleAISettings() {
       if (isValid) {
         await fetchAvailableModels(newKey);
       }
+    }
+  };
+
+  const saveApiKeyToDatabase = async (apiKey: string) => {
+    if (!user) return;
+
+    try {
+      setIsSaving(true);
+
+      const { error } = await supabase
+        .from('user_settings')
+        .upsert({
+          user_id: user.id,
+          google_ai_api_key: apiKey,
+          updated_at: new Date().toISOString(),
+        });
+
+      if (error) throw error;
+    } catch (err) {
+      console.error('Error saving API key:', err);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -75,6 +134,9 @@ export function GoogleAISettings() {
                     {isValidating && (
                       <RefreshCw className="w-4 h-4 animate-spin text-purple-400" />
                     )}
+                    {isSaving && (
+                      <div className="w-4 h-4 border border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+                    )}
                     {googleAIKey && !isValidating && (
                       keyValidated ? (
                         <CheckCircle className="w-4 h-4 text-green-400" />
@@ -105,10 +167,10 @@ export function GoogleAISettings() {
                   Google AI Studio
                 </a>
               </p>
-              {keyValidated && (
+              {keyValidated && !isValidating && (
                 <span className="text-xs text-green-400 flex items-center">
                   <CheckCircle className="w-3 h-3 mr-1" />
-                  Valid
+                  Valid & Saved
                 </span>
               )}
             </div>
