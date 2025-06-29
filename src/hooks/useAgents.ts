@@ -41,7 +41,11 @@ export function useAgents() {
   }, [fetchAgents]);
 
   const createAgent = async (agentData: Omit<Agent, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
-    if (!user) throw new Error('User not authenticated');
+    // Double-check authentication
+    const { data: { user: currentUser }, error: authError } = await supabase.auth.getUser();
+    if (authError || !currentUser) {
+      throw new Error('Authentication required. Please refresh the page and try again.');
+    }
 
     try {
       setError(null);
@@ -50,7 +54,7 @@ export function useAgents() {
         .from('agents')
         .insert({
           ...agentData,
-          user_id: user.id,
+          user_id: currentUser.id,
         })
         .select()
         .single();

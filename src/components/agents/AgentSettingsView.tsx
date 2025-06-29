@@ -43,7 +43,13 @@ export function AgentSettingsView() {
       setShowForm(false);
       setEditingAgent(null);
     } catch (error) {
-      showError('Failed to save agent', error instanceof Error ? error.message : 'Unknown error');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      showError('Failed to save agent', errorMessage);
+      
+      // If it's an auth error, suggest refresh
+      if (errorMessage.includes('Authentication required')) {
+        showError('Authentication Issue', 'Please refresh the page and try again');
+      }
     } finally {
       setIsSubmitting(false);
     }
