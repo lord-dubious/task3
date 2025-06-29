@@ -6,6 +6,7 @@ import { AgentList } from './AgentList';
 import { AgentForm } from './AgentForm';
 import { AgentImportExport } from './AgentImportExport';
 import { useAgents } from '../../hooks/useAgents';
+import { useAuth } from '../../hooks/useAuth';
 import { useNotifications } from '../../hooks/useNotifications';
 import { Agent } from '../../types';
 
