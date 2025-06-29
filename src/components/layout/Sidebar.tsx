@@ -67,15 +67,6 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
         })}
       </nav>
 
-      <div className="p-4 border-t border-gray-700">
-        <div className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg p-4 text-center">
-          <p className="text-white text-sm font-medium mb-2">Upgrade to Pro</p>
-          <p className="text-purple-100 text-xs mb-3">Unlock unlimited scheduling and advanced AI features</p>
-          <button className="bg-white text-purple-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors">
-            Upgrade Now
-          </button>
-        </div>
-      </div>
     </div>
   );
 }
