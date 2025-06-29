@@ -17,29 +17,29 @@ export function StatsCard({
   change, 
   changeType = 'neutral', 
   icon: Icon,
-  gradient = 'from-purple-500 to-purple-700'
+  gradient = 'from-md3-primary to-md3-primary-container'
 }: StatsCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 hover:border-purple-500/50 transition-all duration-300"
+      className="bg-md3-surface-container rounded-2xl p-6 hover:shadow-elevation-2 transition-all duration-300 border border-md3-outline-variant/50 state-layer"
     >
       <div className="flex items-center justify-between">
-        <div>
-          <p className="text-gray-400 text-sm font-medium">{title}</p>
-          <p className="text-2xl font-bold text-white mt-1">{value}</p>
+        <div className="flex-1">
+          <p className="md3-body-medium text-md3-on-surface-variant font-medium">{title}</p>
+          <p className="md3-headline-small text-md3-on-surface font-bold mt-2">{value}</p>
           {change && (
-            <p className={`text-sm mt-2 flex items-center ${
+            <p className={`md3-body-small mt-3 flex items-center ${
               changeType === 'positive' ? 'text-green-400' : 
-              changeType === 'negative' ? 'text-red-400' : 'text-gray-400'
+              changeType === 'negative' ? 'text-md3-error' : 'text-md3-on-surface-variant'
             }`}>
               {change}
             </p>
           )}
         </div>
-        <div className={`w-12 h-12 bg-gradient-to-br ${gradient} rounded-lg flex items-center justify-center`}>
-          <Icon className="w-6 h-6 text-white" />
+        <div className={`w-14 h-14 bg-gradient-to-br ${gradient} rounded-2xl flex items-center justify-center shadow-elevation-1`}>
+          <Icon className="w-7 h-7 text-md3-on-primary" />
         </div>
       </div>
     </motion.div>

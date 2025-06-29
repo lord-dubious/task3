@@ -28,20 +28,20 @@ const menuItems = [
 
 export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
   return (
-    <div className="w-64 bg-gray-900/80 backdrop-blur-sm border-r border-gray-700 h-screen flex flex-col">
-      <div className="p-6 border-b border-gray-700">
+    <div className="w-80 bg-md3-surface-container h-screen flex flex-col border-r border-md3-outline-variant">
+      <div className="p-6 border-b border-md3-outline-variant">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg flex items-center justify-center">
-            <Sparkles className="w-6 h-6 text-white" />
+          <div className="w-12 h-12 bg-md3-primary rounded-2xl flex items-center justify-center shadow-elevation-2">
+            <Sparkles className="w-7 h-7 text-md3-on-primary" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white">TweetScheduler</h1>
-            <p className="text-sm text-purple-300">Pro</p>
+            <h1 className="md3-title-large text-md3-on-surface">TweetScheduler</h1>
+            <p className="md3-label-medium text-md3-primary">Pro</p>
           </div>
         </div>
       </div>
 
-      <nav className="flex-1 px-4 py-6 space-y-2">
+      <nav className="flex-1 px-3 py-6 space-y-1">
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -51,27 +51,32 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
               key={item.id}
               onClick={() => onTabChange(item.id)}
               className={`
-                w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200
+                w-full flex items-center space-x-4 px-4 py-3 rounded-full text-left transition-all duration-200 state-layer
                 ${isActive 
-                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/25' 
-                  : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                  ? 'bg-md3-primary-container text-md3-on-primary-container shadow-elevation-0' 
+                  : 'text-md3-on-surface hover:bg-md3-on-surface/8'
                 }
               `}
               whileHover={{ x: isActive ? 0 : 4 }}
               whileTap={{ scale: 0.98 }}
             >
-              <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-gray-400'}`} />
-              <span className="font-medium">{item.label}</span>
+              <Icon className={`w-6 h-6 ${isActive ? 'text-md3-on-primary-container' : 'text-md3-on-surface-variant'}`} />
+              <span className="md3-label-large">{item.label}</span>
             </motion.button>
           );
         })}
       </nav>
 
-      <div className="p-4 border-t border-gray-700">
-        <div className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg p-4 text-center">
-          <p className="text-white text-sm font-medium mb-2">Upgrade to Pro</p>
-          <p className="text-purple-100 text-xs mb-3">Unlock unlimited scheduling and advanced AI features</p>
-          <button className="bg-white text-purple-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors">
+      <div className="p-4 border-t border-md3-outline-variant">
+        <div className="bg-md3-primary-container rounded-2xl p-4 text-center">
+          <div className="w-12 h-12 bg-md3-primary rounded-full flex items-center justify-center mx-auto mb-3">
+            <Sparkles className="w-6 h-6 text-md3-on-primary" />
+          </div>
+          <p className="md3-title-small text-md3-on-primary-container mb-2">Upgrade to Pro</p>
+          <p className="md3-body-small text-md3-on-primary-container/80 mb-4">
+            Unlock unlimited scheduling and advanced AI features
+          </p>
+          <button className="bg-md3-primary text-md3-on-primary px-6 py-2 rounded-full md3-label-large hover:shadow-elevation-1 transition-all duration-200 state-layer">
             Upgrade Now
           </button>
         </div>
