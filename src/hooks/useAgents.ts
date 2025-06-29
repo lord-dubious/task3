@@ -11,7 +11,10 @@ export function useAgents() {
   const { user } = useAuth();
 
   const fetchAgents = useCallback(async () => {
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     try {
       setLoading(true);
