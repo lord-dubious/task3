@@ -2,39 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Material Design 3 Base Styles */
-@layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-  
-  body {
-    @apply bg-md3-background text-md3-on-background font-sans antialiased;
-    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-  }
-  
-  /* Material Design 3 Typography Classes */
-  .md3-display-large { @apply text-display-large; }
-  .md3-display-medium { @apply text-display-medium; }
-  .md3-display-small { @apply text-display-small; }
-  .md3-headline-large { @apply text-headline-large; }
-  .md3-headline-medium { @apply text-headline-medium; }
-  .md3-headline-small { @apply text-headline-small; }
-  .md3-title-large { @apply text-title-large; }
-  .md3-title-medium { @apply text-title-medium; }
-  .md3-title-small { @apply text-title-small; }
-  .md3-label-large { @apply text-label-large; }
-  .md3-label-medium { @apply text-label-medium; }
-  .md3-label-small { @apply text-label-small; }
-  .md3-body-large { @apply text-body-large; }
-  .md3-body-medium { @apply text-body-medium; }
-  .md3-body-small { @apply text-body-small; }
-}
-
 /* Custom Safari-style scrollbars */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(187, 134, 252, 0.2) transparent;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
 /* Webkit browsers (Chrome, Safari, Edge) */
@@ -48,13 +19,13 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background: rgba(187, 134, 252, 0.2);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 3px;
   transition: background-color 0.2s ease;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: rgba(187, 134, 252, 0.3);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 *::-webkit-scrollbar-corner {
@@ -73,6 +44,29 @@
   }
 }
 
+/* Specific styling for dark backgrounds */
+.dark *::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.dark *::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Light theme scrollbars */
+.light *::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.light *::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
 /* Custom scrollbar for specific components that need more visibility */
 .scrollbar-visible::-webkit-scrollbar {
   width: 8px;
@@ -80,73 +74,10 @@
 }
 
 .scrollbar-visible::-webkit-scrollbar-thumb {
-  background: rgba(187, 134, 252, 0.3);
+  background: rgba(168, 85, 247, 0.3);
   border-radius: 4px;
 }
 
 .scrollbar-visible::-webkit-scrollbar-thumb:hover {
-  background: rgba(187, 134, 252, 0.5);
-}
-
-/* Material Design 3 State Layers */
-@layer utilities {
-  .state-layer {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .state-layer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: currentColor;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    pointer-events: none;
-  }
-  
-  .state-layer:hover::before {
-    opacity: 0.08;
-  }
-  
-  .state-layer:focus::before {
-    opacity: 0.12;
-  }
-  
-  .state-layer:active::before {
-    opacity: 0.16;
-  }
-  
-  /* Ripple effect */
-  .ripple {
-    position: relative;
-    overflow: hidden;
-    transform: translate3d(0, 0, 0);
-  }
-  
-  .ripple::after {
-    content: '';
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    background-image: radial-gradient(circle, currentColor 10%, transparent 10.01%);
-    background-repeat: no-repeat;
-    background-position: 50%;
-    transform: scale(10, 10);
-    opacity: 0;
-    transition: transform 0.5s, opacity 1s;
-  }
-  
-  .ripple:active::after {
-    transform: scale(0, 0);
-    opacity: 0.2;
-    transition: 0s;
-  }
+  background: rgba(168, 85, 247, 0.5);
 }

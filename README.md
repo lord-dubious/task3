@@ -1,16 +1,16 @@
-# Tasker Pro
+# TweetScheduler Pro
 
-AI-powered task and social media management platform with Cloudflare R2 storage integration.
+AI-powered Twitter management platform with Cloudflare R2 storage integration.
 
 ## Features
 
-- 🤖 **AI-Powered Content Generation** - Create engaging content and manage tasks with Google AI
-- 📅 **Smart Scheduling** - Schedule posts and tasks at optimal times
+- 🤖 **AI-Powered Content Generation** - Create engaging tweets with Google AI
+- 📅 **Smart Scheduling** - Schedule posts at optimal times
 - 🎭 **AI Agents** - Create custom AI personas for different content styles
 - 📸 **Media Management** - Upload and optimize images/videos with automatic compression
 - ☁️ **Cloudflare R2 Storage** - Zero egress fees for media delivery
 - 🔐 **Secure Authentication** - Google OAuth integration via Supabase
-- 📊 **Analytics Dashboard** - Track performance, engagement, and productivity
+- 📊 **Analytics Dashboard** - Track performance and engagement
 
 ## Quick Setup
 
