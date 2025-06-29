@@ -11,7 +11,6 @@ import { Agent } from '../../types';
 
 export function AgentSettingsView() {
   const { agents, loading, createAgent, updateAgent, deleteAgent, toggleAgent } = useAgents();
-  const { user } = useAuth();
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [editingAgent, setEditingAgent] = useState<Agent | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -20,19 +19,11 @@ export function AgentSettingsView() {
   const { showSuccess, showError } = useNotifications();
 
   const handleCreateNew = () => {
-    if (!user) {
-      showError('Authentication Required', 'Please sign in to create agents');
-      return;
-    }
     setEditingAgent(null);
     setShowForm(true);
   };
 
   const handleEdit = (agent: Agent) => {
-    if (!user) {
-      showError('Authentication Required', 'Please sign in to edit agents');
-      return;
-    }
     setEditingAgent(agent);
     setShowForm(true);
   };
@@ -125,21 +116,6 @@ export function AgentSettingsView() {
   };
 
   return (
-    <>
-      {!user && (
-        <div className="mb-6 bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-4">
-          <div className="flex items-center space-x-2">
-            <AlertCircle className="w-5 h-5 text-yellow-400" />
-            <div>
-              <p className="text-yellow-300 font-medium">Authentication Required</p>
-              <p className="text-yellow-200 text-sm">
-                Please sign in to manage AI agents and access all features.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
     <div className="h-full flex">
       {/* Left Panel - Agent List */}
       <div className="w-1/2 pr-3">
@@ -154,16 +130,14 @@ export function AgentSettingsView() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowImportExport(true)}
-               disabled={!user}
                 leftIcon={<FileText className="w-4 h-4" />}
               >
                 Import/Export
               </Button>
               <Button
                 onClick={handleCreateNew}
-               disabled={!user}
                 leftIcon={<Plus className="w-4 h-4" />}
-               disabled={showForm || !user}
+                disabled={showForm}
               >
                 New Agent
               </Button>
@@ -338,6 +312,5 @@ export function AgentSettingsView() {
         onExportAll={handleExportAll}
       />
     </div>
-    </>
   );
 }
