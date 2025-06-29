@@ -8,7 +8,7 @@ import {
   BarChart3, 
   Settings, 
   Bot,
-  Sparkles
+  CheckSquare
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -31,11 +31,12 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
     <div className="w-80 bg-md3-surface-container h-screen flex flex-col border-r border-md3-outline-variant">
       <div className="p-6 border-b border-md3-outline-variant">
         <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 bg-md3-primary rounded-2xl flex items-center justify-center shadow-elevation-2">
-            <Sparkles className="w-7 h-7 text-md3-on-primary" />
+          <div className="w-12 h-12 bg-gradient-to-br from-md3-primary to-md3-primary-container rounded-2xl flex items-center justify-center shadow-elevation-2 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-md3-primary/20 to-transparent"></div>
+            <CheckSquare className="w-7 h-7 text-md3-on-primary relative z-10" />
           </div>
           <div>
-            <h1 className="md3-title-large text-md3-on-surface">TweetScheduler</h1>
+            <h1 className="md3-title-large text-md3-on-surface">Tasker</h1>
             <p className="md3-label-medium text-md3-primary">Pro</p>
           </div>
         </div>
@@ -69,12 +70,12 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
 
       <div className="p-4 border-t border-md3-outline-variant">
         <div className="bg-md3-primary-container rounded-2xl p-4 text-center">
-          <div className="w-12 h-12 bg-md3-primary rounded-full flex items-center justify-center mx-auto mb-3">
-            <Sparkles className="w-6 h-6 text-md3-on-primary" />
+          <div className="w-12 h-12 bg-gradient-to-br from-md3-primary to-md3-primary-container rounded-full flex items-center justify-center mx-auto mb-3 shadow-elevation-1">
+            <CheckSquare className="w-6 h-6 text-md3-on-primary" />
           </div>
           <p className="md3-title-small text-md3-on-primary-container mb-2">Upgrade to Pro</p>
           <p className="md3-body-small text-md3-on-primary-container/80 mb-4">
-            Unlock unlimited scheduling and advanced AI features
+            Unlock unlimited tasks, scheduling and advanced AI features
           </p>
           <button className="bg-md3-primary text-md3-on-primary px-6 py-2 rounded-full md3-label-large hover:shadow-elevation-1 transition-all duration-200 state-layer">
             Upgrade Now

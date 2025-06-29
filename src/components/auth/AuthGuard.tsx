@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Twitter, Bot, Calendar } from 'lucide-react';
+import { CheckSquare, Twitter, Bot, Calendar } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { AuthModal } from './AuthModal';
 import { Button } from '../ui/Button';
@@ -18,8 +18,8 @@ export function AuthGuard({ children }: AuthGuardProps) {
     return (
       <div className="min-h-screen bg-md3-background flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 bg-md3-primary rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-            <Sparkles className="w-8 h-8 text-md3-on-primary" />
+          <div className="w-16 h-16 bg-gradient-to-br from-md3-primary to-md3-primary-container rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse shadow-elevation-2">
+            <CheckSquare className="w-8 h-8 text-md3-on-primary" />
           </div>
           <p className="md3-body-large text-md3-on-surface-variant">Loading...</p>
         </div>
@@ -36,14 +36,15 @@ export function AuthGuard({ children }: AuthGuardProps) {
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <div className="w-20 h-20 bg-md3-primary rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-elevation-3">
-              <Sparkles className="w-10 h-10 text-md3-on-primary" />
+            <div className="w-20 h-20 bg-gradient-to-br from-md3-primary via-md3-primary-container to-md3-primary rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-elevation-3 relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+              <CheckSquare className="w-10 h-10 text-md3-on-primary relative z-10" />
             </div>
             <h1 className="md3-display-medium text-md3-on-background mb-4">
-              TweetScheduler <span className="text-md3-primary">Pro</span>
+              Tasker <span className="text-md3-primary">Pro</span>
             </h1>
             <p className="md3-title-medium text-md3-on-surface-variant mb-8 max-w-2xl mx-auto">
-              AI-powered Twitter management that helps you create, schedule, and optimize your social media presence
+              AI-powered task and social media management that helps you organize, schedule, and optimize your productivity
             </p>
           </motion.div>
 
