@@ -15,6 +15,7 @@ import {
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { Agent } from '../../types';
+import { useAuth } from '../../hooks/useAuth';
 
 interface AgentImportExportProps {
   isOpen: boolean;
@@ -66,6 +67,7 @@ export function AgentImportExport({
   onImport,
   onExportAll
 }: AgentImportExportProps) {
+  const { user } = useAuth();
   const [dragOver, setDragOver] = useState(false);
   const [importData, setImportData] = useState<ImportData | null>(null);
   const [selectedAgents, setSelectedAgents] = useState<number[]>([]);
@@ -131,6 +133,12 @@ export function AgentImportExport({
   const handleImport = async () => {
     if (!importData) return;
 
+    // Check authentication before importing
+    if (!user) {
+      setError('You must be logged in to import agents');
+      return;
+    }
+
     setIsImporting(true);
     setImportResults(null);
     
@@ -161,7 +169,9 @@ export function AgentImportExport({
             results.success++;
           } catch (err) {
             results.failed++;
-            results.errors.push(`Failed to import ${importData.name}: ${err instanceof Error ? err.message : 'Unknown error'}`);
+            const errorMsg = err instanceof Error ? err.message : 'Unknown error';
+            results.errors.push(`Failed to import ${importData.name}: ${errorMsg}`);
+            console.error('Import error:', err);
           }
         }
       }
@@ -188,13 +198,17 @@ export function AgentImportExport({
             results.success++;
           } catch (err) {
             results.failed++;
-            results.errors.push(`Failed to import ${agent.name}: ${err instanceof Error ? err.message : 'Unknown error'}`);
+            const errorMsg = err instanceof Error ? err.message : 'Unknown error';
+            results.errors.push(`Failed to import ${agent.name}: ${errorMsg}`);
+            console.error('Import error for agent:', agent.name, err);
           }
         }
       }
     } catch (err) {
       results.failed++;
-      results.errors.push(`Import failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      const errorMsg = err instanceof Error ? err.message : 'Unknown error';
+      results.errors.push(`Import failed: ${errorMsg}`);
+      console.error('General import error:', err);
     }
     setImportResults(results);
     setIsImporting(false);
@@ -292,6 +306,25 @@ export function AgentImportExport({
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Authentication Check */}
+            {!user && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-red-500/20 border border-red-500/30 rounded-lg p-4"
+              >
+                <div className="flex items-center space-x-2">
+                  <AlertCircle className="w-5 h-5 text-red-400" />
+                  <div>
+                    <p className="text-red-300 font-medium">Authentication Required</p>
+                    <p className="text-red-200 text-sm">
+                      You must be logged in to import agents. Please sign in and try again.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
             {/* Export Section */}
             <Card>
               <div className="space-y-4">
@@ -459,7 +492,7 @@ export function AgentImportExport({
 
                     <Button
                       onClick={handleImport}
-                      disabled={selectedAgents.length === 0 || isImporting}
+                     disabled={selectedAgents.length === 0 || isImporting || !user}
                       isLoading={isImporting}
                       leftIcon={<Upload className="w-4 h-4" />}
                       className="w-full"

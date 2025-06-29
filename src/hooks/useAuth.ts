@@ -22,8 +22,10 @@ export function useAuth() {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session }, error }) => {
       if (error) {
+        console.error('Session error:', error);
         setAuthState(prev => ({ ...prev, error: error.message, loading: false }));
       } else {
+        console.log('Initial session:', session ? 'Found' : 'Not found');
         setAuthState(prev => ({
           ...prev,
           session,
@@ -37,6 +39,7 @@ export function useAuth() {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Auth state change:', event, session ? 'Session exists' : 'No session');
       setAuthState(prev => ({
         ...prev,
         session,
