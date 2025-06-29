@@ -14,39 +14,39 @@ export function Header({ title, subtitle }: HeaderProps) {
   const { user, signOut } = useAuth();
 
   return (
-    <header className="bg-md3-surface border-b border-md3-outline-variant px-6 py-4 relative z-[100]">
+    <header className="bg-gray-900/50 backdrop-blur-sm border-b border-gray-700 px-6 py-4 relative z-[100]">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="md3-headline-small text-md3-on-surface">{title}</h1>
-          {subtitle && <p className="md3-body-medium text-md3-on-surface-variant mt-1">{subtitle}</p>}
+          <h1 className="text-2xl font-bold text-white">{title}</h1>
+          {subtitle && <p className="text-gray-400 mt-1">{subtitle}</p>}
         </div>
         
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-4">
           <NotificationDropdown />
           
           <QuickSettingsDropdown />
           
-          <Button variant="text" size="sm" onClick={signOut}>
+          <Button variant="ghost" size="sm" onClick={signOut}>
             <LogOut className="w-5 h-5" />
           </Button>
           
-          <div className="flex items-center space-x-3 pl-4 border-l border-md3-outline-variant">
+          <div className="flex items-center space-x-3 pl-4 border-l border-gray-600">
             {user?.user_metadata?.avatar_url || user?.user_metadata?.picture ? (
               <img
                 src={user.user_metadata.avatar_url || user.user_metadata.picture}
                 alt="Profile"
-                className="w-10 h-10 rounded-full border-2 border-md3-primary"
+                className="w-8 h-8 rounded-full border-2 border-purple-500"
               />
             ) : (
-              <div className="w-10 h-10 bg-md3-primary rounded-full flex items-center justify-center">
-                <User className="w-5 h-5 text-md3-on-primary" />
+              <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center">
+                <User className="w-4 h-4 text-white" />
               </div>
             )}
             <div className="text-sm">
-              <p className="md3-body-medium text-md3-on-surface font-medium">
+              <p className="text-white font-medium">
                 {user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split('@')[0]}
               </p>
-              <p className="md3-body-small text-md3-on-surface-variant">{user?.email}</p>
+              <p className="text-gray-400">{user?.email}</p>
             </div>
           </div>
         </div>

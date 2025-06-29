@@ -40,22 +40,22 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 bg-md3-scrim/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="bg-md3-surface-container rounded-3xl p-8 w-full max-w-md border border-md3-outline-variant shadow-elevation-3"
+          className="bg-gray-900 rounded-2xl p-8 w-full max-w-md border border-gray-700"
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="md3-headline-small text-md3-on-surface">
+            <h2 className="text-2xl font-bold text-white">
               {mode === 'signin' && 'Welcome Back'}
               {mode === 'signup' && 'Create Account'}
               {mode === 'forgot' && 'Reset Password'}
             </h2>
             <button
               onClick={onClose}
-              className="text-md3-on-surface-variant hover:text-md3-on-surface transition-colors p-2 rounded-full hover:bg-md3-on-surface/8"
+              className="text-gray-400 hover:text-white transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
@@ -65,9 +65,9 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-md3-error-container border border-md3-error rounded-xl p-4 mb-4"
+              className="bg-red-500/20 border border-red-500/30 rounded-lg p-3 mb-4"
             >
-              <p className="md3-body-small text-md3-on-error-container">{error}</p>
+              <p className="text-red-300 text-sm">{error}</p>
             </motion.div>
           )}
 
@@ -106,7 +106,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="hover:text-md3-on-surface transition-colors"
+                    className="hover:text-white transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -117,7 +117,6 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
 
             <Button
               type="submit"
-              variant="filled"
               className="w-full"
               isLoading={loading}
             >
@@ -131,16 +130,16 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
             <>
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-md3-outline-variant"></div>
+                  <div className="w-full border-t border-gray-700"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-md3-surface-container md3-body-small text-md3-on-surface-variant">Or continue with</span>
+                  <span className="px-2 bg-gray-900 text-gray-400">Or continue with</span>
                 </div>
               </div>
 
               <Button
                 onClick={handleGoogleSignIn}
-                variant="outlined"
+                variant="secondary"
                 className="w-full"
                 isLoading={loading}
               >
@@ -167,43 +166,43 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
             </>
           )}
 
-          <div className="mt-6 text-center md3-body-small">
+          <div className="mt-6 text-center text-sm">
             {mode === 'signin' && (
               <>
-                <p className="text-md3-on-surface-variant">
+                <p className="text-gray-400">
                   Don't have an account?{' '}
                   <button
                     onClick={() => setMode('signup')}
-                    className="text-md3-primary hover:text-md3-primary/80 font-medium"
+                    className="text-purple-400 hover:text-purple-300 font-medium"
                   >
                     Sign up
                   </button>
                 </p>
                 <button
                   onClick={() => setMode('forgot')}
-                  className="text-md3-primary hover:text-md3-primary/80 font-medium mt-2 block mx-auto"
+                  className="text-purple-400 hover:text-purple-300 font-medium mt-2 block mx-auto"
                 >
                   Forgot password?
                 </button>
               </>
             )}
             {mode === 'signup' && (
-              <p className="text-md3-on-surface-variant">
+              <p className="text-gray-400">
                 Already have an account?{' '}
                 <button
                   onClick={() => setMode('signin')}
-                  className="text-md3-primary hover:text-md3-primary/80 font-medium"
+                  className="text-purple-400 hover:text-purple-300 font-medium"
                 >
                   Sign in
                 </button>
               </p>
             )}
             {mode === 'forgot' && (
-              <p className="text-md3-on-surface-variant">
+              <p className="text-gray-400">
                 Remember your password?{' '}
                 <button
                   onClick={() => setMode('signin')}
-                  className="text-md3-primary hover:text-md3-primary/80 font-medium"
+                  className="text-purple-400 hover:text-purple-300 font-medium"
                 >
                   Sign in
                 </button>
