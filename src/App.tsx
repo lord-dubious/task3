@@ -94,12 +94,30 @@ function App() {
         expand={true}
         richColors={true}
         closeButton={true}
+        duration={4000}
         toastOptions={{
           style: {
-            background: 'rgb(17, 24, 39)',
-            border: '1px solid rgb(55, 65, 81)',
-            color: 'rgb(243, 244, 246)',
+            background: '#111827',
+            border: '1px solid #374151',
+            color: '#f3f4f6',
             zIndex: 10000,
+            borderRadius: '12px',
+            fontSize: '14px',
+            fontWeight: '500',
+            backdropFilter: 'blur(8px)',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.05)',
+          },
+          classNames: {
+            toast: 'shadow-xl backdrop-blur-sm',
+            title: 'text-white font-semibold',
+            description: 'text-gray-300',
+            actionButton: 'bg-purple-600 hover:bg-purple-700 text-white border-none',
+            cancelButton: 'bg-gray-700 hover:bg-gray-600 text-gray-200 border-none',
+            closeButton: 'text-gray-400 hover:text-white border-gray-600 hover:border-gray-500',
+            success: 'border-green-500/30 bg-green-500/10',
+            error: 'border-red-500/30 bg-red-500/10',
+            warning: 'border-yellow-500/30 bg-yellow-500/10',
+            info: 'border-blue-500/30 bg-blue-500/10',
           },
         }}
       />
