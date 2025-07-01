@@ -30,7 +30,7 @@ export function Input({
         )}
         <input
           className={`
-            block w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white placeholder-gray-400
+            block w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 min-h-[40px]
             focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none
             transition-colors duration-200
             ${leftIcon ? 'pl-10' : ''}

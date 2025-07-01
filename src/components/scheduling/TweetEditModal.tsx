@@ -4,6 +4,7 @@ import { X, Save, Calendar, Clock, Bot, AlertCircle } from 'lucide-react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Tweet } from '../../hooks/useTweets';
 import { useAgents } from '../../hooks/useAgents';
 import { useTwitterAuth } from '../../hooks/useTwitterAuth';
@@ -173,18 +174,22 @@ export function TweetEditModal({
                 <label className="block text-sm font-medium text-gray-200 mb-2">
                   AI Agent
                 </label>
-                <select
+                <Select
                   value={selectedAgent}
-                  onChange={(e) => setSelectedAgent(e.target.value)}
-                  className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-purple-500 focus:outline-none"
+                  onValueChange={setSelectedAgent}
                 >
-                  <option value="">No agent</option>
-                  {agents.filter(a => a.enabled).map(agent => (
-                    <option key={agent.id} value={agent.id}>
-                      {agent.name}
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="No agent" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">No agent</SelectItem>
+                    {agents.filter(a => a.enabled).map(agent => (
+                      <SelectItem key={agent.id} value={agent.id}>
+                        {agent.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             )}
 
@@ -194,18 +199,22 @@ export function TweetEditModal({
                 <label className="block text-sm font-medium text-gray-200 mb-2">
                   Twitter Account
                 </label>
-                <select
+                <Select
                   value={selectedAccount}
-                  onChange={(e) => setSelectedAccount(e.target.value)}
-                  className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-purple-500 focus:outline-none"
+                  onValueChange={setSelectedAccount}
                 >
-                  <option value="">Default account</option>
-                  {connectedAccounts.map(account => (
-                    <option key={account.id} value={account.id}>
-                      @{account.username}
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Default account" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Default account</SelectItem>
+                    {connectedAccounts.map(account => (
+                      <SelectItem key={account.id} value={account.id}>
+                        @{account.username}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             )}
 

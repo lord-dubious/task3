@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Upload, FolderOpen, Tag, Zap, AlertCircle } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { MediaLibraryItem } from '../../hooks/useMediaLibrary';
 import { MediaOptimizer, OptimizedMedia } from '../../utils/mediaOptimization';
 import { useNotifications } from '../../hooks/useNotifications';
@@ -160,17 +161,21 @@ export function MediaUploadModal({
               <label className="block text-sm font-medium text-gray-200 mb-2">
                 Folder
               </label>
-              <select
+              <Select
                 value={folder}
-                onChange={(e) => setFolder(e.target.value)}
-                className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-purple-500 focus:outline-none"
+                onValueChange={setFolder}
               >
-                <option value="general">General</option>
-                <option value="tweets">Tweets</option>
-                <option value="profile">Profile</option>
-                <option value="banners">Banners</option>
-                <option value="products">Products</option>
-              </select>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="general">General</SelectItem>
+                  <SelectItem value="tweets">Tweets</SelectItem>
+                  <SelectItem value="profile">Profile</SelectItem>
+                  <SelectItem value="banners">Banners</SelectItem>
+                  <SelectItem value="products">Products</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <Input

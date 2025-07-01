@@ -122,11 +122,11 @@ export function AgentSettingsView() {
   };
 
   return (
-    <div className="h-full flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
+    <div className="h-full flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-6">
       {/* Left Panel - Agent List */}
-      <div className="w-full lg:w-1/2 lg:pr-3">
+      <div className="w-full lg:w-1/2">
         <div className="h-full flex flex-col">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 sm:mb-4 lg:mb-6 space-y-2 sm:space-y-0">
             <div className="flex items-center space-x-2 sm:space-x-3">
               <Bot className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" />
               <h2 className="text-lg sm:text-xl font-semibold text-white">AI Agents</h2>
@@ -169,7 +169,7 @@ export function AgentSettingsView() {
       </div>
 
       {/* Right Panel - Agent Form or Details */}
-      <div className="w-full lg:w-1/2 lg:pl-3">
+      <div className="w-full lg:w-1/2">
         <AnimatePresence mode="wait">
           {showForm ? (
             <AgentForm

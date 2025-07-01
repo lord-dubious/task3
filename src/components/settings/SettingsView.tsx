@@ -31,13 +31,13 @@ export function SettingsView() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-2xl mx-auto space-y-4 sm:space-y-6">
       <GoogleAISettings />
       <TwitterIntegration />
       <EdgeFunctionSetup />
       <CloudflareR2Settings />
 
-      <div className="flex justify-end">
+      <div className="flex justify-end pt-4">
         <Button onClick={handleSave} leftIcon={<Save className="w-4 h-4" />}>
           Save Settings
         </Button>

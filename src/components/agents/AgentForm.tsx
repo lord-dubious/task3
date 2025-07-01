@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Save, X, Plus, Trash2, Bot } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+import { Checkbox } from '../ui/Checkbox';
 import { Card } from '../ui/Card';
 import { Agent } from '../../types';
 
@@ -255,12 +256,10 @@ export function AgentForm({ agent, onSave, onCancel, isLoading }: AgentFormProps
             </div>
 
             <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="enabled"
+              <Checkbox
                 checked={formData.enabled}
-                onChange={(e) => setFormData(prev => ({ ...prev, enabled: e.target.checked }))}
-                className="w-4 h-4 text-purple-600 bg-gray-800 border-gray-600 rounded focus:ring-purple-500"
+                onCheckedChange={(checked) => setFormData(prev => ({ ...prev, enabled: !!checked }))}
+                id="enabled"
               />
               <label htmlFor="enabled" className="text-sm text-gray-200">
                 Enable this agent

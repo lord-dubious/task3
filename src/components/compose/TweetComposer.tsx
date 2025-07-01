@@ -226,9 +226,9 @@ export function TweetComposer() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-4 sm:space-y-6">
+    <div className="max-w-2xl mx-auto space-y-3 sm:space-y-4 lg:space-y-6">
       <Card>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-2 sm:space-y-0">
             <h2 className="text-lg sm:text-xl font-semibold text-white">Compose Tweet</h2>
             <div className="flex items-center space-x-2 sm:space-x-3">
@@ -283,7 +283,7 @@ export function TweetComposer() {
           )}
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-gray-700 space-y-3 sm:space-y-0">
-            <div className="flex items-center space-x-2 sm:space-x-3">
+            <div className="flex items-center space-x-2">
               <Button 
                 variant="ghost" 
                 size="sm"
@@ -348,13 +348,13 @@ export function TweetComposer() {
       </Card>
 
       <Card>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center space-x-2 sm:space-x-3">
             <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
             <h3 className="text-base sm:text-lg font-semibold text-white">AI Assistant</h3>
           </div>
           
-          <div className="grid grid-cols-1 gap-4">
+          <div className="space-y-3 sm:space-y-4">
             {/* Agent Selection */}
             <div>
               <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
