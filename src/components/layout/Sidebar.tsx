@@ -28,7 +28,7 @@ const menuItems = [
 
 export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
   return (
-    <div className="w-64 bg-gray-900/80 backdrop-blur-sm border-r border-gray-700 h-screen flex flex-col">
+    <div className="w-64 bg-gray-900/80 backdrop-blur-sm border-r border-gray-700 h-screen flex flex-col relative z-sidebar">
       <div className="p-6 border-b border-gray-700">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg flex items-center justify-center">

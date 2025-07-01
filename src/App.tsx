@@ -100,7 +100,7 @@ function App() {
             background: '#111827',
             border: '1px solid #374151',
             color: '#f3f4f6',
-            zIndex: 10000,
+            zIndex: 500, // Using our toast z-index
             borderRadius: '12px',
             fontSize: '14px',
             fontWeight: '500',

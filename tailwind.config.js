@@ -53,10 +53,14 @@ export default {
         'xs': '2px',
       },
       zIndex: {
-        'dropdown': '9999',
-        'modal': '9990',
-        'toast': '10000',
-        'tooltip': '9980',
+        'base': '1',
+        'header': '100',
+        'sidebar': '90',
+        'dropdown': '200',
+        'tooltip': '300',
+        'modal': '400',
+        'toast': '500',
+        'overlay': '1000',
       },
       boxShadow: {
         'purple-glow': '0 0 20px rgba(168, 85, 247, 0.3)',

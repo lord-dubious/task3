@@ -78,6 +78,7 @@ export function QuickSettingsDropdown() {
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.15 }}
             className="absolute right-0 top-full mt-2 w-80 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-[9999] overflow-hidden"
+            className="absolute right-0 top-full mt-2 w-80 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-dropdown overflow-hidden"
           >
             <div className="p-4 border-b border-gray-700">
               <h3 className="text-white font-semibold flex items-center">
