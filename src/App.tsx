@@ -13,22 +13,36 @@ import { MediaLibraryView } from './components/media/MediaLibraryView';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Prevent body scroll when modals are open
+  // Handle responsive sidebar collapse
   useEffect(() => {
-    const body = document.body;
-    const hasModal = document.querySelector('.z-modal');
-    
-    if (hasModal) {
-      body.style.overflow = 'hidden';
+    const handleResize = () => {
+      if (window.innerWidth < 1024) {
+        setSidebarCollapsed(false);
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Check initial size
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
     } else {
-      body.style.overflow = 'unset';
+      document.body.style.overflow = 'unset';
     }
     
     return () => {
-      body.style.overflow = 'unset';
+      document.body.style.overflow = 'unset';
     };
-  }, []);
+  }, [mobileMenuOpen]);
 
   const getHeaderProps = () => {
     switch (activeTab) {
@@ -80,13 +94,27 @@ function App() {
   return (
     <AuthGuard>
       <div className="min-h-screen bg-black flex overflow-hidden">
-        <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+        <Sidebar 
+          activeTab={activeTab} 
+          onTabChange={setActiveTab}
+          isCollapsed={sidebarCollapsed}
+          onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+          isMobileOpen={mobileMenuOpen}
+          onMobileToggle={() => setMobileMenuOpen(!mobileMenuOpen)}
+        />
         
-        <div className="flex-1 flex flex-col min-h-screen ml-64">
-          <Header {...getHeaderProps()} />
+        <div className={`
+          flex-1 flex flex-col min-h-screen transition-all duration-300
+          ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'}
+        `}>
+          <Header 
+            {...getHeaderProps()} 
+            onMobileMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)}
+            sidebarCollapsed={sidebarCollapsed}
+          />
           
           <main className="flex-1 overflow-y-auto bg-black">
-            <div className="p-4 sm:p-6 min-h-full">
+            <div className="p-3 sm:p-4 lg:p-6 min-h-full">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab}
@@ -111,7 +139,6 @@ function App() {
         richColors={true}
         closeButton={true}
         duration={4000}
-        position="top-right"
         expand={false}
         visibleToasts={4}
         toastOptions={{
@@ -119,7 +146,7 @@ function App() {
             background: '#111827',
             border: '1px solid #374151',
             color: '#f3f4f6',
-            zIndex: 500, // Using our toast z-index
+            zIndex: 500,
             borderRadius: '12px',
             fontSize: '13px',
             fontWeight: '500',

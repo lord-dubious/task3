@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, LogOut } from 'lucide-react';
+import { User, LogOut, Menu } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { QuickSettingsDropdown } from './QuickSettingsDropdown';
 import { NotificationDropdown } from './NotificationDropdown';
@@ -8,17 +8,35 @@ import { useAuth } from '../../hooks/useAuth';
 interface HeaderProps {
   title: string;
   subtitle?: string;
+  onMobileMenuToggle?: () => void;
+  sidebarCollapsed?: boolean;
 }
 
-export function Header({ title, subtitle }: HeaderProps) {
+export function Header({ title, subtitle, onMobileMenuToggle, sidebarCollapsed }: HeaderProps) {
   const { user, signOut } = useAuth();
 
   return (
-    <header className="bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 px-4 sm:px-6 py-3 sm:py-4 relative z-header flex-shrink-0">
+    <header className={`
+      bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 px-4 sm:px-6 py-3 sm:py-4 
+      relative z-header flex-shrink-0 transition-all duration-300
+      ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'}
+    `}>
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-lg sm:text-2xl font-bold text-white truncate">{title}</h1>
-          {subtitle && <p className="text-gray-400 mt-1 text-sm sm:text-base hidden sm:block">{subtitle}</p>}
+        <div className="flex items-center space-x-4">
+          {/* Mobile menu button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onMobileMenuToggle}
+            className="lg:hidden"
+          >
+            <Menu className="w-5 h-5" />
+          </Button>
+          
+          <div>
+            <h1 className="text-lg sm:text-2xl font-bold text-white truncate">{title}</h1>
+            {subtitle && <p className="text-gray-400 mt-1 text-sm sm:text-base hidden sm:block">{subtitle}</p>}
+          </div>
         </div>
         
         <div className="flex items-center space-x-2 sm:space-x-4">
