@@ -20,6 +20,7 @@ export function AgentForm({ agent, onSave, onCancel, isLoading }: AgentFormProps
     system_prompt: '',
     bio: [''],
     lore: [''],
+    message_examples: [''],
     post_examples: [''],
     adjectives: [''],
     topics: [''],
@@ -39,6 +40,7 @@ export function AgentForm({ agent, onSave, onCancel, isLoading }: AgentFormProps
         system_prompt: agent.system_prompt || '',
         bio: Array.isArray(agent.bio) ? agent.bio : agent.bio ? [agent.bio] : [''],
         lore: agent.lore || [''],
+        message_examples: agent.message_examples || [''],
         post_examples: agent.post_examples || [''],
         adjectives: agent.adjectives || [''],
         topics: agent.topics || [''],
@@ -59,6 +61,7 @@ export function AgentForm({ agent, onSave, onCancel, isLoading }: AgentFormProps
       ...formData,
       bio: formData.bio.filter(item => item.trim()),
       lore: formData.lore.filter(item => item.trim()),
+      message_examples: formData.message_examples.filter(item => item.trim()),
       post_examples: formData.post_examples.filter(item => item.trim()),
       adjectives: formData.adjectives.filter(item => item.trim()),
       topics: formData.topics.filter(item => item.trim()),
@@ -239,6 +242,7 @@ export function AgentForm({ agent, onSave, onCancel, isLoading }: AgentFormProps
 
             {renderArrayField('Bio', 'bio', 'Add a bio line...')}
             {renderArrayField('Lore/Background', 'lore', 'Add background information...')}
+            {renderArrayField('Message Examples', 'message_examples', 'Add example message...')}
             {renderArrayField('Post Examples', 'post_examples', 'Example post...')}
             {renderArrayField('Adjectives/Traits', 'adjectives', 'Add personality trait...')}
             {renderArrayField('Topics', 'topics', 'Add topic of expertise...')}

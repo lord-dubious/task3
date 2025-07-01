@@ -253,6 +253,24 @@ export function AgentSettingsView() {
                     </div>
                   )}
 
+                  {selectedAgent.message_examples && selectedAgent.message_examples.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-300 mb-2">Message Examples</h4>
+                      <div className="space-y-2">
+                        {selectedAgent.message_examples.slice(0, 3).map((example, index) => (
+                          <div key={index} className="bg-gray-800/50 rounded-lg p-3">
+                            <p className="text-gray-400 text-sm">{example}</p>
+                          </div>
+                        ))}
+                        {selectedAgent.message_examples.length > 3 && (
+                          <p className="text-gray-500 text-xs">
+                            +{selectedAgent.message_examples.length - 3} more examples
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
                   {selectedAgent.adjectives && selectedAgent.adjectives.length > 0 && (
                     <div>
                       <h4 className="text-sm font-medium text-gray-300 mb-2">Traits</h4>
