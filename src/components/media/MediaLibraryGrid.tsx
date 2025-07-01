@@ -63,10 +63,10 @@ export function MediaLibraryGrid({
 
   if (items.length === 0) {
     return (
-      <Card className="p-12 text-center">
-        <ImageIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-xl font-semibold text-white mb-2">No Media Files</h3>
-        <p className="text-gray-400">
+      <Card className="p-8 sm:p-12 text-center">
+        <ImageIcon className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mx-auto mb-3 sm:mb-4" />
+        <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">No Media Files</h3>
+        <p className="text-sm sm:text-base text-gray-400">
           Upload your first media file to get started with the library.
         </p>
       </Card>
@@ -80,7 +80,7 @@ export function MediaLibraryGrid({
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-700">
-                <th className="text-left p-3 text-gray-300">
+                <th className="text-left p-2 sm:p-3 text-xs sm:text-sm text-gray-300">
                   <input
                     type="checkbox"
                     checked={selectedItems.length === items.length}
@@ -95,16 +95,16 @@ export function MediaLibraryGrid({
                         });
                       }
                     }}
-                    className="w-4 h-4"
+                    className="w-3 h-3 sm:w-4 sm:h-4"
                   />
                 </th>
-                <th className="text-left p-3 text-gray-300">Preview</th>
-                <th className="text-left p-3 text-gray-300">Name</th>
-                <th className="text-left p-3 text-gray-300">Size</th>
-                <th className="text-left p-3 text-gray-300">Compression</th>
-                <th className="text-left p-3 text-gray-300">Tags</th>
-                <th className="text-left p-3 text-gray-300">Date</th>
-                <th className="text-left p-3 text-gray-300">Actions</th>
+                <th className="text-left p-2 sm:p-3 text-xs sm:text-sm text-gray-300">Preview</th>
+                <th className="text-left p-2 sm:p-3 text-xs sm:text-sm text-gray-300">Name</th>
+                <th className="text-left p-2 sm:p-3 text-xs sm:text-sm text-gray-300">Size</th>
+                <th className="text-left p-2 sm:p-3 text-xs sm:text-sm text-gray-300">Compression</th>
+                <th className="text-left p-2 sm:p-3 text-xs sm:text-sm text-gray-300">Tags</th>
+                <th className="text-left p-2 sm:p-3 text-xs sm:text-sm text-gray-300">Date</th>
+                <th className="text-left p-2 sm:p-3 text-xs sm:text-sm text-gray-300">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -118,16 +118,16 @@ export function MediaLibraryGrid({
                     selectedItems.includes(item.id) ? 'bg-purple-500/10' : ''
                   }`}
                 >
-                  <td className="p-3">
+                  <td className="p-2 sm:p-3">
                     <input
                       type="checkbox"
                       checked={selectedItems.includes(item.id)}
                       onChange={() => onSelectItem(item.id)}
-                      className="w-4 h-4"
+                      className="w-3 h-3 sm:w-4 sm:h-4"
                     />
                   </td>
-                  <td className="p-3">
-                    <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-800 flex items-center justify-center">
+                  <td className="p-2 sm:p-3">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-gray-800 flex items-center justify-center">
                       {item.file_type.startsWith('image/') ? (
                         <img
                           src={item.url}
@@ -135,51 +135,52 @@ export function MediaLibraryGrid({
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <Video className="w-6 h-6 text-gray-400" />
+                        <Video className="w-4 h-4 sm:w-6 sm:h-6 text-gray-400" />
                       )}
                     </div>
                   </td>
-                  <td className="p-3">
+                  <td className="p-2 sm:p-3">
                     <div>
-                      <p className="text-white font-medium truncate max-w-xs">
+                      <p className="text-white font-medium truncate max-w-xs text-xs sm:text-sm">
                         {item.original_filename}
                       </p>
-                      <p className="text-gray-400 text-sm">
+                      <p className="text-gray-400 text-xs">
                         {item.dimensions.width}×{item.dimensions.height}
                       </p>
                     </div>
                   </td>
-                  <td className="p-3">
+                  <td className="p-2 sm:p-3">
                     <div>
-                      <p className="text-white">
+                      <p className="text-white text-xs sm:text-sm">
                         {MediaOptimizer.formatFileSize(item.optimized_size)}
                       </p>
-                      <p className="text-gray-400 text-sm">
+                      <p className="text-gray-400 text-xs">
                         Original: {MediaOptimizer.formatFileSize(item.file_size)}
                       </p>
                     </div>
                   </td>
-                  <td className="p-3">
+                  <td className="p-2 sm:p-3">
                     <div className="flex items-center space-x-1">
-                      <Zap className="w-4 h-4 text-green-400" />
-                      <span className="text-green-400 font-medium">
+                      <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                      <span className="text-green-400 font-medium text-xs sm:text-sm">
                         {item.compression_ratio.toFixed(1)}%
                       </span>
                     </div>
                   </td>
-                  <td className="p-3">
+                  <td className="p-2 sm:p-3">
                     {editingTags === item.id ? (
                       <div className="flex items-center space-x-2">
                         <input
                           type="text"
                           value={tagInput}
                           onChange={(e) => setTagInput(e.target.value)}
-                          className="bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white text-sm"
+                          className="bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white text-xs"
                           placeholder="tag1, tag2, tag3"
                         />
                         <Button
                           size="sm"
                           onClick={() => handleTagSave(item.id)}
+                          className="text-xs"
                         >
                           Save
                         </Button>
@@ -187,6 +188,7 @@ export function MediaLibraryGrid({
                           variant="ghost"
                           size="sm"
                           onClick={handleTagCancel}
+                          className="text-xs"
                         >
                           Cancel
                         </Button>
@@ -211,19 +213,19 @@ export function MediaLibraryGrid({
                       </div>
                     )}
                   </td>
-                  <td className="p-3">
-                    <p className="text-gray-400 text-sm">
+                  <td className="p-2 sm:p-3">
+                    <p className="text-gray-400 text-xs">
                       {format(new Date(item.created_at), 'MMM d, yyyy')}
                     </p>
                   </td>
-                  <td className="p-3">
+                  <td className="p-2 sm:p-3">
                     <div className="flex items-center space-x-1">
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => handleDownload(item)}
                       >
-                        <Download className="w-4 h-4" />
+                        <Download className="w-3 h-3 sm:w-4 sm:h-4" />
                       </Button>
                       <Button
                         variant="ghost"
@@ -231,7 +233,7 @@ export function MediaLibraryGrid({
                         onClick={() => onDeleteItem(item.id)}
                         className="text-red-400"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
                       </Button>
                     </div>
                   </td>
@@ -245,7 +247,7 @@ export function MediaLibraryGrid({
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
       {items.map((item, index) => (
         <motion.div
           key={item.id}
@@ -267,7 +269,7 @@ export function MediaLibraryGrid({
                 type="checkbox"
                 checked={selectedItems.includes(item.id)}
                 onChange={() => onSelectItem(item.id)}
-                className="w-4 h-4"
+                className="w-3 h-3 sm:w-4 sm:h-4"
                 onClick={(e) => e.stopPropagation()}
               />
             </div>
@@ -282,7 +284,7 @@ export function MediaLibraryGrid({
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
-                  <Video className="w-12 h-12 text-gray-400" />
+                  <Video className="w-8 h-8 sm:w-12 sm:h-12 text-gray-400" />
                 </div>
               )}
 
@@ -297,7 +299,7 @@ export function MediaLibraryGrid({
                   }}
                   className="bg-black/50"
                 >
-                  <Eye className="w-4 h-4" />
+                  <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
                 </Button>
                 <Button
                   variant="ghost"
@@ -308,7 +310,7 @@ export function MediaLibraryGrid({
                   }}
                   className="bg-black/50"
                 >
-                  <Download className="w-4 h-4" />
+                  <Download className="w-3 h-3 sm:w-4 sm:h-4" />
                 </Button>
                 <Button
                   variant="ghost"
@@ -319,7 +321,7 @@ export function MediaLibraryGrid({
                   }}
                   className="bg-black/50 text-red-400"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
                 </Button>
               </div>
 
@@ -333,12 +335,12 @@ export function MediaLibraryGrid({
             </div>
 
             {/* Media Info */}
-            <div className="p-4">
-              <h3 className="text-white font-medium truncate mb-1">
+            <div className="p-3 sm:p-4">
+              <h3 className="text-white font-medium truncate mb-1 text-sm">
                 {item.original_filename}
               </h3>
               
-              <div className="flex items-center justify-between text-sm text-gray-400 mb-2">
+              <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
                 <span>{MediaOptimizer.formatFileSize(item.optimized_size)}</span>
                 <span>{item.dimensions.width}×{item.dimensions.height}</span>
               </div>
@@ -350,7 +352,7 @@ export function MediaLibraryGrid({
                     type="text"
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
-                    className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white text-sm"
+                    className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white text-xs"
                     placeholder="tag1, tag2, tag3"
                     onClick={(e) => e.stopPropagation()}
                   />
@@ -361,6 +363,7 @@ export function MediaLibraryGrid({
                         e.stopPropagation();
                         handleTagSave(item.id);
                       }}
+                      className="text-xs"
                     >
                       Save
                     </Button>
@@ -371,6 +374,7 @@ export function MediaLibraryGrid({
                         e.stopPropagation();
                         handleTagCancel();
                       }}
+                      className="text-xs"
                     >
                       Cancel
                     </Button>

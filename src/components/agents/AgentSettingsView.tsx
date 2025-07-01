@@ -122,28 +122,31 @@ export function AgentSettingsView() {
   };
 
   return (
-    <div className="h-full flex">
+    <div className="h-full flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
       {/* Left Panel - Agent List */}
-      <div className="w-1/2 pr-3">
+      <div className="w-full lg:w-1/2 lg:pr-3">
         <div className="h-full flex flex-col">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-3">
-              <Bot className="w-6 h-6 text-purple-400" />
-              <h2 className="text-xl font-semibold text-white">AI Agents</h2>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <Bot className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" />
+              <h2 className="text-lg sm:text-xl font-semibold text-white">AI Agents</h2>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowImportExport(true)}
-                leftIcon={<FileText className="w-4 h-4" />}
+                leftIcon={<FileText className="w-3 h-3 sm:w-4 sm:h-4" />}
+                className="text-xs sm:text-sm"
               >
                 Import/Export
               </Button>
               <Button
                 onClick={handleCreateNew}
-                leftIcon={<Plus className="w-4 h-4" />}
+                leftIcon={<Plus className="w-3 h-3 sm:w-4 sm:h-4" />}
                 disabled={showForm}
+                size="sm"
+                className="text-xs sm:text-sm"
               >
                 New Agent
               </Button>
@@ -166,7 +169,7 @@ export function AgentSettingsView() {
       </div>
 
       {/* Right Panel - Agent Form or Details */}
-      <div className="w-1/2 pl-3">
+      <div className="w-full lg:w-1/2 lg:pl-3">
         <AnimatePresence mode="wait">
           {showForm ? (
             <AgentForm
@@ -184,43 +187,47 @@ export function AgentSettingsView() {
               exit={{ opacity: 0, x: 20 }}
               className="h-full"
             >
-              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 h-full overflow-y-auto">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center space-x-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-4 sm:p-6 h-full overflow-y-auto">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${
                       selectedAgent.enabled ? 'bg-purple-600' : 'bg-gray-600'
                     }`}>
-                      <Bot className="w-5 h-5 text-white" />
+                      <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                     </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-white">{selectedAgent.name}</h3>
+                    <div className="min-w-0">
+                      <h3 className="text-base sm:text-lg font-semibold text-white truncate">{selectedAgent.name}</h3>
                       {selectedAgent.username && (
-                        <p className="text-gray-400">@{selectedAgent.username}</p>
+                        <p className="text-sm sm:text-base text-gray-400">@{selectedAgent.username}</p>
                       )}
                     </div>
                   </div>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => handleEdit(selectedAgent)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleExportAgent(selectedAgent)}
-                    leftIcon={<Download className="w-4 h-4" />}
-                  >
-                    Export
-                  </Button>
+                  <div className="flex space-x-2">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => handleEdit(selectedAgent)}
+                      className="text-xs sm:text-sm"
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleExportAgent(selectedAgent)}
+                      leftIcon={<Download className="w-3 h-3 sm:w-4 sm:h-4" />}
+                      className="text-xs sm:text-sm"
+                    >
+                      Export
+                    </Button>
+                  </div>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   {selectedAgent.system_prompt && (
                     <div>
-                      <h4 className="text-sm font-medium text-gray-300 mb-2">System Prompt</h4>
-                      <p className="text-gray-400 text-sm bg-gray-800/50 rounded-lg p-3">
+                      <h4 className="text-xs sm:text-sm font-medium text-gray-300 mb-2">System Prompt</h4>
+                      <p className="text-xs sm:text-sm text-gray-400 bg-gray-800/50 rounded-lg p-3">
                         {selectedAgent.system_prompt}
                       </p>
                     </div>
@@ -228,10 +235,10 @@ export function AgentSettingsView() {
 
                   {selectedAgent.bio && selectedAgent.bio.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-medium text-gray-300 mb-2">Bio</h4>
+                      <h4 className="text-xs sm:text-sm font-medium text-gray-300 mb-2">Bio</h4>
                       <ul className="space-y-1">
                         {selectedAgent.bio.map((item, index) => (
-                          <li key={index} className="text-gray-400 text-sm">• {item}</li>
+                          <li key={index} className="text-xs sm:text-sm text-gray-400">• {item}</li>
                         ))}
                       </ul>
                     </div>
@@ -239,8 +246,8 @@ export function AgentSettingsView() {
 
                   {selectedAgent.topics && selectedAgent.topics.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-medium text-gray-300 mb-2">Topics</h4>
-                      <div className="flex flex-wrap gap-2">
+                      <h4 className="text-xs sm:text-sm font-medium text-gray-300 mb-2">Topics</h4>
+                      <div className="flex flex-wrap gap-1 sm:gap-2">
                         {selectedAgent.topics.map((topic, index) => (
                           <span
                             key={index}
@@ -255,11 +262,11 @@ export function AgentSettingsView() {
 
                   {selectedAgent.message_examples && selectedAgent.message_examples.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-medium text-gray-300 mb-2">Message Examples</h4>
+                      <h4 className="text-xs sm:text-sm font-medium text-gray-300 mb-2">Message Examples</h4>
                       <div className="space-y-2">
                         {selectedAgent.message_examples.map((example, index) => (
                           <div key={index} className="bg-gray-800/50 rounded-lg p-3">
-                            <p className="text-gray-400 text-sm">{example}</p>
+                            <p className="text-xs sm:text-sm text-gray-400">{example}</p>
                           </div>
                         ))}
                       </div>
@@ -268,8 +275,8 @@ export function AgentSettingsView() {
 
                   {selectedAgent.adjectives && selectedAgent.adjectives.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-medium text-gray-300 mb-2">Traits</h4>
-                      <div className="flex flex-wrap gap-2">
+                      <h4 className="text-xs sm:text-sm font-medium text-gray-300 mb-2">Traits</h4>
+                      <div className="flex flex-wrap gap-1 sm:gap-2">
                         {selectedAgent.adjectives.map((trait, index) => (
                           <span
                             key={index}
@@ -284,15 +291,15 @@ export function AgentSettingsView() {
 
                   {selectedAgent.post_examples && selectedAgent.post_examples.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-medium text-gray-300 mb-2">Post Examples</h4>
+                      <h4 className="text-xs sm:text-sm font-medium text-gray-300 mb-2">Post Examples</h4>
                       <div className="space-y-2">
                         {selectedAgent.post_examples.slice(0, 3).map((example, index) => (
                           <div key={index} className="bg-gray-800/50 rounded-lg p-3">
-                            <p className="text-gray-400 text-sm">{example}</p>
+                            <p className="text-xs sm:text-sm text-gray-400">{example}</p>
                           </div>
                         ))}
                         {selectedAgent.post_examples.length > 3 && (
-                          <p className="text-gray-500 text-xs">
+                          <p className="text-xs text-gray-500">
                             +{selectedAgent.post_examples.length - 3} more examples
                           </p>
                         )}
@@ -310,10 +317,10 @@ export function AgentSettingsView() {
               exit={{ opacity: 0 }}
               className="h-full flex items-center justify-center"
             >
-              <div className="text-center">
-                <Bot className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-white mb-2">Select an Agent</h3>
-                <p className="text-gray-400">
+              <div className="text-center p-4">
+                <Bot className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mx-auto mb-3 sm:mb-4" />
+                <h3 className="text-base sm:text-lg font-semibold text-white mb-2">Select an Agent</h3>
+                <p className="text-sm sm:text-base text-gray-400">
                   Choose an agent from the list to view details or create a new one.
                 </p>
               </div>

@@ -81,6 +81,7 @@ export function TweetComposer() {
       setIsAnalyzing(false);
     }
   };
+
   const handleAIGenerate = async () => {
     const apiKey = JSON.parse(localStorage.getItem('googleAI_apiKey') || '""');
     if (!apiKey) {
@@ -93,7 +94,7 @@ export function TweetComposer() {
       prompt = buildAgentPrompt(aiPrompt, selectedAgent);
     }
 
-    const generatedContent = await generateTweet(prompt, tone, apiKey, undefined, selectedAgent, mediaFiles);
+    const generatedContent = await generateTweet(prompt, undefined, selectedAgent, mediaFiles);
     if (generatedContent) {
       setContent(generatedContent);
     }
@@ -225,18 +226,18 @@ export function TweetComposer() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-2xl mx-auto space-y-4 sm:space-y-6">
       <Card>
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-white">Compose Tweet</h2>
-            <div className="flex items-center space-x-2">
-              <span className={`text-sm ${
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-2 sm:space-y-0">
+            <h2 className="text-lg sm:text-xl font-semibold text-white">Compose Tweet</h2>
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <span className={`text-xs sm:text-sm ${
                 isOverLimit ? 'text-red-400' : 'text-gray-400'
               }`}>
                 {characterCount}/{maxCharacters}
               </span>
-              <div className={`w-8 h-8 rounded-full border-2 relative ${
+              <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full border-2 relative ${
                 isOverLimit ? 'border-red-400' : 'border-purple-500'
               }`}>
                 <svg className="w-full h-full transform -rotate-90" viewBox="0 0 32 32">
@@ -259,7 +260,7 @@ export function TweetComposer() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="What's happening?"
-            className="w-full bg-transparent text-white text-lg placeholder-gray-400 resize-none border-none outline-none"
+            className="w-full bg-transparent text-white text-base sm:text-lg placeholder-gray-400 resize-none border-none outline-none"
             minRows={3}
             maxRows={8}
           />
@@ -281,15 +282,15 @@ export function TweetComposer() {
             />
           )}
 
-          <div className="flex items-center justify-between pt-4 border-t border-gray-700">
-            <div className="flex items-center space-x-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-gray-700 space-y-3 sm:space-y-0">
+            <div className="flex items-center space-x-2 sm:space-x-3">
               <Button 
                 variant="ghost" 
                 size="sm"
                 onClick={() => setShowMediaUpload(!showMediaUpload)}
                 className={showMediaUpload ? 'text-purple-400' : ''}
               >
-                <Image className="w-5 h-5" />
+                <Image className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
               <Button 
                 variant="ghost" 
@@ -297,11 +298,11 @@ export function TweetComposer() {
                 onClick={() => setShowSchedulePicker(!showSchedulePicker)}
                 className={showSchedulePicker ? 'text-purple-400' : ''}
               >
-                <Calendar className="w-5 h-5" />
+                <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
             </div>
             
-            <div className="flex items-center space-x-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
               {scheduledDateTime && (
                 <div className="text-xs text-purple-400 flex items-center space-x-1">
                   <Calendar className="w-3 h-3" />
@@ -319,8 +320,9 @@ export function TweetComposer() {
                 size="sm" 
                 onClick={handleAIImprove}
                 disabled={!content.trim() || isLoading}
+                className="text-xs sm:text-sm"
               >
-                <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-3 h-3 sm:w-4 sm:h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
                 Improve
               </Button>
               <Button 
@@ -334,8 +336,10 @@ export function TweetComposer() {
                   }
                 }}
                 isLoading={uploading}
+                size="sm"
+                className="text-xs sm:text-sm"
               >
-                <Send className="w-4 h-4 mr-2" />
+                <Send className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
                 {scheduledDateTime ? 'Schedule' : 'Tweet'}
               </Button>
             </div>
@@ -345,15 +349,15 @@ export function TweetComposer() {
 
       <Card>
         <div className="space-y-4">
-          <div className="flex items-center space-x-3">
-            <Sparkles className="w-5 h-5 text-purple-400" />
-            <h3 className="text-lg font-semibold text-white">AI Assistant</h3>
+          <div className="flex items-center space-x-2 sm:space-x-3">
+            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
+            <h3 className="text-base sm:text-lg font-semibold text-white">AI Assistant</h3>
           </div>
           
           <div className="grid grid-cols-1 gap-4">
             {/* Agent Selection */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
                 AI Agent
               </label>
               <select
@@ -362,7 +366,7 @@ export function TweetComposer() {
                   const agent = agents.find(a => a.id === e.target.value);
                   setSelectedAgent(agent || null);
                 }}
-                className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-purple-500 focus:outline-none"
+                className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:border-purple-500 focus:outline-none"
               >
                 <option value="">No agent (default)</option>
                 {agents.filter(a => a.enabled).map(agent => (
@@ -374,8 +378,8 @@ export function TweetComposer() {
               {selectedAgent && (
                 <div className="mt-2 p-2 bg-purple-500/10 border border-purple-500/30 rounded-lg">
                   <div className="flex items-center space-x-2">
-                    <Bot className="w-4 h-4 text-purple-400" />
-                    <span className="text-purple-300 text-sm font-medium">
+                    <Bot className="w-3 h-3 sm:w-4 sm:h-4 text-purple-400" />
+                    <span className="text-purple-300 text-xs sm:text-sm font-medium">
                       {selectedAgent.name}
                     </span>
                   </div>
@@ -393,10 +397,10 @@ export function TweetComposer() {
 
             <div className="grid grid-cols-1 gap-4">
               {mediaFiles.length > 0 && (
-                <div className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-gray-800/50 rounded-lg space-y-2 sm:space-y-0">
                   <div className="flex items-center space-x-2">
-                    <Eye className="w-4 h-4 text-purple-400" />
-                    <span className="text-sm text-gray-300">
+                    <Eye className="w-3 h-3 sm:w-4 sm:h-4 text-purple-400" />
+                    <span className="text-xs sm:text-sm text-gray-300">
                       AI can analyze your media to create better content
                     </span>
                   </div>
@@ -406,6 +410,7 @@ export function TweetComposer() {
                     onClick={handleAnalyzeMedia}
                     disabled={isAnalyzing}
                     isLoading={isAnalyzing}
+                    className="text-xs"
                   >
                     Analyze Media
                   </Button>
@@ -416,26 +421,27 @@ export function TweetComposer() {
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
-                  className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4"
+                  className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3 sm:p-4"
                 >
-                  <h4 className="text-purple-300 font-medium mb-2 flex items-center">
-                    <Eye className="w-4 h-4 mr-2" />
+                  <h4 className="text-purple-300 font-medium mb-2 flex items-center text-sm">
+                    <Eye className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
                     Media Analysis
                   </h4>
                   <div className="space-y-2">
                     {mediaAnalysis.map((analysis, index) => (
-                      <div key={index} className="text-sm text-purple-200 bg-purple-500/10 rounded p-2">
+                      <div key={index} className="text-xs sm:text-sm text-purple-200 bg-purple-500/10 rounded p-2">
                         <span className="font-medium">Media {index + 1}:</span> {analysis}
                       </div>
                     ))}
                   </div>
                 </motion.div>
               )}
+              
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
                   What should I tweet about?
                 </label>
-                <div className="flex space-x-2">
+                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                   <input
                     type="text"
                     value={aiPrompt}
@@ -444,12 +450,14 @@ export function TweetComposer() {
                       ? `Ask ${selectedAgent.name} to tweet about...` 
                       : "e.g., Latest React features, productivity tips... (Select an agent above for personalized content)"
                     }
-                    className="flex-1 bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none"
+                    className="flex-1 bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400 text-sm focus:border-purple-500 focus:outline-none"
                   />
                   <Button 
                     onClick={handleAIGenerate}
                     disabled={!aiPrompt.trim() || isLoading}
                     isLoading={isLoading}
+                    size="sm"
+                    className="text-xs sm:text-sm"
                   >
                     {selectedAgent ? `Ask ${selectedAgent.name}` : 'Generate'}
                   </Button>
@@ -464,8 +472,8 @@ export function TweetComposer() {
                 className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-3"
               >
                 <div className="flex items-center space-x-2">
-                  <Bot className="w-4 h-4 text-blue-400" />
-                  <p className="text-blue-300 text-sm">
+                  <Bot className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400" />
+                  <p className="text-blue-300 text-xs sm:text-sm">
                     <strong>Tip:</strong> Select an AI agent above to get personalized content with their unique personality, tone, and expertise!
                   </p>
                 </div>
@@ -479,20 +487,21 @@ export function TweetComposer() {
                 className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-3"
               >
                 <div className="flex items-center space-x-2">
-                  <Eye className="w-4 h-4 text-blue-400" />
-                  <p className="text-blue-300 text-sm">
+                  <Eye className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400" />
+                  <p className="text-blue-300 text-xs sm:text-sm">
                     <strong>Tip:</strong> Analyze your media first to generate content that references your images/videos!
                   </p>
                 </div>
               </motion.div>
             )}
+            
             {error && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="bg-red-500/20 border border-red-500/30 rounded-lg p-3"
               >
-                <p className="text-red-300 text-sm">{error}</p>
+                <p className="text-red-300 text-xs sm:text-sm">{error}</p>
               </motion.div>
             )}
           </div>

@@ -129,19 +129,19 @@ export function MediaUpload({
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          className="border border-gray-600 rounded-lg p-4 bg-gray-800/50"
+          className="border border-gray-600 rounded-lg p-3 sm:p-4 bg-gray-800/50"
         >
-          <div className="flex items-center justify-between mb-4">
-            <h4 className="text-white font-medium">Media Library</h4>
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <h4 className="text-sm sm:text-base text-white font-medium">Media Library</h4>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setShowLibrary(false)}
             >
-              <X className="w-4 h-4" />
+              <X className="w-3 h-3 sm:w-4 sm:h-4" />
             </Button>
           </div>
-          <div className="grid grid-cols-4 gap-2 max-h-48 overflow-y-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-h-48 overflow-y-auto">
             {mediaItems.slice(0, 12).map((item) => (
               <div
                 key={item.id}
@@ -156,7 +156,7 @@ export function MediaUpload({
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <Video className="w-6 h-6 text-gray-400" />
+                    <Video className="w-4 h-4 sm:w-6 sm:h-6 text-gray-400" />
                   </div>
                 )}
               </div>
@@ -168,7 +168,7 @@ export function MediaUpload({
       {/* Upload Area */}
       <div
         className={`
-          border-2 border-dashed rounded-lg p-6 text-center transition-colors cursor-pointer
+          border-2 border-dashed rounded-lg p-4 sm:p-6 text-center transition-colors cursor-pointer
           ${dragOver 
             ? 'border-purple-500 bg-purple-500/10' 
             : 'border-gray-600 hover:border-purple-500/50'
@@ -182,32 +182,33 @@ export function MediaUpload({
       >
         {isOptimizing ? (
           <div className="flex flex-col items-center">
-            <div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin mb-2"></div>
-            <p className="text-purple-400 text-sm">Optimizing files...</p>
+            <div className="w-6 h-6 sm:w-8 sm:h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin mb-2"></div>
+            <p className="text-purple-400 text-xs sm:text-sm">Optimizing files...</p>
           </div>
         ) : (
           <>
-        <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-        <p className="text-gray-400 text-sm">
-          {mediaFiles.length >= maxFiles 
-            ? `Maximum ${maxFiles} files reached`
-            : 'Drop files here or click to upload'
-          }
-        </p>
-        <p className="text-gray-500 text-xs mt-1">
-          Images and videos up to {maxSizePerFile}MB each
-        </p>
+            <Upload className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400 mx-auto mb-2" />
+            <p className="text-gray-400 text-sm">
+              {mediaFiles.length >= maxFiles 
+                ? `Maximum ${maxFiles} files reached`
+                : 'Drop files here or click to upload'
+              }
+            </p>
+            <p className="text-gray-500 text-xs mt-1">
+              Images and videos up to {maxSizePerFile}MB each
+            </p>
           </>
         )}
       </div>
 
       {/* Quick Actions */}
-      <div className="flex items-center space-x-2">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setShowLibrary(!showLibrary)}
-          leftIcon={<FolderOpen className="w-4 h-4" />}
+          leftIcon={<FolderOpen className="w-3 h-3 sm:w-4 sm:h-4" />}
+          className="text-xs sm:text-sm"
         >
           Browse Library
         </Button>
@@ -216,6 +217,7 @@ export function MediaUpload({
           <span>Auto-optimization enabled</span>
         </div>
       </div>
+
       <input
         ref={fileInputRef}
         type="file"
@@ -232,8 +234,8 @@ export function MediaUpload({
           animate={{ opacity: 1, y: 0 }}
           className="bg-red-500/20 border border-red-500/30 rounded-lg p-3 flex items-center space-x-2"
         >
-          <AlertCircle className="w-4 h-4 text-red-400" />
-          <p className="text-red-300 text-sm">{error}</p>
+          <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4 text-red-400" />
+          <p className="text-red-300 text-xs sm:text-sm">{error}</p>
         </motion.div>
       )}
 
@@ -244,7 +246,7 @@ export function MediaUpload({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="grid grid-cols-2 gap-4"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"
           >
             {mediaFiles.map((mediaFile) => (
               <motion.div
@@ -263,28 +265,28 @@ export function MediaUpload({
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gray-700">
-                      <Video className="w-8 h-8 text-gray-400" />
+                      <Video className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" />
                     </div>
                   )}
                   
                   {/* Upload Status Overlay */}
                   {mediaFile.uploaded === false && (
                     <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                      <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <div className="w-4 h-4 sm:w-6 sm:h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                     </div>
                   )}
                 </div>
 
                 {/* File Info */}
-                <div className="p-3">
+                <div className="p-2 sm:p-3">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 min-w-0 flex-1">
                       {mediaFile.type === 'image' ? (
-                        <Image className="w-4 h-4 text-gray-400" />
+                        <Image className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 flex-shrink-0" />
                       ) : (
-                        <Video className="w-4 h-4 text-gray-400" />
+                        <Video className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 flex-shrink-0" />
                       )}
-                      <span className="text-white text-sm font-medium truncate">
+                      <span className="text-white text-xs sm:text-sm font-medium truncate">
                         {mediaFile.file.name}
                       </span>
                     </div>
@@ -292,9 +294,9 @@ export function MediaUpload({
                       variant="ghost"
                       size="sm"
                       onClick={() => onMediaRemove(mediaFile.id)}
-                      className="text-red-400 hover:text-red-300"
+                      className="text-red-400 hover:text-red-300 flex-shrink-0 ml-2"
                     >
-                      <X className="w-4 h-4" />
+                      <X className="w-3 h-3 sm:w-4 sm:h-4" />
                     </Button>
                   </div>
                   <p className="text-gray-400 text-xs mt-1">

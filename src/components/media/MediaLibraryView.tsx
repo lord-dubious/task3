@@ -87,25 +87,27 @@ export function MediaLibraryView() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-3 sm:space-y-0">
         <div>
-          <h2 className="text-2xl font-bold text-white">Media Library</h2>
-          <p className="text-gray-400 mt-1">
+          <h2 className="text-xl sm:text-2xl font-bold text-white">Media Library</h2>
+          <p className="text-sm sm:text-base text-gray-400 mt-1">
             Manage your uploaded media files with automatic optimization
           </p>
         </div>
         <Button
           onClick={() => setShowUploadModal(true)}
-          leftIcon={<Upload className="w-4 h-4" />}
+          leftIcon={<Upload className="w-3 h-3 sm:w-4 sm:h-4" />}
+          size="sm"
+          className="text-xs sm:text-sm"
         >
           Upload Media
         </Button>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <MediaStatsCard
           title="Total Files"
           value={mediaItems.length}
@@ -134,21 +136,21 @@ export function MediaLibraryView() {
 
       {/* Filters and Search */}
       <Card>
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
           <div className="flex-1">
             <Input
               placeholder="Search media files..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              leftIcon={<Search className="w-4 h-4" />}
+              leftIcon={<Search className="w-3 h-3 sm:w-4 sm:h-4" />}
             />
           </div>
           
-          <div className="flex items-center space-x-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
             <select
               value={selectedFolder}
               onChange={(e) => setSelectedFolder(e.target.value)}
-              className="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-purple-500 focus:outline-none"
+              className="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:border-purple-500 focus:outline-none"
             >
               <option value="all">All Folders</option>
               {folders.map(folder => (
@@ -165,7 +167,7 @@ export function MediaLibraryView() {
                 onClick={() => setViewMode('grid')}
                 className="rounded-r-none border-r border-gray-600"
               >
-                <Grid className="w-4 h-4" />
+                <Grid className="w-3 h-3 sm:w-4 sm:h-4" />
               </Button>
               <Button
                 variant={viewMode === 'list' ? 'primary' : 'ghost'}
@@ -173,15 +175,15 @@ export function MediaLibraryView() {
                 onClick={() => setViewMode('list')}
                 className="rounded-l-none"
               >
-                <List className="w-4 h-4" />
+                <List className="w-3 h-3 sm:w-4 sm:h-4" />
               </Button>
             </div>
           </div>
         </div>
 
         {selectedItems.length > 0 && (
-          <div className="flex items-center justify-between mt-4 p-3 bg-purple-500/20 border border-purple-500/30 rounded-lg">
-            <span className="text-purple-300">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-4 p-3 bg-purple-500/20 border border-purple-500/30 rounded-lg space-y-2 sm:space-y-0">
+            <span className="text-purple-300 text-sm">
               {selectedItems.length} item{selectedItems.length !== 1 ? 's' : ''} selected
             </span>
             <div className="flex items-center space-x-2">
@@ -189,6 +191,7 @@ export function MediaLibraryView() {
                 variant="ghost"
                 size="sm"
                 onClick={handleSelectAll}
+                className="text-xs sm:text-sm"
               >
                 {selectedItems.length === filteredItems.length ? 'Deselect All' : 'Select All'}
               </Button>
@@ -196,7 +199,8 @@ export function MediaLibraryView() {
                 variant="danger"
                 size="sm"
                 onClick={handleBulkDelete}
-                leftIcon={<Trash2 className="w-4 h-4" />}
+                leftIcon={<Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />}
+                className="text-xs sm:text-sm"
               >
                 Delete Selected
               </Button>
@@ -207,7 +211,7 @@ export function MediaLibraryView() {
 
       {/* Media Grid */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
           {[...Array(8)].map((_, i) => (
             <div key={i} className="animate-pulse">
               <Card className="aspect-square bg-gray-800"></Card>
@@ -245,7 +249,7 @@ export function MediaLibraryView() {
           animate={{ opacity: 1, y: 0 }}
           className="bg-red-500/20 border border-red-500/30 rounded-lg p-4"
         >
-          <p className="text-red-300">{error}</p>
+          <p className="text-red-300 text-sm">{error}</p>
         </motion.div>
       )}
     </div>
