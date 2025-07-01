@@ -78,16 +78,16 @@ export function QuickSettingsDropdown() {
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.15 }}
             className="absolute right-0 top-full mt-2 w-80 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-[9999] overflow-hidden"
-            className="absolute right-0 top-full mt-2 w-80 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-dropdown overflow-hidden"
+            className="absolute right-0 top-full mt-2 w-72 sm:w-80 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-dropdown overflow-hidden max-h-[80vh]"
           >
-            <div className="p-4 border-b border-gray-700">
+            <div className="p-3 sm:p-4 border-b border-gray-700 flex-shrink-0">
               <h3 className="text-white font-semibold flex items-center">
                 <Zap className="w-4 h-4 mr-2 text-purple-400" />
                 Quick Settings
               </h3>
             </div>
 
-            <div className="p-4 space-y-4">
+            <div className="p-3 sm:p-4 space-y-4 overflow-y-auto max-h-96">
               {/* AI Model Selection */}
               <div>
                 <div className="flex items-center space-x-2 mb-2">
@@ -190,7 +190,7 @@ export function QuickSettingsDropdown() {
               </div>
             </div>
 
-            <div className="p-4 border-t border-gray-700 bg-gray-800/50">
+            <div className="p-3 sm:p-4 border-t border-gray-700 bg-gray-800/50 flex-shrink-0">
               <div className="grid grid-cols-2 gap-2">
                 <Button
                   variant="ghost"

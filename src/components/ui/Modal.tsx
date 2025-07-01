@@ -41,26 +41,29 @@ export function Modal({
   if (!isOpen) return null;
 
   return (
-    <AnimatePresence>
-      <div 
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-modal flex items-center justify-center p-4"
+    <AnimatePresence mode="wait">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-modal flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
         onClick={handleOverlayClick}
       >
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          transition={{ duration: 0.2 }}
+          exit={{ opacity: 0, scale: 0.9, y: 20 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
           className={`
-            bg-gray-900 rounded-2xl border border-gray-700 w-full ${sizeClasses[size]} 
-            max-h-[90vh] overflow-y-auto shadow-2xl ${className}
+            bg-gray-900/95 backdrop-blur-sm rounded-2xl border border-gray-700 w-full ${sizeClasses[size]} 
+            max-h-[95vh] shadow-2xl my-auto ${className}
           `}
           onClick={(e) => e.stopPropagation()}
         >
           {(title || showCloseButton) && (
-            <div className="flex items-center justify-between p-6 border-b border-gray-700">
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-700 flex-shrink-0">
               {title && (
-                <h2 className="text-xl font-bold text-white">{title}</h2>
+                <h2 className="text-lg sm:text-xl font-bold text-white truncate pr-4">{title}</h2>
               )}
               {showCloseButton && (
                 <Button
@@ -75,11 +78,11 @@ export function Modal({
             </div>
           )}
           
-          <div className={title || showCloseButton ? 'p-6' : 'p-6'}>
+          <div className={`${title || showCloseButton ? 'p-4 sm:p-6' : 'p-4 sm:p-6'} overflow-y-auto max-h-[calc(95vh-120px)]`}>
             {children}
           </div>
         </motion.div>
-      </div>
+      </motion.div>
     </AnimatePresence>
   );
 }

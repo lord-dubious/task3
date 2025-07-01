@@ -14,7 +14,8 @@ export function Card({ children, className = '', hover = false, onClick }: CardP
   return (
     <Component
       className={`
-        bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-4 sm:p-6
+        bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-3 sm:p-4 lg:p-6
+        card-responsive
         ${hover ? 'hover:bg-gray-800/50 hover:border-purple-500/50 transition-all duration-300 cursor-pointer' : ''}
         ${className}
       `}

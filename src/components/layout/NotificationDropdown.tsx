@@ -98,10 +98,10 @@ export function NotificationDropdown() {
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.15 }}
             className="absolute right-0 top-full mt-2 w-96 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-50 overflow-hidden"
-            className="absolute right-0 top-full mt-2 w-96 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-dropdown overflow-hidden"
+            className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-dropdown overflow-hidden max-h-[80vh]"
           >
             {/* Header */}
-            <div className="p-4 border-b border-gray-700 flex items-center justify-between">
+            <div className="p-3 sm:p-4 border-b border-gray-700 flex items-center justify-between flex-shrink-0">
               <h3 className="text-white font-semibold flex items-center">
                 <Bell className="w-4 h-4 mr-2 text-purple-400" />
                 Notifications
@@ -138,9 +138,9 @@ export function NotificationDropdown() {
             </div>
 
             {/* Notifications List */}
-            <div className="max-h-96 overflow-y-auto">
+            <div className="max-h-80 overflow-y-auto">
               {notifications.length === 0 ? (
-                <div className="p-8 text-center">
+                <div className="p-6 sm:p-8 text-center">
                   <Bell className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <p className="text-gray-400 text-sm">No notifications yet</p>
                   <p className="text-gray-500 text-xs mt-1">
@@ -155,7 +155,7 @@ export function NotificationDropdown() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       className={`
-                        p-4 hover:bg-gray-800/50 cursor-pointer transition-colors relative
+                        p-3 sm:p-4 hover:bg-gray-800/50 cursor-pointer transition-colors relative
                         ${!notification.read ? 'bg-purple-500/5' : ''}
                       `}
                       onClick={() => handleNotificationClick(notification)}
@@ -224,7 +224,7 @@ export function NotificationDropdown() {
 
             {/* Footer */}
             {notifications.length > 0 && (
-              <div className="p-3 border-t border-gray-700 bg-gray-800/50">
+              <div className="p-3 border-t border-gray-700 bg-gray-800/50 flex-shrink-0">
                 <Button
                   variant="ghost"
                   size="sm"
