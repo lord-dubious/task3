@@ -6,6 +6,7 @@ import { Card } from '../ui/Card';
 import { TweetCalendar } from './TweetCalendar';
 import { ScheduleModal } from './ScheduleModal';
 import { TweetEditModal } from './TweetEditModal';
+import { CronJobStatus } from './CronJobStatus';
 import { InlineSchedulePicker } from '../compose/InlineSchedulePicker';
 import { useTweets, Tweet } from '../../hooks/useTweets';
 import { StatsCard } from '../dashboard/StatsCard';
@@ -200,6 +201,20 @@ export function SchedulingView() {
         onDeleteTweet={handleDeleteTweet}
         onRetryTweet={handleRetryTweet}
       />
+
+      {/* Cron Job Status */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="lg:col-span-2">
+          <div className="bg-gray-900/50 rounded-lg p-4">
+            <h3 className="text-lg font-semibold text-white mb-4">Automated Processing</h3>
+            <p className="text-gray-400 text-sm mb-4">
+              Your scheduled tweets are automatically processed every 5 minutes by our cron job system. 
+              You can also trigger manual processing if needed.
+            </p>
+          </div>
+        </div>
+        <CronJobStatus />
+      </div>
 
       {/* Schedule Confirmation */}
       {scheduledDateTime && (

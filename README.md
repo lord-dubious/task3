@@ -99,6 +99,44 @@ The application uses several key tables:
 - `media_library` - Media file metadata and optimization stats
 - `user_settings` - User preferences and API keys
 
+## Scheduled Tweet Processing
+
+The application uses Supabase Edge Functions with `pg_cron` for automated tweet posting:
+
+### Setup Requirements
+
+1. **Enable Supabase Extensions**:
+   - Go to your Supabase project dashboard
+   - Navigate to "Database" → "Extensions"
+   - Enable `pg_cron` extension
+   - Enable `pg_net` extension
+
+2. **Deploy Edge Function**:
+   ```bash
+   supabase functions deploy post-tweets
+   ```
+
+3. **Configure Cron Job**:
+   - Update the migration file `20250629150000_setup_cron_job.sql`
+   - Replace `YOUR_EDGE_FUNCTION_URL` with your actual Edge Function URL
+   - Replace `YOUR_SUPABASE_ANON_KEY` with your project's anon key
+   - Run the migration
+
+### How It Works
+
+- **Automated Processing**: Cron job runs every 5 minutes
+- **Tweet Detection**: Finds tweets with `status = 'scheduled'` and `scheduled_for` in the past
+- **Twitter Integration**: Posts tweets using stored Twitter credentials
+- **Status Updates**: Updates tweet status to `posted` or `failed` with error details
+- **Manual Trigger**: Available in the UI for immediate processing
+
+### Monitoring
+
+- View cron job status in the Scheduling tab
+- Manual processing trigger available
+- Real-time status updates and error reporting
+- Comprehensive logging in Edge Function
+
 ## Security
 
 - All API keys stored locally in browser
