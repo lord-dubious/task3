@@ -55,4 +55,3 @@ function Tooltip({
 }
 
 export { Tooltip, TooltipProvider, TooltipRoot, TooltipTrigger, TooltipContent };
-```
