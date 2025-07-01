@@ -283,287 +283,288 @@ export function AgentImportExport({
   return (
     <AnimatePresence>
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-modal flex items-center justify-center p-4">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          className="bg-gray-900 rounded-2xl p-6 w-full max-w-4xl border border-gray-700 max-h-[90vh] overflow-y-auto"
-        >
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-3">
-              <FileText className="w-6 h-6 text-purple-400" />
-              <h2 className="text-2xl font-bold text-white">Import/Export Agents</h2>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-modal flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="bg-gray-900 rounded-2xl p-6 w-full max-w-4xl border border-gray-700 max-h-[90vh] overflow-y-auto"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-3">
+                <FileText className="w-6 h-6 text-purple-400" />
+                <h2 className="text-2xl font-bold text-white">Import/Export Agents</h2>
+              </div>
+              <button
+                onClick={onClose}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
             </div>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-white transition-colors"
-            >
-              <X className="w-6 h-6" />
-            </button>
-          </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Export Section */}
-            <Card>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <Download className="w-5 h-5 text-green-400" />
-                  <h3 className="text-lg font-semibold text-white">Export Agents</h3>
-                </div>
-                
-                <div className="bg-gray-800/50 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <p className="text-white font-medium">Current Agents</p>
-                      <p className="text-gray-400 text-sm">{agents.length} agents configured</p>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Bot className="w-8 h-8 text-purple-400" />
-                      <span className="text-2xl font-bold text-white">{agents.length}</span>
-                    </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Export Section */}
+              <Card>
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <Download className="w-5 h-5 text-green-400" />
+                    <h3 className="text-lg font-semibold text-white">Export Agents</h3>
                   </div>
                   
-                  <Button
-                    onClick={onExportAll}
-                    disabled={agents.length === 0}
-                    leftIcon={<Download className="w-4 h-4" />}
-                    className="w-full"
-                  >
-                    Export All Agents
-                  </Button>
-                </div>
-
-                <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-4">
-                  <h4 className="text-blue-300 font-medium mb-2">Export Features</h4>
-                  <ul className="text-blue-200 text-sm space-y-1">
-                    <li>• Export individual agents or all at once</li>
-                    <li>• JSON format for easy sharing and backup</li>
-                    <li>• Includes all agent configuration and personality data</li>
-                    <li>• Compatible with other TweetScheduler Pro instances</li>
-                  </ul>
-                </div>
-              </div>
-            </Card>
-
-            {/* Import Section */}
-            <Card>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <Upload className="w-5 h-5 text-blue-400" />
-                  <h3 className="text-lg font-semibold text-white">Import Agents</h3>
-                </div>
-
-                {!importData ? (
-                  <>
-                    <div
-                      className={`
-                        border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer
-                        ${dragOver 
-                          ? 'border-purple-500 bg-purple-500/10' 
-                          : 'border-gray-600 hover:border-purple-500/50'
-                        }
-                      `}
-                      onDrop={handleDrop}
-                      onDragOver={handleDragOver}
-                      onDragLeave={handleDragLeave}
-                      onClick={() => fileInputRef.current?.click()}
+                  <div className="bg-gray-800/50 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <p className="text-white font-medium">Current Agents</p>
+                        <p className="text-gray-400 text-sm">{agents.length} agents configured</p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Bot className="w-8 h-8 text-purple-400" />
+                        <span className="text-2xl font-bold text-white">{agents.length}</span>
+                      </div>
+                    </div>
+                    
+                    <Button
+                      onClick={onExportAll}
+                      disabled={agents.length === 0}
+                      leftIcon={<Download className="w-4 h-4" />}
+                      className="w-full"
                     >
-                      <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-400 text-lg mb-2">
-                        Drop JSON file here or click to upload
-                      </p>
-                      <p className="text-gray-500 text-sm">
-                        Import agent configurations from JSON files
-                      </p>
-                    </div>
+                      Export All Agents
+                    </Button>
+                  </div>
 
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept=".json"
-                      onChange={(e) => handleFileSelect(e.target.files)}
-                      className="hidden"
-                    />
-                  </>
-                ) : (
-                  <div className="space-y-4">
-                    <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center space-x-2">
-                          <CheckCircle className="w-5 h-5 text-green-400" />
-                          <span className="text-green-300 font-medium">File Loaded Successfully</span>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={resetImport}
-                        >
-                          <X className="w-4 h-4" />
-                        </Button>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                          <span className="text-gray-400">Agents Found: </span>
-                          <span className="text-white">{getAgentsToDisplay().length}</span>
-                        </div>
-                        <div>
-                          <span className="text-gray-400">Version: </span>
-                          <span className="text-white">{importData.version || 'Unknown'}</span>
-                        </div>
-                      </div>
-                    </div>
+                  <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-4">
+                    <h4 className="text-blue-300 font-medium mb-2">Export Features</h4>
+                    <ul className="text-blue-200 text-sm space-y-1">
+                      <li>• Export individual agents or all at once</li>
+                      <li>• JSON format for easy sharing and backup</li>
+                      <li>• Includes all agent configuration and personality data</li>
+                      <li>• Compatible with other TweetScheduler Pro instances</li>
+                    </ul>
+                  </div>
+                </div>
+              </Card>
 
-                    {/* Agent Selection */}
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <h4 className="text-white font-medium">Select Agents to Import</h4>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={selectAllAgents}
-                        >
-                          {selectedAgents.length === getAgentsToDisplay().length ? 'Deselect All' : 'Select All'}
-                        </Button>
+              {/* Import Section */}
+              <Card>
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <Upload className="w-5 h-5 text-blue-400" />
+                    <h3 className="text-lg font-semibold text-white">Import Agents</h3>
+                  </div>
+
+                  {!importData ? (
+                    <>
+                      <div
+                        className={`
+                          border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer
+                          ${dragOver 
+                            ? 'border-purple-500 bg-purple-500/10' 
+                            : 'border-gray-600 hover:border-purple-500/50'
+                          }
+                        `}
+                        onDrop={handleDrop}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                        <p className="text-gray-400 text-lg mb-2">
+                          Drop JSON file here or click to upload
+                        </p>
+                        <p className="text-gray-500 text-sm">
+                          Import agent configurations from JSON files
+                        </p>
                       </div>
-                      
-                      <div className="max-h-48 overflow-y-auto space-y-2">
-                        {getAgentsToDisplay().map((agent, index) => (
-                          <div
-                            key={index}
-                            className={`
-                              p-3 rounded-lg border cursor-pointer transition-all
-                              ${selectedAgents.includes(index)
-                                ? 'border-purple-500 bg-purple-500/10'
-                                : 'border-gray-600 hover:border-purple-500/50'
-                              }
-                            `}
-                            onClick={() => toggleAgentSelection(index)}
+
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept=".json"
+                        onChange={(e) => handleFileSelect(e.target.files)}
+                        className="hidden"
+                      />
+                    </>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center space-x-2">
+                            <CheckCircle className="w-5 h-5 text-green-400" />
+                            <span className="text-green-300 font-medium">File Loaded Successfully</span>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={resetImport}
                           >
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center space-x-3">
-                                <input
-                                  type="checkbox"
-                                  checked={selectedAgents.includes(index)}
-                                  onChange={() => toggleAgentSelection(index)}
-                                  className="w-4 h-4"
-                                />
-                                <div>
-                                  <p className="text-white font-medium">{agent.name}</p>
-                                  {agent.username && (
-                                    <p className="text-gray-400 text-sm">@{agent.username}</p>
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <span className="text-gray-400">Agents Found: </span>
+                            <span className="text-white">{getAgentsToDisplay().length}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-400">Version: </span>
+                            <span className="text-white">{importData.version || 'Unknown'}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Agent Selection */}
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-white font-medium">Select Agents to Import</h4>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={selectAllAgents}
+                          >
+                            {selectedAgents.length === getAgentsToDisplay().length ? 'Deselect All' : 'Select All'}
+                          </Button>
+                        </div>
+                        
+                        <div className="max-h-48 overflow-y-auto space-y-2">
+                          {getAgentsToDisplay().map((agent, index) => (
+                            <div
+                              key={index}
+                              className={`
+                                p-3 rounded-lg border cursor-pointer transition-all
+                                ${selectedAgents.includes(index)
+                                  ? 'border-purple-500 bg-purple-500/10'
+                                  : 'border-gray-600 hover:border-purple-500/50'
+                                }
+                              `}
+                              onClick={() => toggleAgentSelection(index)}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-3">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedAgents.includes(index)}
+                                    onChange={() => toggleAgentSelection(index)}
+                                    className="w-4 h-4"
+                                  />
+                                  <div>
+                                    <p className="text-white font-medium">{agent.name}</p>
+                                    {agent.username && (
+                                      <p className="text-gray-400 text-sm">@{agent.username}</p>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="flex items-center space-x-2 text-xs text-gray-500">
+                                  {agent.topics && agent.topics.length > 0 && (
+                                    <span>{agent.topics.length} topics</span>
+                                  )}
+                                  {agent.post_examples && agent.post_examples.length > 0 && (
+                                    <span>{agent.post_examples.length} examples</span>
                                   )}
                                 </div>
                               </div>
-                              <div className="flex items-center space-x-2 text-xs text-gray-500">
-                                {agent.topics && agent.topics.length > 0 && (
-                                  <span>{agent.topics.length} topics</span>
-                                )}
-                                {agent.post_examples && agent.post_examples.length > 0 && (
-                                  <span>{agent.post_examples.length} examples</span>
-                                )}
-                              </div>
                             </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <Button
-                      onClick={handleImport}
-                      disabled={selectedAgents.length === 0 || isImporting}
-                      isLoading={isImporting}
-                      leftIcon={<Upload className="w-4 h-4" />}
-                      className="w-full"
-                    >
-                      Import {selectedAgents.length} Agent{selectedAgents.length !== 1 ? 's' : ''}
-                    </Button>
-                  </div>
-                )}
-
-                {/* Import Results */}
-                {importResults && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`rounded-lg p-4 border ${
-                      importResults.failed === 0
-                        ? 'bg-green-500/20 border-green-500/30'
-                        : 'bg-yellow-500/20 border-yellow-500/30'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-2 mb-2">
-                      {importResults.failed === 0 ? (
-                        <CheckCircle className="w-5 h-5 text-green-400" />
-                      ) : (
-                        <AlertCircle className="w-5 h-5 text-yellow-400" />
-                      )}
-                      <span className={`font-medium ${
-                        importResults.failed === 0 ? 'text-green-300' : 'text-yellow-300'
-                      }`}>
-                        Import Complete
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 text-sm mb-2">
-                      <div>
-                        <span className="text-gray-400">Successful: </span>
-                        <span className="text-green-400">{importResults.success}</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-400">Failed: </span>
-                        <span className="text-red-400">{importResults.failed}</span>
-                      </div>
-                    </div>
-                    {importResults.errors.length > 0 && (
-                      <div className="mt-2">
-                        <p className="text-red-300 text-sm font-medium mb-1">Errors:</p>
-                        <ul className="text-red-200 text-xs space-y-1">
-                          {importResults.errors.map((error, index) => (
-                            <li key={index}>• {error}</li>
                           ))}
-                        </ul>
+                        </div>
                       </div>
-                    )}
-                  </motion.div>
-                )}
 
-                {error && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="bg-red-500/20 border border-red-500/30 rounded-lg p-3 flex items-center space-x-2"
-                  >
-                    <AlertCircle className="w-4 h-4 text-red-400" />
-                    <p className="text-red-300 text-sm">{error}</p>
-                  </motion.div>
-                )}
-              </div>
-            </Card>
-          </div>
+                      <Button
+                        onClick={handleImport}
+                        disabled={selectedAgents.length === 0 || isImporting}
+                        isLoading={isImporting}
+                        leftIcon={<Upload className="w-4 h-4" />}
+                        className="w-full"
+                      >
+                        Import {selectedAgents.length} Agent{selectedAgents.length !== 1 ? 's' : ''}
+                      </Button>
+                    </div>
+                  )}
 
-          {/* Usage Instructions */}
-          <div className="mt-6 bg-gray-800/50 rounded-lg p-4">
-            <h4 className="text-white font-medium mb-2">How to Use</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-400">
-              <div>
-                <p className="font-medium text-gray-300 mb-1">Exporting:</p>
-                <ul className="space-y-1">
-                  <li>• Click "Export All" to download all agents as JSON</li>
-                  <li>• Use the download button on individual agents</li>
-                  <li>• Share files with team members or backup configurations</li>
-                </ul>
-              </div>
-              <div>
-                <p className="font-medium text-gray-300 mb-1">Importing:</p>
-                <ul className="space-y-1">
-                  <li>• Drag and drop JSON files or click to upload</li>
-                  <li>• Select which agents to import</li>
-                  <li>• Duplicate names will be automatically handled</li>
-                </ul>
+                  {/* Import Results */}
+                  {importResults && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`rounded-lg p-4 border ${
+                        importResults.failed === 0
+                          ? 'bg-green-500/20 border-green-500/30'
+                          : 'bg-yellow-500/20 border-yellow-500/30'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-2 mb-2">
+                        {importResults.failed === 0 ? (
+                          <CheckCircle className="w-5 h-5 text-green-400" />
+                        ) : (
+                          <AlertCircle className="w-5 h-5 text-yellow-400" />
+                        )}
+                        <span className={`font-medium ${
+                          importResults.failed === 0 ? 'text-green-300' : 'text-yellow-300'
+                        }`}>
+                          Import Complete
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4 text-sm mb-2">
+                        <div>
+                          <span className="text-gray-400">Successful: </span>
+                          <span className="text-green-400">{importResults.success}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-400">Failed: </span>
+                          <span className="text-red-400">{importResults.failed}</span>
+                        </div>
+                      </div>
+                      {importResults.errors.length > 0 && (
+                        <div className="mt-2">
+                          <p className="text-red-300 text-sm font-medium mb-1">Errors:</p>
+                          <ul className="text-red-200 text-xs space-y-1">
+                            {importResults.errors.map((error, index) => (
+                              <li key={index}>• {error}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </motion.div>
+                  )}
+
+                  {error && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="bg-red-500/20 border border-red-500/30 rounded-lg p-3 flex items-center space-x-2"
+                    >
+                      <AlertCircle className="w-4 h-4 text-red-400" />
+                      <p className="text-red-300 text-sm">{error}</p>
+                    </motion.div>
+                  )}
+                </div>
+              </Card>
+            </div>
+
+            {/* Usage Instructions */}
+            <div className="mt-6 bg-gray-800/50 rounded-lg p-4">
+              <h4 className="text-white font-medium mb-2">How to Use</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-400">
+                <div>
+                  <p className="font-medium text-gray-300 mb-1">Exporting:</p>
+                  <ul className="space-y-1">
+                    <li>• Click "Export All" to download all agents as JSON</li>
+                    <li>• Use the download button on individual agents</li>
+                    <li>• Share files with team members or backup configurations</li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-medium text-gray-300 mb-1">Importing:</p>
+                  <ul className="space-y-1">
+                    <li>• Drag and drop JSON files or click to upload</li>
+                    <li>• Select which agents to import</li>
+                    <li>• Duplicate names will be automatically handled</li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </AnimatePresence>
   );
