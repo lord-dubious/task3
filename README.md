@@ -14,6 +14,23 @@ AI-powered Twitter management platform with Cloudflare R2 storage integration.
 
 ## Quick Setup
 
+### Automated Setup (Recommended)
+
+Run the automated setup script to configure everything:
+
+```bash
+npm run setup
+```
+
+This will:
+- Check your Supabase project configuration
+- Deploy the Edge Function automatically
+- Update migration files with your project details
+- Apply database migrations
+- Test the setup
+
+### Manual Setup
+
 ### 1. Environment Variables
 
 Create a `.env` file with your credentials:

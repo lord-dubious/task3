@@ -7,6 +7,7 @@ import { useNotifications } from '../../hooks/useNotifications';
 import { TwitterIntegration } from './TwitterIntegration';
 import { GoogleAISettings } from './GoogleAISettings';
 import { CloudflareR2Settings } from './CloudflareR2Settings';
+import { EdgeFunctionSetup } from './EdgeFunctionSetup';
 
 export function SettingsView() {
   const [twitterCredentials, setTwitterCredentials] = useLocalStorage('twitter_credentials', {
@@ -33,6 +34,7 @@ export function SettingsView() {
     <div className="max-w-2xl mx-auto space-y-6">
       <GoogleAISettings />
       <TwitterIntegration />
+      <EdgeFunctionSetup />
       <CloudflareR2Settings />
 
       <div className="flex justify-end">
