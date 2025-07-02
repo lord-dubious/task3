@@ -1,54 +1,27 @@
 import React from 'react';
+import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
+import { Check } from 'lucide-react';
 
-interface CheckboxProps {
-  checked?: boolean;
-  onCheckedChange?: (checked: boolean) => void;
-  disabled?: boolean;
-  id?: string;
-  className?: string;
-}
+const Checkbox = React.forwardRef<
+  React.ElementRef<typeof CheckboxPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>
+>(({ className, ...props }, ref) => (
+  <CheckboxPrimitive.Root
+    ref={ref}
+    className={`
+      peer h-4 w-4 shrink-0 rounded-sm border border-gray-600 bg-gray-800 ring-offset-background 
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 
+      focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 
+      data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600 
+      data-[state=checked]:text-white hover:border-purple-500 transition-colors ${className}
+    `}
+    {...props}
+  >
+    <CheckboxPrimitive.Indicator className="flex items-center justify-center text-current">
+      <Check className="h-3 w-3" />
+    </CheckboxPrimitive.Indicator>
+  </CheckboxPrimitive.Root>
+));
+Checkbox.displayName = CheckboxPrimitive.Root.displayName;
 
-// Declare Material Web components for TypeScript
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'md-checkbox': any;
-    }
-  }
-}
-
-export function Checkbox({
-  checked = false,
-  onCheckedChange,
-  disabled = false,
-  id,
-  className = '',
-}: CheckboxProps) {
-  const handleChange = (event: Event) => {
-    const target = event.target as any;
-    if (onCheckedChange) {
-      onCheckedChange(target.checked);
-    }
-  };
-
-  return (
-    <md-checkbox
-      id={id}
-      checked={checked}
-      disabled={disabled}
-      className={`transition-colors duration-200 ${className}`}
-      style={{
-        '--md-checkbox-selected-container-color': 'rgb(168, 85, 247)',
-        '--md-checkbox-selected-hover-container-color': 'rgb(147, 51, 234)',
-        '--md-checkbox-selected-pressed-container-color': 'rgb(126, 34, 206)',
-        '--md-checkbox-selected-focus-container-color': 'rgb(168, 85, 247)',
-        '--md-checkbox-selected-icon-color': 'rgb(255, 255, 255)',
-        '--md-checkbox-unselected-outline-color': 'rgb(156, 163, 175)',
-        '--md-checkbox-unselected-hover-outline-color': 'rgb(168, 85, 247)',
-        '--md-checkbox-unselected-pressed-outline-color': 'rgb(147, 51, 234)',
-        '--md-checkbox-unselected-focus-outline-color': 'rgb(168, 85, 247)',
-      }}
-      onChange={handleChange}
-    />
-  );
-}
+export { Checkbox };
