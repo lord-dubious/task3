@@ -2,24 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Toaster } from 'sonner';
 import { AuthGuard } from './components/auth/AuthGuard';
-import { Sidebar } from './components/layout/Sidebar';
-import { Header } from './components/layout/Header';
+import { MobileSidebar } from './components/mobile/MobileSidebar';
+import { MobileHeader } from './components/mobile/MobileHeader';
+import { MobileBottomNav } from './components/mobile/MobileBottomNav';
+import { MobileDashboard } from './components/mobile/MobileDashboard';
+import { MobileTweetComposer } from './components/mobile/MobileTweetComposer';
+import { WebSidebar } from './components/web/WebSidebar';
+import { WebHeader } from './components/web/WebHeader';
 import { DashboardView } from './components/dashboard/DashboardView';
 import { TweetComposer } from './components/compose/TweetComposer';
 import { SettingsView } from './components/settings/SettingsView';
 import { AgentSettingsView } from './components/agents/AgentSettingsView';
 import { SchedulingView } from './components/scheduling/SchedulingView';
 import { MediaLibraryView } from './components/media/MediaLibraryView';
+import { useDeviceType } from './hooks/useDeviceType';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const deviceType = useDeviceType();
+  const isMobile = deviceType === 'mobile';
 
   // Handle responsive sidebar collapse
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 1024) {
+      if (window.innerWidth < 1024 && !isMobile) {
         setSidebarCollapsed(false);
         setMobileMenuOpen(false);
       }
@@ -29,11 +37,11 @@ function App() {
     handleResize(); // Check initial size
 
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [isMobile]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
-    if (mobileMenuOpen) {
+    if (mobileMenuOpen && isMobile) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
@@ -42,7 +50,7 @@ function App() {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [mobileMenuOpen]);
+  }, [mobileMenuOpen, isMobile]);
 
   const getHeaderProps = () => {
     switch (activeTab) {
@@ -65,7 +73,25 @@ function App() {
     }
   };
 
-  const renderContent = () => {
+  const renderMobileContent = () => {
+    switch (activeTab) {
+      case 'dashboard':
+        return <MobileDashboard />;
+      case 'compose':
+        return <MobileTweetComposer />;
+      default:
+        return (
+          <div className="flex items-center justify-center h-64 pb-20">
+            <div className="text-center">
+              <h3 className="text-xl font-semibold text-white mb-2">Coming Soon</h3>
+              <p className="text-gray-400">Mobile version under development</p>
+            </div>
+          </div>
+        );
+    }
+  };
+
+  const renderWebContent = () => {
     switch (activeTab) {
       case 'dashboard':
         return <DashboardView />;
@@ -91,30 +117,86 @@ function App() {
     }
   };
 
+  if (isMobile) {
+    return (
+      <AuthGuard>
+        <div className="min-h-screen bg-black">
+          <MobileHeader 
+            {...getHeaderProps()} 
+            onMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)}
+          />
+          
+          <MobileSidebar
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            isOpen={mobileMenuOpen}
+            onClose={() => setMobileMenuOpen(false)}
+          />
+          
+          <main className="min-h-screen bg-black">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                {renderMobileContent()}
+              </motion.div>
+            </AnimatePresence>
+          </main>
+          
+          <MobileBottomNav
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+          />
+        </div>
+        
+        {/* Toast Notifications */}
+        <Toaster 
+          theme="dark"
+          position="top-center"
+          richColors={true}
+          closeButton={true}
+          duration={4000}
+          visibleToasts={3}
+          toastOptions={{
+            style: {
+              background: '#111827',
+              border: '1px solid #374151',
+              color: '#f3f4f6',
+              zIndex: 500,
+              borderRadius: '12px',
+              fontSize: '13px',
+              fontWeight: '500',
+            },
+          }}
+        />
+      </AuthGuard>
+    );
+  }
   return (
     <AuthGuard>
       <div className="min-h-screen bg-black flex overflow-hidden">
-        <Sidebar 
+        <WebSidebar 
           activeTab={activeTab} 
           onTabChange={setActiveTab}
           isCollapsed={sidebarCollapsed}
           onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
-          isMobileOpen={mobileMenuOpen}
-          onMobileToggle={() => setMobileMenuOpen(!mobileMenuOpen)}
         />
         
         <div className={`
           flex-1 flex flex-col min-h-screen transition-all duration-300
           ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'}
         `}>
-          <Header 
+          <WebHeader 
             {...getHeaderProps()} 
-            onMobileMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)}
             sidebarCollapsed={sidebarCollapsed}
           />
           
           <main className="flex-1 overflow-y-auto bg-black">
-            <div className="p-3 sm:p-4 lg:p-6 min-h-full">
+            <div className="p-6 min-h-full">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab}
@@ -123,7 +205,7 @@ function App() {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3 }}
                 >
-                  {renderContent()}
+                  {renderWebContent()}
                 </motion.div>
               </AnimatePresence>
             </div>
