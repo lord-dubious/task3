@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    include: ['@google/genai', 'fast-xml-parser'],
+    include: ['@google/genai', 'fast-xml-parser', '@material/web'],
     exclude: ['lucide-react', '@aws-sdk/client-s3']
   },
   build: {

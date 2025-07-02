@@ -1,29 +1,59 @@
 import React from 'react';
-import * as SwitchPrimitive from '@radix-ui/react-switch';
 
-const Switch = React.forwardRef<
-  React.ElementRef<typeof SwitchPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root>
->(({ className, ...props }, ref) => (
-  <SwitchPrimitive.Root
-    className={`
-      peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 
-      border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 
-      focus-visible:ring-purple-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background 
-      disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-purple-600 
-      data-[state=unchecked]:bg-gray-600 hover:data-[state=unchecked]:bg-gray-500 ${className}
-    `}
-    {...props}
-    ref={ref}
-  >
-    <SwitchPrimitive.Thumb
-      className={`
-        pointer-events-none block h-4 w-4 rounded-full bg-white shadow-lg ring-0 transition-transform 
-        data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0
-      `}
+interface SwitchProps {
+  checked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
+  disabled?: boolean;
+  id?: string;
+  className?: string;
+}
+
+// Declare Material Web components for TypeScript
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'md-switch': any;
+    }
+  }
+}
+
+export function Switch({
+  checked = false,
+  onCheckedChange,
+  disabled = false,
+  id,
+  className = '',
+}: SwitchProps) {
+  const handleChange = (event: Event) => {
+    const target = event.target as any;
+    if (onCheckedChange) {
+      onCheckedChange(target.selected);
+    }
+  };
+
+  return (
+    <md-switch
+      id={id}
+      selected={checked}
+      disabled={disabled}
+      className={`transition-colors duration-200 ${className}`}
+      style={{
+        '--md-switch-selected-track-color': 'rgb(168, 85, 247)',
+        '--md-switch-selected-hover-track-color': 'rgb(147, 51, 234)',
+        '--md-switch-selected-pressed-track-color': 'rgb(126, 34, 206)',
+        '--md-switch-selected-focus-track-color': 'rgb(168, 85, 247)',
+        '--md-switch-selected-handle-color': 'rgb(255, 255, 255)',
+        '--md-switch-unselected-track-color': 'rgb(75, 85, 99)',
+        '--md-switch-unselected-hover-track-color': 'rgb(107, 114, 128)',
+        '--md-switch-unselected-pressed-track-color': 'rgb(55, 65, 81)',
+        '--md-switch-unselected-focus-track-color': 'rgb(107, 114, 128)',
+        '--md-switch-unselected-handle-color': 'rgb(156, 163, 175)',
+        '--md-switch-disabled-selected-track-color': 'rgb(55, 65, 81)',
+        '--md-switch-disabled-unselected-track-color': 'rgb(31, 41, 55)',
+        '--md-switch-disabled-selected-handle-color': 'rgb(107, 114, 128)',
+        '--md-switch-disabled-unselected-handle-color': 'rgb(75, 85, 99)',
+      }}
+      onChange={handleChange}
     />
-  </SwitchPrimitive.Root>
-));
-Switch.displayName = SwitchPrimitive.Root.displayName;
-
-export { Switch };
+  );
+}
