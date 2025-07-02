@@ -5,7 +5,17 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    include: ['@google/genai', 'fast-xml-parser', '@material/web'],
+    include: [
+      '@google/genai', 
+      'fast-xml-parser', 
+      '@material/web/all.js',
+      '@material/web/tokens/md-sys-color.css',
+      '@material/web/tokens/md-sys-elevation.css',
+      '@material/web/tokens/md-sys-motion.css',
+      '@material/web/tokens/md-sys-shape.css',
+      '@material/web/tokens/md-sys-state.css',
+      '@material/web/tokens/md-sys-typescale.css'
+    ],
     exclude: ['lucide-react', '@aws-sdk/client-s3']
   },
   build: {
