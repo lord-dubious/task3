@@ -17,7 +17,6 @@
     "@0xindie/agent-twitter-client": "^1.0.0",
     "@aws-sdk/client-s3": "^3.490.0",
     "@google/genai": "^1.0.0",
-    "@material/web": "^1.0.1",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-tooltip": "^1.0.7",
