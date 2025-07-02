@@ -16,6 +16,7 @@ import { useGoogleAI } from '../../hooks/useGoogleAI';
 import { useAuth } from '../../hooks/useAuth';
 
 export function QuickSettingsDropdown() {
+  const dropdownRef = useRef(null);
   const [selectedModel, setSelectedModel] = useLocalStorage('googleAI_selectedModel', 'gemini-1.5-flash');
   const [googleAIKey, setGoogleAIKey] = useLocalStorage('googleAI_apiKey', '');
   const [theme, setTheme] = useLocalStorage('app_theme', 'dark');

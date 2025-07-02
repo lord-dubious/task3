@@ -22,6 +22,7 @@ import { useNotifications, Notification } from '../../hooks/useNotifications';
 import { formatDistanceToNow } from 'date-fns';
 
 export function NotificationDropdown() {
+  const dropdownRef = useRef(null);
   const {
     notifications,
     unreadCount,
