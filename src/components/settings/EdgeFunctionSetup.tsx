@@ -35,31 +35,42 @@ export function EdgeFunctionSetup() {
     setSetupStatus(prev => ({ ...prev, checking: true }));
 
     try {
-      // Check if cron job exists
-      const { data: cronData, error: cronError } = await supabase
-        .from('cron_job_status')
-        .select('*');
-
-      // Check if extensions are enabled by trying to access cron functions
+      // Check if cron job exists with better error handling
       let extensionsEnabled = false;
       let cronJobConfigured = false;
 
-      if (!cronError && cronData) {
-        extensionsEnabled = true;
-        cronJobConfigured = cronData.length > 0;
-      } else if (cronError) {
-        // Handle case where cron_job_status view doesn't exist
-        console.warn('cron_job_status view not found - migrations may not have run:', cronError.message);
-        // Try to detect if extensions are enabled by checking for pg_cron functions
-        try {
-          const { error: extensionError } = await supabase.rpc('pg_cron_job_count');
-          extensionsEnabled = !extensionError;
-        } catch {
-          extensionsEnabled = false;
+      try {
+        const { data: cronData, error: cronError } = await supabase
+          .from('cron_job_status')
+          .select('*');
+
+        if (!cronError && cronData) {
+          extensionsEnabled = true;
+          cronJobConfigured = cronData.length > 0;
+        } else if (cronError) {
+          // Handle case where cron_job_status view doesn't exist
+          if (cronError.code === 'PGRST116' || cronError.message.includes('does not exist')) {
+            console.warn('cron_job_status view not found - migrations may not have run');
+            showError('Setup Required', 'Database migrations have not been run. Please run "npm run setup-db" first.');
+          } else {
+            console.warn('Error accessing cron_job_status:', cronError.message);
+          }
+
+          // Try alternative detection method for extensions
+          try {
+            const { error: extensionError } = await supabase.rpc('pg_cron_job_count');
+            extensionsEnabled = !extensionError;
+          } catch {
+            extensionsEnabled = false;
+          }
         }
+      } catch (error) {
+        console.error('Failed to check cron job status:', error);
+        extensionsEnabled = false;
+        cronJobConfigured = false;
       }
 
-      // Test edge function by making a simple request
+      // Test edge function with proper status code checking
       let edgeFunctionDeployed = false;
       try {
         const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/post-tweets`, {
@@ -71,10 +82,15 @@ export function EdgeFunctionSetup() {
           body: JSON.stringify({})
         });
 
-        // Check if we got a response (2xx, 4xx, or 5xx status codes indicate the function exists)
-        edgeFunctionDeployed = response.status !== 0;
+        // Only consider 2xx, 4xx, and 5xx as successful deployment (function exists)
+        // 404 would indicate the function doesn't exist, but other errors mean it exists but failed
+        if (response.status >= 200 && response.status < 600) {
+          edgeFunctionDeployed = true;
+        } else {
+          edgeFunctionDeployed = false;
+        }
       } catch (error) {
-        // Network errors could be connectivity issues, not necessarily missing function
+        // Network errors or fetch failures indicate function might not exist
         console.warn('Failed to test edge function:', error);
         edgeFunctionDeployed = false;
       }
