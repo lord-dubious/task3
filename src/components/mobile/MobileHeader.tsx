@@ -33,11 +33,11 @@ export function MobileHeader({ title, subtitle, onMenuToggle }: MobileHeaderProp
       </div>
       
       <div className="flex items-center space-x-2">
-        <Button variant="ghost" size="sm" className="p-2">
+        <Button variant="ghost" size="sm" className="p-2" aria-label="Notifications">
           <Bell className="w-5 h-5" />
         </Button>
-        
-        <Button variant="ghost" size="sm" className="p-2">
+
+        <Button variant="ghost" size="sm" className="p-2" aria-label="Settings">
           <Settings className="w-5 h-5" />
         </Button>
         
