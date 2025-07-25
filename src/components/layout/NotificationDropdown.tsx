@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Bell, 
   CheckCircle, 
@@ -22,7 +22,6 @@ import { useNotifications, Notification } from '../../hooks/useNotifications';
 import { formatDistanceToNow } from 'date-fns';
 
 export function NotificationDropdown() {
-  const dropdownRef = useRef(null);
   const {
     notifications,
     unreadCount,

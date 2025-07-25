@@ -84,10 +84,17 @@ export function MediaLibraryGrid({
                 <th className="text-left p-2 sm:p-3 text-xs sm:text-sm text-gray-300">
                   <Checkbox
                     checked={selectedItems.length === items.length}
+                    indeterminate={selectedItems.length > 0 && selectedItems.length < items.length}
                     onCheckedChange={() => {
                       if (selectedItems.length === items.length) {
-                        items.forEach(item => onSelectItem(item.id));
+                        // Unselect all
+                        items.forEach(item => {
+                          if (selectedItems.includes(item.id)) {
+                            onSelectItem(item.id);
+                          }
+                        });
                       } else {
+                        // Select all
                         items.forEach(item => {
                           if (!selectedItems.includes(item.id)) {
                             onSelectItem(item.id);

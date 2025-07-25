@@ -134,7 +134,7 @@ The application uses Supabase Edge Functions with `pg_cron` for automated tweet 
    ```
 
 3. **Configure Cron Job**:
-   - Update the migration file `20250629150000_setup_cron_job.sql`
+   - Update the migration file `20250701184904_pale_grass.sql`
    - Replace `YOUR_EDGE_FUNCTION_URL` with your actual Edge Function URL
    - Replace `YOUR_SUPABASE_ANON_KEY` with your project's anon key
    - Run the migration

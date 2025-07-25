@@ -47,6 +47,16 @@ export function EdgeFunctionSetup() {
       if (!cronError && cronData) {
         extensionsEnabled = true;
         cronJobConfigured = cronData.length > 0;
+      } else if (cronError) {
+        // Handle case where cron_job_status view doesn't exist
+        console.warn('cron_job_status view not found - migrations may not have run:', cronError.message);
+        // Try to detect if extensions are enabled by checking for pg_cron functions
+        try {
+          const { error: extensionError } = await supabase.rpc('pg_cron_job_count');
+          extensionsEnabled = !extensionError;
+        } catch {
+          extensionsEnabled = false;
+        }
       }
 
       // Test edge function by making a simple request
@@ -60,11 +70,12 @@ export function EdgeFunctionSetup() {
           },
           body: JSON.stringify({})
         });
-        
-        // If we get any response (even an error), the function exists
-        edgeFunctionDeployed = true;
+
+        // Check if we got a response (2xx, 4xx, or 5xx status codes indicate the function exists)
+        edgeFunctionDeployed = response.status !== 0;
       } catch (error) {
-        // Network error means function might not exist
+        // Network errors could be connectivity issues, not necessarily missing function
+        console.warn('Failed to test edge function:', error);
         edgeFunctionDeployed = false;
       }
 
@@ -112,9 +123,13 @@ export function EdgeFunctionSetup() {
     }
   };
 
-  const copySetupCommand = () => {
-    navigator.clipboard.writeText('npm run setup');
-    showInfo('Copied to clipboard', 'Setup command copied to clipboard');
+  const copySetupCommand = async () => {
+    try {
+      await navigator.clipboard.writeText('npm run setup');
+      showInfo('Copied to clipboard', 'Setup command copied to clipboard');
+    } catch (error) {
+      showError('Clipboard Error', 'Failed to copy setup command. Please check your browser permissions.');
+    }
   };
 
   const getStatusIcon = (status: boolean, checking: boolean) => {

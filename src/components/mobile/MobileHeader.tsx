@@ -13,7 +13,7 @@ export function MobileHeader({ title, subtitle, onMenuToggle }: MobileHeaderProp
   const { user } = useAuth();
 
   return (
-    <header className="bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+    <header className="bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 px-4 py-3 flex items-center justify-between sticky top-0 z-header">
       <div className="flex items-center space-x-3">
         <Button
           variant="ghost"

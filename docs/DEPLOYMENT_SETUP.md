@@ -37,7 +37,7 @@ This guide walks you through setting up the complete scheduled tweet posting sys
 
 ## Step 3: Configure Cron Job
 
-1. Open the migration file: `supabase/migrations/20250629150000_setup_cron_job.sql`
+1. Open the migration file: `supabase/migrations/20250701184904_pale_grass.sql`
 
 2. Replace the placeholder values:
    - Replace `https://your-project-ref.supabase.co/functions/v1/post-tweets` with your actual Edge Function URL
