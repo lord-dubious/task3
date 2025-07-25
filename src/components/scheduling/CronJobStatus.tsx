@@ -10,8 +10,14 @@ interface CronJobStatusProps {
   className?: string;
 }
 
+interface CronStatus {
+  jobname: string;
+  schedule: string;
+  active: boolean;
+}
+
 export function CronJobStatus({ className = '' }: CronJobStatusProps) {
-  const [cronStatus, setCronStatus] = useState<any>(null);
+  const [cronStatus, setCronStatus] = useState<CronStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const { 
     triggerManualProcessing, 
