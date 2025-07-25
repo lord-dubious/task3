@@ -16,7 +16,19 @@ const recentTweets = [
   { id: 3, content: 'Thanks for all the support! 💜', status: 'draft', time: 'Draft' },
 ];
 
-export function MobileDashboard() {
+interface MobileDashboardProps {
+  onNewTweet?: () => void;
+  onSchedule?: () => void;
+  onViewAll?: () => void;
+  onGenerateContent?: () => void;
+}
+
+export function MobileDashboard({
+  onNewTweet,
+  onSchedule,
+  onViewAll,
+  onGenerateContent
+}: MobileDashboardProps = {}) {
   return (
     <div className="pb-20 space-y-6">
       {/* Quick Actions */}
@@ -25,11 +37,11 @@ export function MobileDashboard() {
           <h2 className="text-xl font-bold text-white">Quick Actions</h2>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Button className="h-16 flex-col space-y-1">
+          <Button className="h-16 flex-col space-y-1" onClick={onNewTweet}>
             <Plus className="w-6 h-6" />
             <span className="text-sm">New Tweet</span>
           </Button>
-          <Button variant="secondary" className="h-16 flex-col space-y-1">
+          <Button variant="secondary" className="h-16 flex-col space-y-1" onClick={onSchedule}>
             <Calendar className="w-6 h-6" />
             <span className="text-sm">Schedule</span>
           </Button>
@@ -66,7 +78,7 @@ export function MobileDashboard() {
       <div className="p-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-white">Recent Activity</h3>
-          <Button variant="ghost" size="sm">View All</Button>
+          <Button variant="ghost" size="sm" onClick={onViewAll}>View All</Button>
         </div>
         <div className="space-y-3">
           {recentTweets.map((tweet, index) => (
@@ -105,7 +117,7 @@ export function MobileDashboard() {
               <p className="text-purple-200 text-sm">Ready to help</p>
             </div>
           </div>
-          <Button variant="primary" size="sm" className="w-full">
+          <Button variant="primary" size="sm" className="w-full" onClick={onGenerateContent}>
             <Zap className="w-4 h-4 mr-2" />
             Generate Content
           </Button>

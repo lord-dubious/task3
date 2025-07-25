@@ -3,27 +3,41 @@ import { motion } from 'framer-motion';
 import { Send, Image, Calendar, Sparkles, X } from 'lucide-react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { Button } from '../ui/Button';
+import { useAuth } from '../../hooks/useAuth';
 
-export function MobileTweetComposer() {
+interface MobileTweetComposerProps {
+  onClose?: () => void;
+  onTweet?: (content: string) => void;
+}
+
+export function MobileTweetComposer({ onClose, onTweet }: MobileTweetComposerProps = {}) {
   const [content, setContent] = useState('');
   const [showOptions, setShowOptions] = useState(false);
+  const { user } = useAuth();
 
   const characterCount = content.length;
   const maxCharacters = 280;
   const isOverLimit = characterCount > maxCharacters;
 
+  const handleTweet = () => {
+    if (content.trim() && !isOverLimit && onTweet) {
+      onTweet(content);
+    }
+  };
+
   return (
     <div className="h-full flex flex-col bg-black">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-700">
-        <Button variant="ghost" size="sm">
+        <Button variant="ghost" size="sm" onClick={onClose}>
           <X className="w-5 h-5" />
         </Button>
         <h2 className="text-lg font-semibold text-white">New Tweet</h2>
-        <Button 
+        <Button
           size="sm"
           disabled={!content.trim() || isOverLimit}
           className="px-6"
+          onClick={handleTweet}
         >
           Tweet
         </Button>
@@ -33,7 +47,9 @@ export function MobileTweetComposer() {
       <div className="flex-1 p-4">
         <div className="flex space-x-3">
           <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center flex-shrink-0">
-            <span className="text-white font-semibold text-lg">U</span>
+            <span className="text-white font-semibold text-lg">
+              {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+            </span>
           </div>
           
           <div className="flex-1">

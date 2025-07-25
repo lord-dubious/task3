@@ -55,6 +55,9 @@ export function MobileSidebar({ activeTab, onTabChange, isOpen, onClose }: Mobil
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             className="fixed top-0 left-0 h-full w-80 bg-gray-900/95 backdrop-blur-sm border-r border-gray-700 z-50 flex flex-col"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation menu"
           >
             {/* Header */}
             <div className="p-6 border-b border-gray-700 flex items-center justify-between">
@@ -70,6 +73,7 @@ export function MobileSidebar({ activeTab, onTabChange, isOpen, onClose }: Mobil
               <button
                 onClick={onClose}
                 className="p-2 text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition-colors"
+                aria-label="Close sidebar"
               >
                 <X className="w-6 h-6" />
               </button>
