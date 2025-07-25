@@ -77,7 +77,7 @@ export function Modal({
             </div>
           )}
           
-          <div className={`${title || showCloseButton ? 'p-4 sm:p-6' : 'p-4 sm:p-6'} overflow-y-auto max-h-[calc(95vh-120px)]`}>
+          <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(95vh-8rem)]">
             {children}
           </div>
         </motion.div>

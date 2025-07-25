@@ -84,8 +84,16 @@ async function createTwitterHeaders(credentials: TwitterCredentials, method: str
 async function postTweetToTwitter(tweet: Tweet, credentials: TwitterCredentials): Promise<{ success: boolean; twitterPostId?: string; error?: string }> {
   try {
     const twitterApiUrl = 'https://api.twitter.com/2/tweets';
-    
-    const tweetData: any = {
+
+    // Define proper interface for tweet data
+    interface TwitterTweetData {
+      text: string;
+      media?: {
+        media_ids: string[];
+      };
+    }
+
+    const tweetData: TwitterTweetData = {
       text: tweet.content
     };
 
@@ -139,10 +147,17 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Initialize Supabase client
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    
+    // Initialize Supabase client with explicit environment variable checks
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    if (!supabaseUrl) {
+      throw new Error('SUPABASE_URL environment variable is not set. Please configure this in your Edge Function environment.');
+    }
+
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    if (!supabaseServiceKey) {
+      throw new Error('SUPABASE_SERVICE_ROLE_KEY environment variable is not set. Please configure this in your Edge Function environment.');
+    }
+
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     console.log('Starting scheduled tweet processing...');

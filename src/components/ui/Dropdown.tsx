@@ -82,9 +82,9 @@ export function Dropdown({
             `}
           >
             <div className="py-2">
-              {items.map((item, index) => (
+              {items.map((item) => (
                 <button
-                  key={index}
+                  key={item.value}
                   onClick={() => handleItemClick(item)}
                   disabled={item.disabled}
                   className={`

@@ -48,6 +48,9 @@ export function useScheduledTweets() {
     }
 
     try {
+      // Clear any previous errors before attempting the operation
+      setError(null);
+
       const { data, error: statusError } = await supabase
         .from('cron_job_status')
         .select('*');
