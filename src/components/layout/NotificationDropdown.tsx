@@ -68,7 +68,7 @@ export function NotificationDropdown() {
   };
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="sm" className="relative">
