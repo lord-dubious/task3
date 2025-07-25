@@ -37,15 +37,35 @@ This guide walks you through setting up the complete scheduled tweet posting sys
 
 ## Step 3: Configure Cron Job
 
-1. Open the migration file: `supabase/migrations/20250701184904_pale_grass.sql`
-
-2. Replace the placeholder values:
-   - Replace `https://your-project-ref.supabase.co/functions/v1/post-tweets` with your actual Edge Function URL
-   - Replace `your-supabase-anon-key` with your project's anon key (found in Project Settings → API)
-
-3. Apply the migration:
+1. Apply the migration to set up the cron job infrastructure:
    ```bash
    supabase db push
+   ```
+
+2. Update the Edge Function configuration with your actual values:
+   ```sql
+   -- Connect to your database and run these commands:
+
+   -- Update the Edge Function URL
+   SELECT update_edge_function_config(
+     'edge_function_url',
+     'https://YOUR_PROJECT_REF.supabase.co/functions/v1/post-tweets'
+   );
+
+   -- Update the Supabase anon key (found in Project Settings → API)
+   SELECT update_edge_function_config(
+     'supabase_anon_key',
+     'your-actual-anon-key-here'
+   );
+   ```
+
+3. Verify the configuration:
+   ```sql
+   -- Check current configuration
+   SELECT * FROM edge_function_config;
+
+   -- Test the manual trigger function
+   SELECT trigger_tweet_processing();
    ```
 
 ## Step 4: Configure Twitter Credentials
