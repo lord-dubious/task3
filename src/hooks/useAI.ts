@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { GoogleGenAI } from '@google/genai';
 import { useLocalStorage } from './useLocalStorage';
 import { toast } from 'sonner';
-import { Agent, MediaFile } from '../types';
+import type { Agent, MediaFile } from '../types';
 
 export function useAI() {
   const [isLoading, setIsLoading] = useState(false);

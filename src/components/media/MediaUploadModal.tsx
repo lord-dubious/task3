@@ -4,8 +4,9 @@ import { X, Upload, Tag, Zap } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
-import { MediaLibraryItem } from '../../hooks/useMediaLibrary';
-import { MediaOptimizer, OptimizedMedia } from '../../utils/mediaOptimization';
+import type { MediaLibraryItem } from '../../hooks/useMediaLibrary';
+import type { OptimizedMedia } from '../../utils/mediaOptimization';
+import { MediaOptimizer } from '../../utils/mediaOptimization';
 import { useNotifications } from '../../hooks/useNotifications';
 
 interface MediaUploadModalProps {

@@ -5,7 +5,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
-import { Tweet } from '../../hooks/useTweets';
+import type { Tweet } from '../../hooks/useTweets';
 import { useAgents } from '../../hooks/useAgents';
 import { useTwitterAuth } from '../../hooks/useTwitterAuth';
 

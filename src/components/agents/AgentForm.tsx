@@ -5,7 +5,7 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Checkbox } from '../ui/Checkbox';
 import { Card } from '../ui/Card';
-import { Agent } from '../../types';
+import type { Agent } from '../../types';
 
 interface StyleConfig {
   all: string[];
