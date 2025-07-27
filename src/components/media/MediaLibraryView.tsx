@@ -384,8 +384,8 @@ export function MediaLibraryView() {
                 <Button
                   onClick={() => {
                     if (newFolderName.trim()) {
-                      // TODO: Implement folder creation
-                      console.log('Creating folder:', newFolderName);
+                      // TODO: Implement folder creation functionality
+                      // This would typically call an API to create the folder
                       setShowNewFolderModal(false);
                       setNewFolderName('');
                     }
