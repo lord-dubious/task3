@@ -104,7 +104,7 @@ All uploaded media is automatically optimized:
 - **Storage**: Cloudflare R2 (S3-compatible)
 - **AI**: Google Gemini API
 - **Build Tool**: Vite
-- **Deployment**: Netlify (see [NETLIFY_DEPLOYMENT.md](./NETLIFY_DEPLOYMENT.md))
+- **Deployment**: Netlify & Render.com (see deployment guides below)
 
 ## Database Schema
 
@@ -163,23 +163,55 @@ The application uses Supabase Edge Functions with `pg_cron` for automated tweet 
 
 ## 🚀 Deployment
 
-This application is configured for easy deployment on Netlify. See the comprehensive [NETLIFY_DEPLOYMENT.md](./NETLIFY_DEPLOYMENT.md) guide for detailed instructions.
+This application supports deployment on **both Netlify and Render.com** - choose your preferred platform!
 
-### Quick Deploy to Netlify
+### 🌐 Option 1: Deploy to Netlify (Recommended)
 
+**Quick Deploy:**
 1. **Fork this repository** to your GitHub account
 2. **Connect to Netlify**: Go to [netlify.com](https://netlify.com) and create a new site from Git
 3. **Configure Environment Variables**: Set up your Supabase and Cloudflare R2 credentials
 4. **Deploy**: Netlify will automatically detect the `netlify.toml` and deploy your app
 
-The included `netlify.toml` configuration provides:
+**Features:**
 - ✅ **Automatic builds** with Node.js 18
 - ✅ **Static site hosting** with SPA routing
 - ✅ **Deploy previews** for pull requests
 - ✅ **Security headers** and performance optimization
 - ✅ **Custom domains** and automatic HTTPS
 
-For detailed setup instructions, troubleshooting, and advanced configuration, see [NETLIFY_DEPLOYMENT.md](./NETLIFY_DEPLOYMENT.md).
+📚 **[Complete Netlify Guide →](./NETLIFY_DEPLOYMENT.md)**
+
+### 🔧 Option 2: Deploy to Render.com
+
+**Quick Deploy:**
+1. **Fork this repository** to your GitHub account
+2. **Connect to Render**: Go to [render.com](https://render.com) and connect your GitHub repo
+3. **Configure Environment Variables**: Set up your Supabase and Cloudflare R2 credentials
+4. **Deploy**: Render will automatically detect the `render.yaml` and deploy your app
+
+**Features:**
+- ✅ **Automatic builds** with Node.js 18
+- ✅ **Static site hosting** with SPA routing
+- ✅ **Pull request previews** for testing
+- ✅ **Environment variable management**
+- ✅ **HTTPS and custom domains** support
+
+📚 **[Complete Render Guide →](./DEPLOYMENT.md)**
+
+### 🎯 Which Platform to Choose?
+
+| Feature | Netlify | Render |
+|---------|---------|--------|
+| **Free Tier** | 100GB bandwidth | 100GB bandwidth |
+| **Build Minutes** | 300/month | 500/month |
+| **Custom Domains** | ✅ Free | ✅ Free |
+| **Deploy Previews** | ✅ | ✅ |
+| **Edge Functions** | ✅ Advanced | ✅ Basic |
+| **Form Handling** | ✅ Built-in | ❌ |
+| **Analytics** | ✅ Built-in | ✅ Basic |
+
+Both platforms work great - choose based on your preferences!
 
 ## Contributing
 
