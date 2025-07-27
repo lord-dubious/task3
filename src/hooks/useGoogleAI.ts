@@ -41,11 +41,11 @@ export function useGoogleAI() {
       
       // Filter and format models that support generateContent
       const availableModels: GoogleAIModel[] = data.models
-        .filter((model: any) => 
+        .filter((model: { name: string; supportedGenerationMethods?: string[] }) => 
           model.supportedGenerationMethods?.includes('generateContent') &&
           !model.name.includes('embedding') // Exclude embedding models
         )
-        .map((model: any) => ({
+        .map((model: { name: string; displayName?: string; description?: string; inputTokenLimit?: number; outputTokenLimit?: number; supportedGenerationMethods?: string[] }) => ({
           name: model.name.replace('models/', ''), // Remove 'models/' prefix
           displayName: model.displayName || model.name.replace('models/', ''),
           description: model.description,

@@ -26,7 +26,7 @@ export interface MessageExample {
 
 export type TemplateType =
   | string
-  | ((options: { state: any }) => string);
+  | ((options: { state: Record<string, unknown> }) => string);
 
 export interface Character {
   id?: string;
@@ -45,7 +45,7 @@ export interface Character {
   knowledge?: (string | { path: string; shared?: boolean })[];
   plugins?: string[];
   settings?: {
-    [key: string]: string | boolean | number | Record<string, any>;
+    [key: string]: string | boolean | number | Record<string, unknown>;
   };
   style_config?: {
     all?: string[];

@@ -25,6 +25,7 @@ export function MediaUpload({
   const [error, setError] = useState<string | null>(null);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [showLibrary, setShowLibrary] = useState(false);
+  const [optimizationStats, setOptimizationStats] = useState<OptimizedMedia[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { mediaItems } = useMediaLibrary();
 
@@ -44,6 +45,7 @@ export function MediaUpload({
     setIsOptimizing(true);
     const validFiles: File[] = [];
     const optimizedFiles: File[] = [];
+    const newOptimizationStats: OptimizedMedia[] = [];
     
     for (const file of fileArray) {
       if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
@@ -67,17 +69,27 @@ export function MediaUpload({
         
         validFiles.push(file);
         optimizedFiles.push(optimized.file);
+        newOptimizationStats.push(optimized);
       } catch (optimizationError) {
         console.error('Failed to optimize file:', optimizationError);
         // Use original file if optimization fails
         validFiles.push(file);
         optimizedFiles.push(file);
+        // Create a basic OptimizedMedia object for failed optimization
+        newOptimizationStats.push({
+          file,
+          originalSize: file.size,
+          optimizedSize: file.size,
+          compressionRatio: 1,
+          dimensions: { width: 0, height: 0 }
+        });
       }
     }
 
     setIsOptimizing(false);
     
     if (optimizedFiles.length > 0) {
+      setOptimizationStats(prev => [...prev, ...newOptimizationStats]);
       onMediaAdd(optimizedFiles);
     }
   };
@@ -98,7 +110,7 @@ export function MediaUpload({
     setDragOver(false);
   };
 
-  const handleLibrarySelect = (item: any) => {
+  const handleLibrarySelect = (item: { id: string; original_filename: string; file_type: string; url: string }) => {
     // Convert library item to MediaFile format
     fetch(item.url)
       .then(res => res.blob())
@@ -236,6 +248,26 @@ export function MediaUpload({
         >
           <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4 text-red-400" />
           <p className="text-red-300 text-xs sm:text-sm">{error}</p>
+        </motion.div>
+      )}
+
+      {/* Optimization Stats */}
+      {optimizationStats.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-green-500/20 border border-green-500/30 rounded-lg p-3"
+        >
+          <div className="flex items-center space-x-2 mb-2">
+            <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+            <p className="text-green-300 text-xs sm:text-sm font-medium">Optimization Complete</p>
+          </div>
+          {optimizationStats.map((stat, index) => (
+            <div key={index} className="text-xs text-gray-400 mb-1">
+              {stat.file.name}: {(stat.originalSize / 1024).toFixed(1)}KB → {(stat.optimizedSize / 1024).toFixed(1)}KB 
+              ({(stat.compressionRatio * 100).toFixed(0)}% of original)
+            </div>
+          ))}
         </motion.div>
       )}
 
