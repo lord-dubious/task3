@@ -104,7 +104,7 @@ All uploaded media is automatically optimized:
 - **Storage**: Cloudflare R2 (S3-compatible)
 - **AI**: Google Gemini API
 - **Build Tool**: Vite
-- **Deployment**: Netlify
+- **Deployment**: Render.com (see [DEPLOYMENT.md](./DEPLOYMENT.md))
 
 ## Database Schema
 
@@ -160,6 +160,26 @@ The application uses Supabase Edge Functions with `pg_cron` for automated tweet 
 - Row Level Security (RLS) enabled on all database tables
 - Secure OAuth authentication via Supabase
 - Direct client-to-R2 uploads (no server intermediary)
+
+## 🚀 Deployment
+
+This application is configured for easy deployment on Render.com. See the comprehensive [DEPLOYMENT.md](./DEPLOYMENT.md) guide for detailed instructions.
+
+### Quick Deploy to Render
+
+1. **Fork this repository** to your GitHub account
+2. **Connect to Render**: Go to [render.com](https://render.com) and connect your GitHub repo
+3. **Configure Environment Variables**: Set up your Supabase and Cloudflare R2 credentials
+4. **Deploy**: Render will automatically detect the `render.yaml` and deploy your app
+
+The included `render.yaml` configuration provides:
+- ✅ **Automatic builds** with Node.js 18
+- ✅ **Static site hosting** with SPA routing
+- ✅ **Pull request previews** for testing
+- ✅ **Environment variable management**
+- ✅ **HTTPS and custom domains** support
+
+For detailed setup instructions, troubleshooting, and advanced configuration, see [DEPLOYMENT.md](./DEPLOYMENT.md).
 
 ## Contributing
 
