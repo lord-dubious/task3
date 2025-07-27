@@ -26,7 +26,7 @@ export function TweetComposer() {
   const { generateTweet, improveTweet, analyzeMedia, isLoading, error } = useAI();
   const { agents } = useAgents();
   const { uploadMultipleFiles, uploading } = useSupabaseStorage();
-  const { showSuccess, showError, showWarning } = useNotifications();
+  const { showSuccess, showError } = useNotifications();
 
   const characterCount = content.length;
   const maxCharacters = 280;
@@ -175,7 +175,7 @@ export function TweetComposer() {
       setMediaAnalysis([]);
       
       showSuccess('Tweet saved', 'Your tweet has been saved successfully');
-    } catch (error) {
+    } catch {
       showError('Failed to save tweet', 'Please try again');
     }
   };
@@ -220,7 +220,7 @@ export function TweetComposer() {
       } else {
         showSuccess('Tweet saved', 'Your tweet has been saved as a draft');
       }
-    } catch (error) {
+    } catch {
       showError('Failed to schedule tweet', 'Please try again');
     }
   };

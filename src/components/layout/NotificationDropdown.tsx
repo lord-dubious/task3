@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { 
   Bell, 
   CheckCircle, 
@@ -6,8 +6,7 @@ import {
   AlertTriangle, 
   Info, 
   Check, 
-  Trash2,
-  MoreHorizontal
+  Trash2
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -44,19 +43,7 @@ export function NotificationDropdown() {
     }
   };
 
-  const getNotificationBgColor = (type: Notification['type']) => {
-    switch (type) {
-      case 'success':
-        return 'bg-green-500/10 border-green-500/20';
-      case 'error':
-        return 'bg-red-500/10 border-red-500/20';
-      case 'warning':
-        return 'bg-yellow-500/10 border-yellow-500/20';
-      case 'info':
-      default:
-        return 'bg-blue-500/10 border-blue-500/20';
-    }
-  };
+
 
   const handleNotificationClick = (notification: Notification) => {
     if (!notification.read) {

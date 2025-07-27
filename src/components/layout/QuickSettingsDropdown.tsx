@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Settings, Bot, Zap, Palette, Monitor, Moon, Sun, ChevronDown } from 'lucide-react';
 import {
   DropdownMenu,
@@ -13,17 +13,15 @@ import { Switch } from '../ui/Switch';
 import { Button } from '../ui/Button';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useGoogleAI } from '../../hooks/useGoogleAI';
-import { useAuth } from '../../hooks/useAuth';
 
 export function QuickSettingsDropdown() {
   const dropdownRef = useRef(null);
   const [selectedModel, setSelectedModel] = useLocalStorage('googleAI_selectedModel', 'gemini-1.5-flash');
-  const [googleAIKey, setGoogleAIKey] = useLocalStorage('googleAI_apiKey', '');
+  const [googleAIKey] = useLocalStorage('googleAI_apiKey', '');
   const [theme, setTheme] = useLocalStorage('app_theme', 'dark');
   const [autoOptimize, setAutoOptimize] = useLocalStorage('auto_optimize_media', true);
 
   const { models, fetchAvailableModels, isLoadingModels } = useGoogleAI();
-  const { user } = useAuth();
 
   // Fetch models when component mounts or API key changes
   useEffect(() => {
@@ -42,10 +40,7 @@ export function QuickSettingsDropdown() {
     document.documentElement.className = newTheme;
   };
 
-  const getModelDisplayName = (modelName: string) => {
-    const model = models.find(m => m.name === modelName);
-    return model?.displayName || modelName.replace('gemini-', 'Gemini ').replace('-', ' ');
-  };
+
 
   // Get available models or fallback to common ones
   const availableModels = models.length > 0 ? models : [

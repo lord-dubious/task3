@@ -1,6 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Twitter, Users, UserPlus, Unlink } from 'lucide-react';
+import { Users, UserPlus, Unlink } from 'lucide-react';
 import { TwitterAccount } from '../../types';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';

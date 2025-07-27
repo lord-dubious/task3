@@ -25,12 +25,10 @@ interface Tweet {
   retry_count: number;
 }
 
-interface UserSettings {
-  twitter_credentials: TwitterCredentials | null;
-}
+
 
 // Twitter API v2 helper functions
-async function createTwitterHeaders(credentials: TwitterCredentials, method: string, url: string, body?: string) {
+async function createTwitterHeaders(credentials: TwitterCredentials, method: string, url: string) {
   const oauth = {
     oauth_consumer_key: credentials.apiKey,
     oauth_token: credentials.accessToken,

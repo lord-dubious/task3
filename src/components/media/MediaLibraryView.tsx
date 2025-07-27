@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   Upload, 
   Search, 
-  Filter, 
   Grid, 
   List, 
   Trash2, 
-  Tag, 
   Download,
   Image as ImageIcon,
-  Video,
-  FolderOpen,
-  BarChart3,
-  Plus,
-  X
+  BarChart3
 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, FileText, TrendingUp, Users, Bot, Zap, Plus } from 'lucide-react';
+import { Calendar, TrendingUp, Users, Bot, Zap, Plus } from 'lucide-react';
 import { Button } from '../ui/Button';
 
 const stats = [

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
 
 interface DropdownItem {
   label: string;
@@ -108,4 +107,3 @@ export function Dropdown({
     </div>
   );
 }
-```

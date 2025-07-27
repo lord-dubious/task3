@@ -1,7 +1,5 @@
 import { useState, useCallback } from 'react';
-import { GoogleGenAI } from '@google/genai';
 import { toast } from 'sonner';
-import { useLocalStorage } from './useLocalStorage';
 
 export interface GoogleAIModel {
   name: string;
@@ -28,8 +26,6 @@ export function useGoogleAI() {
     setError(null);
 
     try {
-      const genAI = new GoogleGenAI({ apiKey });
-      
       // Fetch available models
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
       

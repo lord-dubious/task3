@@ -5,7 +5,6 @@ import {
   ChevronLeft, 
   ChevronRight, 
   Image, 
-  Video,
   CheckCircle,
   XCircle,
   Clock,
@@ -172,7 +171,7 @@ export function TweetCalendar({
                   </div>
                   
                   <div className="space-y-1">
-                    {dayEvents.slice(0, 2).map((event, index) => (
+                    {dayEvents.slice(0, 2).map((event) => (
                       <div
                         key={event.tweet.id}
                         className={`

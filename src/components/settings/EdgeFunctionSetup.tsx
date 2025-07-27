@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Zap, 
@@ -6,7 +6,6 @@ import {
   AlertCircle, 
   Play, 
   RefreshCw,
-  Terminal,
   ExternalLink,
   Copy
 } from 'lucide-react';
@@ -31,7 +30,7 @@ export function EdgeFunctionSetup() {
   const [isTestingFunction, setIsTestingFunction] = useState(false);
   const { showSuccess, showError, showInfo } = useNotifications();
 
-  const checkSetupStatus = async () => {
+  const checkSetupStatus = useCallback(async () => {
     setSetupStatus(prev => ({ ...prev, checking: true }));
 
     try {
@@ -106,11 +105,11 @@ export function EdgeFunctionSetup() {
       console.error('Error checking setup status:', error);
       setSetupStatus(prev => ({ ...prev, checking: false }));
     }
-  };
+  }, [showError]);
 
   useEffect(() => {
     checkSetupStatus();
-  }, []);
+  }, [checkSetupStatus]);
 
   const testEdgeFunction = async () => {
     setIsTestingFunction(true);
@@ -132,7 +131,7 @@ export function EdgeFunctionSetup() {
       } else {
         showError('Edge Function Test', result.error || 'Function returned an error');
       }
-    } catch (error) {
+    } catch {
       showError('Edge Function Test', 'Failed to connect to Edge Function');
     } finally {
       setIsTestingFunction(false);
@@ -143,7 +142,7 @@ export function EdgeFunctionSetup() {
     try {
       await navigator.clipboard.writeText('npm run setup');
       showInfo('Copied to clipboard', 'Setup command copied to clipboard');
-    } catch (error) {
+    } catch {
       showError('Clipboard Error', 'Failed to copy setup command. Please check your browser permissions.');
     }
   };

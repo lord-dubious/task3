@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Image, Calendar, Sparkles, X } from 'lucide-react';
+import { Image, Calendar, Sparkles, X } from 'lucide-react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { Button } from '../ui/Button';
 import { useAuth } from '../../hooks/useAuth';

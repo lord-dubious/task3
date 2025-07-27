@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Clock, Play, AlertCircle, CheckCircle, RefreshCw } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -27,7 +27,7 @@ export function CronJobStatus({ className = '' }: CronJobStatusProps) {
   } = useScheduledTweets();
   const { showSuccess, showError } = useNotifications();
 
-  const fetchCronStatus = async () => {
+  const fetchCronStatus = useCallback(async () => {
     setLoading(true);
     try {
       const status = await getCronJobStatus();
@@ -37,17 +37,17 @@ export function CronJobStatus({ className = '' }: CronJobStatusProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [getCronJobStatus]);
 
   useEffect(() => {
     fetchCronStatus();
-  }, []);
+  }, [fetchCronStatus]);
 
   const handleManualTrigger = async () => {
     try {
       await triggerManualProcessing();
       showSuccess('Processing triggered', 'Scheduled tweets are being processed');
-    } catch (err) {
+    } catch {
       showError('Failed to trigger processing', 'Please try again');
     }
   };

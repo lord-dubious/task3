@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Plus, BarChart3, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { Plus, BarChart3, Clock, CheckCircle, XCircle } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { TweetCalendar } from './TweetCalendar';
-import { ScheduleModal } from './ScheduleModal';
 import { TweetEditModal } from './TweetEditModal';
 import { CronJobStatus } from './CronJobStatus';
 import { InlineSchedulePicker } from '../compose/InlineSchedulePicker';
