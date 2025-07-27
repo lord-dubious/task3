@@ -7,7 +7,7 @@ import { AgentForm } from './AgentForm';
 import { AgentImportExport } from './AgentImportExport';
 import { useAgents } from '../../hooks/useAgents';
 import { useNotifications } from '../../hooks/useNotifications';
-import { Agent } from '../../types';
+import type { Agent } from '../../types';
 
 export function AgentSettingsView() {
   const { agents, loading, createAgent, updateAgent, deleteAgent, toggleAgent } = useAgents();

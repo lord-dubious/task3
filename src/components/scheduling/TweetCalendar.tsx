@@ -14,7 +14,7 @@ import {
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths } from 'date-fns';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
-import { Tweet } from '../../hooks/useTweets';
+import type { Tweet } from '../../hooks/useTweets';
 
 interface TweetCalendarProps {
   tweets: Tweet[];

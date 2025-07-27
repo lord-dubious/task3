@@ -12,7 +12,7 @@ import {
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { Checkbox } from '../ui/Checkbox';
-import { MediaLibraryItem } from '../../hooks/useMediaLibrary';
+import type { MediaLibraryItem } from '../../hooks/useMediaLibrary';
 import { MediaOptimizer } from '../../utils/mediaOptimization';
 import { format } from 'date-fns';
 

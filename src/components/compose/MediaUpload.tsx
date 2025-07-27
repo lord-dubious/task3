@@ -2,8 +2,9 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Image, Video, X, Upload, AlertCircle, Zap, FolderOpen } from 'lucide-react';
 import { Button } from '../ui/Button';
-import { MediaFile } from '../../types';
-import { MediaOptimizer, OptimizedMedia } from '../../utils/mediaOptimization';
+import type { MediaFile } from '../../types';
+import type { OptimizedMedia } from '../../utils/mediaOptimization';
+import { MediaOptimizer } from '../../utils/mediaOptimization';
 import { useMediaLibrary } from '../../hooks/useMediaLibrary';
 
 interface MediaUploadProps {

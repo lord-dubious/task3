@@ -5,7 +5,8 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
-import { useGoogleAI, GoogleAIModel } from '../../hooks/useGoogleAI';
+import type { GoogleAIModel } from '../../hooks/useGoogleAI';
+import { useGoogleAI } from '../../hooks/useGoogleAI';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
 

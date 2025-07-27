@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
-import { Agent } from '../../types';
+import type { Agent } from '../../types';
 import { supabase } from '../../lib/supabase';
 
 export interface StyleConfig {

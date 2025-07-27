@@ -18,7 +18,8 @@ import {
   DropdownMenuTrigger,
 } from '../ui/DropdownMenu';
 import { Button } from '../ui/Button';
-import { useNotifications, Notification } from '../../hooks/useNotifications';
+import type { Notification } from '../../hooks/useNotifications';
+import { useNotifications } from '../../hooks/useNotifications';
 import { formatDistanceToNow } from 'date-fns';
 
 export function NotificationDropdown() {

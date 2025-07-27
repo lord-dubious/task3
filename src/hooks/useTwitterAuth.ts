@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
-import { TwitterAccount, TwitterOAuthTokens } from '../types';
+import type { TwitterAccount, TwitterOAuthTokens } from '../types';
 import { toast } from 'sonner';
 
 export function useTwitterAuth() {

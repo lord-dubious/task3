@@ -7,7 +7,8 @@ import { TweetCalendar } from './TweetCalendar';
 import { TweetEditModal } from './TweetEditModal';
 import { CronJobStatus } from './CronJobStatus';
 import { InlineSchedulePicker } from '../compose/InlineSchedulePicker';
-import { useTweets, Tweet } from '../../hooks/useTweets';
+import type { Tweet } from '../../hooks/useTweets';
+import { useTweets } from '../../hooks/useTweets';
 import { StatsCard } from '../dashboard/StatsCard';
 import { useNotifications } from '../../hooks/useNotifications';
 

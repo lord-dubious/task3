@@ -10,7 +10,7 @@ import { useAI } from '../../hooks/useAI';
 import { useAgents } from '../../hooks/useAgents';
 import { useSupabaseStorage } from '../../hooks/useSupabaseStorage';
 import { useNotifications } from '../../hooks/useNotifications';
-import { MediaFile, Agent } from '../../types';
+import type { MediaFile, Agent } from '../../types';
 
 export function TweetComposer() {
   const [content, setContent] = useState('');

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Users, UserPlus, Unlink } from 'lucide-react';
-import { TwitterAccount } from '../../types';
+import type { TwitterAccount } from '../../types';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 
