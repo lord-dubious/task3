@@ -6,7 +6,8 @@ import {
   AlertTriangle, 
   Info, 
   Check, 
-  Trash2
+  Trash2,
+  MoreHorizontal
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -43,7 +44,19 @@ export function NotificationDropdown() {
     }
   };
 
-
+  const getNotificationBgColor = (type: Notification['type']) => {
+    switch (type) {
+      case 'success':
+        return 'bg-green-500/10 border-green-500/20';
+      case 'error':
+        return 'bg-red-500/10 border-red-500/20';
+      case 'warning':
+        return 'bg-yellow-500/10 border-yellow-500/20';
+      case 'info':
+      default:
+        return 'bg-blue-500/10 border-blue-500/20';
+    }
+  };
 
   const handleNotificationClick = (notification: Notification) => {
     if (!notification.read) {
@@ -124,8 +137,9 @@ export function NotificationDropdown() {
                 <DropdownMenuItem
                   key={notification.id}
                   className={`
-                    flex-col items-start p-3 cursor-pointer
+                    flex-col items-start p-3 cursor-pointer border-l-2 group
                     ${!notification.read ? 'bg-purple-500/5' : ''}
+                    ${getNotificationBgColor(notification.type)}
                   `}
                   onClick={() => handleNotificationClick(notification)}
                 >
@@ -156,6 +170,20 @@ export function NotificationDropdown() {
                           {!notification.read && (
                             <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                           )}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // Handle notification actions (mark as read, delete, etc.)
+                              if (!notification.read) {
+                                markAsRead(notification.id);
+                              }
+                            }}
+                          >
+                            <MoreHorizontal className="w-3 h-3" />
+                          </Button>
                         </div>
                       </div>
                     </div>
