@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, BarChart3, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { Plus, BarChart3, Clock, CheckCircle, XCircle, Calendar, List } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { TweetCalendar } from './TweetCalendar';
@@ -28,6 +28,7 @@ export function SchedulingView() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingTweet, setEditingTweet] = useState<Tweet | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar');
   const { showSuccess, showError, showPromise } = useNotifications();
 
   const scheduledTweets = getScheduledTweets();
@@ -160,14 +161,41 @@ export function SchedulingView() {
             Manage your scheduled tweets and view posting calendar
           </p>
         </div>
-        <Button
-          onClick={() => setShowSchedulePicker(true)}
-          leftIcon={<Plus className="w-3 h-3 sm:w-4 sm:h-4" />}
-          size="sm"
-          className="text-xs sm:text-sm"
-        >
-          Schedule Tweet
-        </Button>
+        <div className="flex items-center space-x-2">
+          {/* View Toggle */}
+          <div className="flex bg-gray-800 rounded-lg p-1">
+            <button
+              onClick={() => setViewMode('calendar')}
+              className={`flex items-center space-x-1 px-2 py-1 rounded text-xs sm:text-sm transition-colors ${
+                viewMode === 'calendar'
+                  ? 'bg-purple-600 text-white'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Calendar</span>
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`flex items-center space-x-1 px-2 py-1 rounded text-xs sm:text-sm transition-colors ${
+                viewMode === 'list'
+                  ? 'bg-purple-600 text-white'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              <List className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">List</span>
+            </button>
+          </div>
+          <Button
+            onClick={() => setShowSchedulePicker(true)}
+            leftIcon={<Plus className="w-3 h-3 sm:w-4 sm:h-4" />}
+            size="sm"
+            className="text-xs sm:text-sm"
+          >
+            Schedule Tweet
+          </Button>
+        </div>
       </div>
 
       {/* Stats */}
@@ -193,13 +221,65 @@ export function SchedulingView() {
         />
       )}
 
-      {/* Calendar */}
-      <TweetCalendar
-        tweets={tweets}
-        onEditTweet={handleEditTweet}
-        onDeleteTweet={handleDeleteTweet}
-        onRetryTweet={handleRetryTweet}
-      />
+      {/* Calendar/List View */}
+      {viewMode === 'calendar' ? (
+        <TweetCalendar
+          tweets={tweets}
+          onEditTweet={handleEditTweet}
+          onDeleteTweet={handleDeleteTweet}
+          onRetryTweet={handleRetryTweet}
+        />
+      ) : (
+        <Card className="p-4 sm:p-6">
+          <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+            <List className="w-5 h-5 mr-2 text-purple-400" />
+            Tweet List View
+          </h3>
+          <div className="space-y-3">
+            {tweets.length === 0 ? (
+              <div className="text-center py-8">
+                <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-400">No tweets scheduled yet</p>
+              </div>
+            ) : (
+              tweets.map((tweet) => (
+                <div
+                  key={tweet.id}
+                  className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg border border-gray-700"
+                >
+                  <div className="flex-1">
+                    <p className="text-white text-sm line-clamp-2">{tweet.content}</p>
+                    <div className="flex items-center space-x-4 mt-2 text-xs text-gray-400">
+                      <span>Status: {tweet.status}</span>
+                      {tweet.scheduled_for && (
+                        <span>Scheduled: {new Date(tweet.scheduled_for).toLocaleString()}</span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2 ml-4">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleEditTweet(tweet)}
+                      className="text-xs"
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDeleteTweet(tweet.id)}
+                      className="text-xs text-red-400 hover:text-red-300"
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </Card>
+      )}
 
       {/* Cron Job Status */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
