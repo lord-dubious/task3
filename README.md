@@ -104,7 +104,7 @@ All uploaded media is automatically optimized:
 - **Storage**: Cloudflare R2 (S3-compatible)
 - **AI**: Google Gemini API
 - **Build Tool**: Vite
-- **Deployment**: Render.com (see [DEPLOYMENT.md](./DEPLOYMENT.md))
+- **Deployment**: Netlify (see [NETLIFY_DEPLOYMENT.md](./NETLIFY_DEPLOYMENT.md))
 
 ## Database Schema
 
@@ -163,23 +163,23 @@ The application uses Supabase Edge Functions with `pg_cron` for automated tweet 
 
 ## 🚀 Deployment
 
-This application is configured for easy deployment on Render.com. See the comprehensive [DEPLOYMENT.md](./DEPLOYMENT.md) guide for detailed instructions.
+This application is configured for easy deployment on Netlify. See the comprehensive [NETLIFY_DEPLOYMENT.md](./NETLIFY_DEPLOYMENT.md) guide for detailed instructions.
 
-### Quick Deploy to Render
+### Quick Deploy to Netlify
 
 1. **Fork this repository** to your GitHub account
-2. **Connect to Render**: Go to [render.com](https://render.com) and connect your GitHub repo
+2. **Connect to Netlify**: Go to [netlify.com](https://netlify.com) and create a new site from Git
 3. **Configure Environment Variables**: Set up your Supabase and Cloudflare R2 credentials
-4. **Deploy**: Render will automatically detect the `render.yaml` and deploy your app
+4. **Deploy**: Netlify will automatically detect the `netlify.toml` and deploy your app
 
-The included `render.yaml` configuration provides:
+The included `netlify.toml` configuration provides:
 - ✅ **Automatic builds** with Node.js 18
 - ✅ **Static site hosting** with SPA routing
-- ✅ **Pull request previews** for testing
-- ✅ **Environment variable management**
-- ✅ **HTTPS and custom domains** support
+- ✅ **Deploy previews** for pull requests
+- ✅ **Security headers** and performance optimization
+- ✅ **Custom domains** and automatic HTTPS
 
-For detailed setup instructions, troubleshooting, and advanced configuration, see [DEPLOYMENT.md](./DEPLOYMENT.md).
+For detailed setup instructions, troubleshooting, and advanced configuration, see [NETLIFY_DEPLOYMENT.md](./NETLIFY_DEPLOYMENT.md).
 
 ## Contributing
 
