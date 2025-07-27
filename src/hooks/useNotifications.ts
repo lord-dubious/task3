@@ -87,7 +87,7 @@ export function useNotifications() {
     }: {
       loading: string;
       success: string | ((data: T) => string);
-      error: string | ((error: any) => string);
+      error: string | ((error: Error | unknown) => string);
     }
   ) => {
     return toast.promise(promise, {

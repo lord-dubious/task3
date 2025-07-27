@@ -1,14 +1,9 @@
 import React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { Button } from './Button';
 
-interface DialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  children: React.ReactNode;
-}
+
 
 interface DialogContentProps {
   children: React.ReactNode;
@@ -22,15 +17,7 @@ interface DialogHeaderProps {
   className?: string;
 }
 
-interface DialogTitleProps {
-  children: React.ReactNode;
-  className?: string;
-}
 
-interface DialogDescriptionProps {
-  children: React.ReactNode;
-  className?: string;
-}
 
 const Dialog = DialogPrimitive.Root;
 
@@ -41,7 +28,7 @@ const DialogPortal = DialogPrimitive.Portal;
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
->(({ className, ...props }, ref) => (
+>(({ ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
     className="fixed inset-0 bg-black/60 backdrop-blur-sm z-modal data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"

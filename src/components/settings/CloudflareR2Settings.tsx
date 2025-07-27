@@ -59,7 +59,7 @@ export function CloudflareR2Settings() {
       await s3Client.send(command);
       setValidationStatus('valid');
       showSuccess('R2 Connection Valid', 'Successfully connected to Cloudflare R2 storage');
-    } catch (error) {
+    } catch {
       setValidationStatus('invalid');
       showError('R2 Connection Failed', 'Failed to connect to Cloudflare R2. Please check your credentials');
     } finally {

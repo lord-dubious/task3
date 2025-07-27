@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Upload, FolderOpen, Tag, Zap, AlertCircle } from 'lucide-react';
+import { X, Upload, Tag, Zap } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
@@ -52,7 +52,7 @@ export function MediaUploadModal({
         }
       }
       setOptimizationPreviews(previews);
-    } catch (error) {
+    } catch {
       showError('Optimization failed', 'Some files could not be optimized');
     } finally {
       setIsOptimizing(false);
@@ -81,7 +81,7 @@ export function MediaUploadModal({
       setTags('');
       setFolder('general');
       onClose();
-    } catch (error) {
+    } catch {
       showError('Upload failed', 'Some files could not be uploaded');
     }
   };

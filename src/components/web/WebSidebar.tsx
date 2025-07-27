@@ -9,7 +9,6 @@ import {
   Settings, 
   Bot,
   Sparkles,
-  Menu,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';

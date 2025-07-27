@@ -26,7 +26,7 @@ export function TweetComposer() {
   const { generateTweet, improveTweet, analyzeMedia, isLoading, error } = useAI();
   const { agents } = useAgents();
   const { uploadMultipleFiles, uploading } = useSupabaseStorage();
-  const { showSuccess, showError, showWarning } = useNotifications();
+  const { showSuccess, showError } = useNotifications();
 
   const characterCount = content.length;
   const maxCharacters = 280;
@@ -161,12 +161,8 @@ export function TweetComposer() {
 
       // Here you would typically save the tweet to your database
       // and potentially schedule it or post it immediately
-      console.log('Tweet data:', {
-        content,
-        mediaUrls,
-        agentId: selectedAgent?.id,
-        scheduledFor: null
-      });
+      // TODO: Implement actual tweet saving functionality
+      void mediaUrls; // Will be used when tweet saving is implemented
 
       // Reset form
       setContent('');
@@ -175,7 +171,7 @@ export function TweetComposer() {
       setMediaAnalysis([]);
       
       showSuccess('Tweet saved', 'Your tweet has been saved successfully');
-    } catch (error) {
+    } catch {
       showError('Failed to save tweet', 'Please try again');
     }
   };
@@ -199,13 +195,8 @@ export function TweetComposer() {
       }
 
       // Here you would save the scheduled tweet to your database
-      console.log('Scheduled tweet data:', {
-        content,
-        mediaUrls,
-        scheduledFor: scheduleData.scheduledFor || scheduledDateTime,
-        agentId: scheduleData.agentId || selectedAgent?.id,
-        twitterAccountId: scheduleData.twitterAccountId,
-      });
+      // TODO: Implement actual scheduled tweet saving functionality
+      void mediaUrls; // Will be used when scheduled tweet saving is implemented
 
       // Reset form
       setContent('');
@@ -220,7 +211,7 @@ export function TweetComposer() {
       } else {
         showSuccess('Tweet saved', 'Your tweet has been saved as a draft');
       }
-    } catch (error) {
+    } catch {
       showError('Failed to schedule tweet', 'Please try again');
     }
   };

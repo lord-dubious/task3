@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Bot, Download, Upload, FileText } from 'lucide-react';
+import { Plus, Bot, Download, Upload } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { AgentList } from './AgentList';
 import { AgentForm } from './AgentForm';
@@ -136,7 +136,7 @@ export function AgentSettingsView() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowImportExport(true)}
-                leftIcon={<FileText className="w-3 h-3 sm:w-4 sm:h-4" />}
+                leftIcon={<Upload className="w-3 h-3 sm:w-4 sm:h-4" />}
                 className="text-xs sm:text-sm"
               >
                 Import/Export

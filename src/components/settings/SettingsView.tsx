@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Save } from 'lucide-react';
-import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useNotifications } from '../../hooks/useNotifications';
 import { TwitterIntegration } from './TwitterIntegration';
 import { GoogleAISettings } from './GoogleAISettings';
@@ -10,19 +8,6 @@ import { CloudflareR2Settings } from './CloudflareR2Settings';
 import { EdgeFunctionSetup } from './EdgeFunctionSetup';
 
 export function SettingsView() {
-  const [twitterCredentials, setTwitterCredentials] = useLocalStorage('twitter_credentials', {
-    apiKey: '',
-    apiSecret: '',
-    accessToken: '',
-    accessTokenSecret: ''
-  });
-  
-  const [showKeys, setShowKeys] = useState({
-    twitterApi: false,
-    twitterSecret: false,
-    accessToken: false,
-    accessSecret: false
-  });
   const { showSuccess } = useNotifications();
 
   const handleSave = () => {

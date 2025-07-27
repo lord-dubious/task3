@@ -17,8 +17,9 @@ import { useAuth } from '../../hooks/useAuth';
 
 export function QuickSettingsDropdown() {
   const dropdownRef = useRef(null);
+  const [showUserInfo, setShowUserInfo] = useState(false);
   const [selectedModel, setSelectedModel] = useLocalStorage('googleAI_selectedModel', 'gemini-1.5-flash');
-  const [googleAIKey, setGoogleAIKey] = useLocalStorage('googleAI_apiKey', '');
+  const [googleAIKey] = useLocalStorage('googleAI_apiKey', '');
   const [theme, setTheme] = useLocalStorage('app_theme', 'dark');
   const [autoOptimize, setAutoOptimize] = useLocalStorage('auto_optimize_media', true);
 
@@ -65,12 +66,46 @@ export function QuickSettingsDropdown() {
         </DropdownMenuTrigger>
         
         <DropdownMenuContent align="end" className="w-72 sm:w-80">
-          <DropdownMenuLabel className="flex items-center">
-            <Zap className="w-4 h-4 mr-2 text-purple-400" />
-            Quick Settings
+          <DropdownMenuLabel className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Zap className="w-4 h-4 mr-2 text-purple-400" />
+              Quick Settings
+            </div>
+            {user && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowUserInfo(!showUserInfo)}
+                className="text-xs"
+              >
+                {user.email?.split('@')[0] || 'User'}
+              </Button>
+            )}
           </DropdownMenuLabel>
           
           <DropdownMenuSeparator />
+          
+          {/* User Info Section */}
+          {showUserInfo && user && (
+            <>
+              <div className="p-3 bg-gray-800/50 rounded-lg mx-3 mb-3">
+                <div className="flex items-center space-x-2 mb-2">
+                  <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
+                    <span className="text-sm font-medium text-white">
+                      {user.email?.charAt(0).toUpperCase() || 'U'}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-white">{user.email}</p>
+                    <p className="text-xs text-gray-400">
+                      {getModelDisplayName(selectedModel)} • {theme} theme
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <DropdownMenuSeparator />
+            </>
+          )}
           
           {/* AI Model Selection */}
           <div className="p-3 space-y-3">

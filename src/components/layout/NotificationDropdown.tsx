@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { 
   Bell, 
   CheckCircle, 
@@ -137,8 +137,9 @@ export function NotificationDropdown() {
                 <DropdownMenuItem
                   key={notification.id}
                   className={`
-                    flex-col items-start p-3 cursor-pointer
+                    flex-col items-start p-3 cursor-pointer border-l-2 group
                     ${!notification.read ? 'bg-purple-500/5' : ''}
+                    ${getNotificationBgColor(notification.type)}
                   `}
                   onClick={() => handleNotificationClick(notification)}
                 >
@@ -169,6 +170,20 @@ export function NotificationDropdown() {
                           {!notification.read && (
                             <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                           )}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // Handle notification actions (mark as read, delete, etc.)
+                              if (!notification.read) {
+                                markAsRead(notification.id);
+                              }
+                            }}
+                          >
+                            <MoreHorizontal className="w-3 h-3" />
+                          </Button>
                         </div>
                       </div>
                     </div>

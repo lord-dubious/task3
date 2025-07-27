@@ -7,6 +7,34 @@ import { Checkbox } from '../ui/Checkbox';
 import { Card } from '../ui/Card';
 import { Agent } from '../../types';
 
+interface StyleConfig {
+  all: string[];
+  chat: string[];
+  post: string[];
+}
+
+type ArrayFieldKey =
+  | 'bio'
+  | 'lore'
+  | 'message_examples'
+  | 'post_examples'
+  | 'adjectives'
+  | 'topics';
+
+type FormDataState = {
+  name: string;
+  username: string;
+  system_prompt: string;
+  bio: string[];
+  lore: string[];
+  message_examples: string[];
+  post_examples: string[];
+  adjectives: string[];
+  topics: string[];
+  style_config: StyleConfig;
+  enabled: boolean;
+};
+
 interface AgentFormProps {
   agent?: Agent | null;
   onSave: (agentData: Omit<Agent, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => Promise<void>;
@@ -15,7 +43,7 @@ interface AgentFormProps {
 }
 
 export function AgentForm({ agent, onSave, onCancel, isLoading }: AgentFormProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormDataState>({
     name: '',
     username: '',
     system_prompt: '',
@@ -76,75 +104,82 @@ export function AgentForm({ agent, onSave, onCancel, isLoading }: AgentFormProps
     await onSave(cleanedData);
   };
 
-  const addArrayItem = (field: string, subField?: string) => {
+  const addArrayItem = (field: ArrayFieldKey | 'style_config', subField?: keyof StyleConfig) => {
     setFormData(prev => {
-      if (subField) {
+      if (field === 'style_config' && subField) {
         return {
           ...prev,
-          [field]: {
-            ...prev[field as keyof typeof prev],
-            [subField]: [...(prev[field as keyof typeof prev] as any)[subField], '']
+          style_config: {
+            ...prev.style_config,
+            [subField]: [...prev.style_config[subField], '']
           }
         };
       }
-      return {
-        ...prev,
-        [field]: [...(prev[field as keyof typeof prev] as string[]), '']
-      };
+      if (field !== 'style_config') {
+        return {
+          ...prev,
+          [field]: [...prev[field], '']
+        } as FormDataState;
+      }
+      return prev;
     });
   };
 
-  const removeArrayItem = (field: string, index: number, subField?: string) => {
+  const removeArrayItem = (field: ArrayFieldKey | 'style_config', index: number, subField?: keyof StyleConfig) => {
     setFormData(prev => {
-      if (subField) {
-        const fieldData = prev[field as keyof typeof prev] as any;
+      if (field === 'style_config' && subField) {
         return {
           ...prev,
-          [field]: {
-            ...fieldData,
-            [subField]: fieldData[subField].filter((_: any, i: number) => i !== index)
+          style_config: {
+            ...prev.style_config,
+            [subField]: prev.style_config[subField].filter((_, i) => i !== index)
           }
         };
       }
-      return {
-        ...prev,
-        [field]: (prev[field as keyof typeof prev] as string[]).filter((_, i) => i !== index)
-      };
+      if (field !== 'style_config') {
+        return {
+          ...prev,
+          [field]: prev[field].filter((_, i) => i !== index)
+        } as FormDataState;
+      }
+      return prev;
     });
   };
 
-  const updateArrayItem = (field: string, index: number, value: string, subField?: string) => {
+  const updateArrayItem = (field: ArrayFieldKey | 'style_config', index: number, value: string, subField?: keyof StyleConfig) => {
     setFormData(prev => {
-      if (subField) {
-        const fieldData = prev[field as keyof typeof prev] as any;
-        const newArray = [...fieldData[subField]];
+      if (field === 'style_config' && subField) {
+        const newArray = [...prev.style_config[subField]];
         newArray[index] = value;
         return {
           ...prev,
-          [field]: {
-            ...fieldData,
+          style_config: {
+            ...prev.style_config,
             [subField]: newArray
           }
         };
       }
-      const newArray = [...(prev[field as keyof typeof prev] as string[])];
-      newArray[index] = value;
-      return {
-        ...prev,
-        [field]: newArray
-      };
+      if (field !== 'style_config') {
+        const newArray = [...prev[field]];
+        newArray[index] = value;
+        return {
+          ...prev,
+          [field]: newArray
+        } as FormDataState;
+      }
+      return prev;
     });
   };
 
   const renderArrayField = (
     title: string,
-    field: string,
+    field: ArrayFieldKey | 'style_config',
     placeholder: string,
-    subField?: string
+    subField?: keyof StyleConfig
   ) => {
-    const items = subField 
-      ? (formData[field as keyof typeof formData] as any)[subField]
-      : formData[field as keyof typeof formData] as string[];
+    const items = field === 'style_config' && subField
+      ? formData.style_config[subField]
+      : (field !== 'style_config' ? formData[field] : []);
 
     return (
       <div>
