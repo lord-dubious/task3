@@ -81,12 +81,16 @@ export function EdgeFunctionSetup() {
           body: JSON.stringify({})
         });
 
-        // Only consider 2xx, 4xx, and 5xx as successful deployment (function exists)
-        // 404 would indicate the function doesn't exist, but other errors mean it exists but failed
-        if (response.status >= 200 && response.status < 600) {
+        // Only consider 2xx status codes as successful deployment
+        // 404 specifically indicates the function doesn't exist
+        if (response.status >= 200 && response.status < 300) {
           edgeFunctionDeployed = true;
-        } else {
+        } else if (response.status === 404) {
+          // Function does not exist
           edgeFunctionDeployed = false;
+        } else {
+          // Other error statuses (4xx, 5xx) indicate function exists but has issues
+          edgeFunctionDeployed = true;
         }
       } catch (error) {
         // Network errors or fetch failures indicate function might not exist
