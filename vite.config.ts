@@ -18,8 +18,8 @@ export default defineConfig({
     ]
   },
   optimizeDeps: {
-    include: ['@google/genai', 'fast-xml-parser'],
-    exclude: ['lucide-react', '@aws-sdk/client-s3']
+    include: ['@google/genai', 'fast-xml-parser', 'lucide-react'],
+    exclude: ['@aws-sdk/client-s3']
   },
   build: {
     rollupOptions: {
