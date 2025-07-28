@@ -6,8 +6,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true, // Allow access from all hosts
-    // Alternatively, you can use:
-    // host: '0.0.0.0'
+    allowedHosts: 'all', // Allow all hosts (bypasses host header check)
+    // Alternatively, you can specify specific hosts:
+    // allowedHosts: ['task3-0cpc.onrender.com', 'localhost']
   },
   optimizeDeps: {
     include: ['@google/genai', 'fast-xml-parser'],
