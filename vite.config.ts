@@ -5,10 +5,9 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true, // Allow access from all hosts
-    allowedHosts: 'all', // Allow all hosts (bypasses host header check)
-    // Alternatively, you can specify specific hosts:
-    // allowedHosts: ['task3-0cpc.onrender.com', 'localhost']
+    host: '0.0.0.0', // Allow connections from any host
+    port: 10000, // Custom port
+    strictPort: false // Allow fallback to other ports if 10000 is busy
   },
   optimizeDeps: {
     include: ['@google/genai', 'fast-xml-parser'],
