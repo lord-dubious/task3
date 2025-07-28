@@ -7,7 +7,15 @@ export default defineConfig({
   server: {
     host: '0.0.0.0', // Allow connections from any host
     port: 10000, // Custom port
-    strictPort: false // Allow fallback to other ports if 10000 is busy
+    strictPort: false, // Allow fallback to other ports if 10000 is busy
+    allowedHosts: [
+      'task3-0cpc.onrender.com', // Your specific Render.com host
+      '.onrender.com', // All Render.com subdomains
+      'localhost', // Local development
+      '127.0.0.1', // Local IP
+      '.localhost', // All localhost subdomains
+      // Add any other hosts you need
+    ]
   },
   optimizeDeps: {
     include: ['@google/genai', 'fast-xml-parser'],
