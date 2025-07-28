@@ -44,6 +44,7 @@ CREATE OR REPLACE FUNCTION get_edge_function_config(config_key TEXT)
 RETURNS TEXT
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path TO public, pg_temp
 AS $$
 DECLARE
   config_value TEXT;
@@ -62,29 +63,40 @@ $$;
 
 -- Create the cron job to process scheduled tweets every 5 minutes
 -- Uses configuration table for dynamic values
-SELECT cron.schedule(
-  'post-scheduled-tweets',
-  '*/5 * * * *', -- Every 5 minutes
-  $$
-    SELECT net.http_post(
-      (SELECT get_edge_function_config('edge_function_url')),
-      '{}'::json,
-      ARRAY[
-        net.http_header('Authorization', 'Bearer ' || (SELECT get_edge_function_config('supabase_anon_key'))),
-        net.http_header('Content-Type', 'application/json')
-      ]
+-- Check if job doesn't exist before creating to prevent duplicate job errors
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM cron.job WHERE jobname = 'post-scheduled-tweets'
+  ) THEN
+    PERFORM cron.schedule(
+      'post-scheduled-tweets',
+      '*/5 * * * *', -- Every 5 minutes
+      $$
+        SELECT net.http_post(
+          (SELECT get_edge_function_config('edge_function_url')),
+          '{}'::json,
+          ARRAY[
+            net.http_header('Authorization', 'Bearer ' || (SELECT get_edge_function_config('supabase_anon_key'))),
+            net.http_header('Content-Type', 'application/json')
+          ]
+        );
+      $$
     );
-  $$
-);
+  END IF;
+END $$;
 
 -- Create a function to manually trigger tweet processing (useful for testing)
 CREATE OR REPLACE FUNCTION trigger_tweet_processing()
 RETURNS json
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path TO public, pg_temp
 AS $$
 DECLARE
   result json;
+  http_status integer;
+  response_body json;
 BEGIN
   SELECT net.http_post(
     (SELECT get_edge_function_config('edge_function_url')),
@@ -95,7 +107,17 @@ BEGIN
     ]
   ) INTO result;
 
-  RETURN result;
+  -- Extract status and response body from the full result
+  http_status := (result->>'status')::integer;
+  response_body := result->'body';
+
+  -- Check if HTTP status indicates an error (400 or higher)
+  IF http_status >= 400 THEN
+    RAISE EXCEPTION 'HTTP request failed with status %: %', http_status, result;
+  END IF;
+
+  -- Return only the response body for successful requests
+  RETURN response_body;
 END;
 $$;
 
