@@ -10,7 +10,7 @@ import { useAI } from '../../hooks/useAI';
 import { useAgents } from '../../hooks/useAgents';
 import { useSupabaseStorage } from '../../hooks/useSupabaseStorage';
 import { useNotifications } from '../../hooks/useNotifications';
-import { MediaFile, Agent } from '../../types';
+import type { MediaFile, Agent } from '../../types';
 
 export function TweetComposer() {
   const [content, setContent] = useState('');
@@ -26,7 +26,7 @@ export function TweetComposer() {
   const { generateTweet, improveTweet, analyzeMedia, isLoading, error } = useAI();
   const { agents } = useAgents();
   const { uploadMultipleFiles, uploading } = useSupabaseStorage();
-  const { showSuccess, showError, showWarning } = useNotifications();
+  const { showSuccess, showError } = useNotifications();
 
   const characterCount = content.length;
   const maxCharacters = 280;
@@ -161,12 +161,8 @@ export function TweetComposer() {
 
       // Here you would typically save the tweet to your database
       // and potentially schedule it or post it immediately
-      console.log('Tweet data:', {
-        content,
-        mediaUrls,
-        agentId: selectedAgent?.id,
-        scheduledFor: null
-      });
+      // TODO: Implement actual tweet saving functionality
+      void mediaUrls; // Will be used when tweet saving is implemented
 
       // Reset form
       setContent('');
@@ -175,7 +171,7 @@ export function TweetComposer() {
       setMediaAnalysis([]);
       
       showSuccess('Tweet saved', 'Your tweet has been saved successfully');
-    } catch (error) {
+    } catch {
       showError('Failed to save tweet', 'Please try again');
     }
   };
@@ -199,13 +195,8 @@ export function TweetComposer() {
       }
 
       // Here you would save the scheduled tweet to your database
-      console.log('Scheduled tweet data:', {
-        content,
-        mediaUrls,
-        scheduledFor: scheduleData.scheduledFor || scheduledDateTime,
-        agentId: scheduleData.agentId || selectedAgent?.id,
-        twitterAccountId: scheduleData.twitterAccountId,
-      });
+      // TODO: Implement actual scheduled tweet saving functionality
+      void mediaUrls; // Will be used when scheduled tweet saving is implemented
 
       // Reset form
       setContent('');
@@ -220,15 +211,15 @@ export function TweetComposer() {
       } else {
         showSuccess('Tweet saved', 'Your tweet has been saved as a draft');
       }
-    } catch (error) {
+    } catch {
       showError('Failed to schedule tweet', 'Please try again');
     }
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-4 sm:space-y-6">
+    <div className="max-w-2xl mx-auto space-y-3 sm:space-y-4 lg:space-y-6">
       <Card>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-2 sm:space-y-0">
             <h2 className="text-lg sm:text-xl font-semibold text-white">Compose Tweet</h2>
             <div className="flex items-center space-x-2 sm:space-x-3">
@@ -283,7 +274,7 @@ export function TweetComposer() {
           )}
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-gray-700 space-y-3 sm:space-y-0">
-            <div className="flex items-center space-x-2 sm:space-x-3">
+            <div className="flex items-center space-x-2">
               <Button 
                 variant="ghost" 
                 size="sm"
@@ -348,13 +339,13 @@ export function TweetComposer() {
       </Card>
 
       <Card>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center space-x-2 sm:space-x-3">
             <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
             <h3 className="text-base sm:text-lg font-semibold text-white">AI Assistant</h3>
           </div>
           
-          <div className="grid grid-cols-1 gap-4">
+          <div className="space-y-3 sm:space-y-4">
             {/* Agent Selection */}
             <div>
               <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">

@@ -1,10 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Upload, FolderOpen, Tag, Zap, AlertCircle } from 'lucide-react';
+import { X, Upload, Tag, Zap } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
-import { MediaLibraryItem } from '../../hooks/useMediaLibrary';
-import { MediaOptimizer, OptimizedMedia } from '../../utils/mediaOptimization';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
+import type { MediaLibraryItem } from '../../hooks/useMediaLibrary';
+import type { OptimizedMedia } from '../../utils/mediaOptimization';
+import { MediaOptimizer } from '../../utils/mediaOptimization';
 import { useNotifications } from '../../hooks/useNotifications';
 
 interface MediaUploadModalProps {
@@ -51,7 +53,7 @@ export function MediaUploadModal({
         }
       }
       setOptimizationPreviews(previews);
-    } catch (error) {
+    } catch {
       showError('Optimization failed', 'Some files could not be optimized');
     } finally {
       setIsOptimizing(false);
@@ -80,7 +82,7 @@ export function MediaUploadModal({
       setTags('');
       setFolder('general');
       onClose();
-    } catch (error) {
+    } catch {
       showError('Upload failed', 'Some files could not be uploaded');
     }
   };
@@ -94,7 +96,12 @@ export function MediaUploadModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-modal flex items-center justify-center p-4"
+      >
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -155,17 +162,21 @@ export function MediaUploadModal({
               <label className="block text-sm font-medium text-gray-200 mb-2">
                 Folder
               </label>
-              <select
+              <Select
                 value={folder}
-                onChange={(e) => setFolder(e.target.value)}
-                className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-purple-500 focus:outline-none"
+                onValueChange={setFolder}
               >
-                <option value="general">General</option>
-                <option value="tweets">Tweets</option>
-                <option value="profile">Profile</option>
-                <option value="banners">Banners</option>
-                <option value="products">Products</option>
-              </select>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="general">General</SelectItem>
+                  <SelectItem value="tweets">Tweets</SelectItem>
+                  <SelectItem value="profile">Profile</SelectItem>
+                  <SelectItem value="banners">Banners</SelectItem>
+                  <SelectItem value="products">Products</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <Input
@@ -303,7 +314,7 @@ export function MediaUploadModal({
             </Button>
           </div>
         </motion.div>
-      </div>
+      </motion.div>
     </AnimatePresence>
   );
 }

@@ -7,14 +7,33 @@ import {
   FileText, 
   AlertCircle, 
   CheckCircle, 
-  Bot,
-  Users,
-  Calendar,
-  Eye
+  Bot
 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
-import { Agent } from '../../types';
+import type { Agent } from '../../types';
+import { supabase } from '../../lib/supabase';
+
+export interface StyleConfig {
+  all?: string[];
+  chat?: string[];
+  post?: string[];
+}
+
+export interface ImportedAgent {
+  name: string;
+  username?: string;
+  system_prompt?: string;
+  bio?: string[];
+  lore?: string[];
+  message_examples?: Record<string, unknown> | null;
+  post_examples?: string[];
+  adjectives?: string[];
+  topics?: string[];
+  style_config?: StyleConfig | null;
+}
+
+// ImportFileData interface removed - using ImportData instead
 
 interface AgentImportExportProps {
   isOpen: boolean;
@@ -22,22 +41,6 @@ interface AgentImportExportProps {
   agents: Agent[];
   onImport: (agentData: Omit<Agent, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => Promise<Agent>;
   onExportAll: () => void;
-}
-
-interface ImportedAgent {
-  name: string;
-  username?: string;
-  system_prompt?: string;
-  bio?: string[];
-  lore?: string[];
-  message_examples?: any;
-  post_examples?: string[];
-  adjectives?: string[];
-  topics?: string[];
-  style_config?: any;
-  enabled?: boolean;
-  exported_at?: string;
-  version?: string;
 }
 
 interface ImportData {
@@ -48,11 +51,11 @@ interface ImportData {
   system_prompt?: string;
   bio?: string[];
   lore?: string[];
-  message_examples?: any;
+  message_examples?: Record<string, unknown> | null;
   post_examples?: string[];
   adjectives?: string[];
   topics?: string[];
-  style_config?: any;
+  style_config?: StyleConfig | null;
   enabled?: boolean;
   exported_at?: string;
   version?: string;
@@ -159,14 +162,14 @@ export function AgentImportExport({
             await onImport({
               name: importData.name,
               username: importData.username || null,
-              system_prompt: (importData as any).system || importData.system_prompt || null,
+              system_prompt: (importData as ImportData & { system?: string }).system || importData.system_prompt || null,
               bio: importData.bio || null,
               lore: importData.lore || null,
-              message_examples: (importData as any).messageExamples || importData.message_examples || null,
-              post_examples: (importData as any).postExamples || importData.post_examples || null,
+              message_examples: (importData as ImportData & { messageExamples?: Record<string, unknown> }).messageExamples || importData.message_examples || null,
+              post_examples: (importData as ImportData & { postExamples?: string[] }).postExamples || importData.post_examples || null,
               adjectives: importData.adjectives || null,
               topics: importData.topics || null,
-              style_config: (importData as any).style || importData.style_config || null,
+              style_config: (importData as ImportData & { style?: StyleConfig }).style || importData.style_config || null,
               enabled: importData.enabled !== false
             });
             results.success++;
@@ -186,14 +189,14 @@ export function AgentImportExport({
             await onImport({
               name: agent.name,
               username: agent.username || null,
-              system_prompt: (agent as any).system || agent.system_prompt || null,
+              system_prompt: (agent as ImportedAgent & { system?: string }).system || agent.system_prompt || null,
               bio: agent.bio || null,
               lore: agent.lore || null,
-              message_examples: (agent as any).messageExamples || agent.message_examples || null,
-              post_examples: (agent as any).postExamples || agent.post_examples || null,
+              message_examples: (agent as ImportedAgent & { messageExamples?: Record<string, unknown> }).messageExamples || agent.message_examples || null,
+              post_examples: (agent as ImportedAgent & { postExamples?: string[] }).postExamples || agent.post_examples || null,
               adjectives: agent.adjectives || null,
               topics: agent.topics || null,
-              style_config: (agent as any).style || agent.style_config || null,
+              style_config: (agent as ImportedAgent & { style?: StyleConfig }).style || agent.style_config || null,
               enabled: agent.enabled !== false
             });
             results.success++;
@@ -282,7 +285,12 @@ export function AgentImportExport({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-modal flex items-center justify-center p-4"
+      >
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -563,7 +571,7 @@ export function AgentImportExport({
             </div>
           </div>
         </motion.div>
-      </div>
+      </motion.div>
     </AnimatePresence>
   );
 }

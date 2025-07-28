@@ -1,7 +1,5 @@
 import { useState, useCallback } from 'react';
-import { GoogleGenAI } from '@google/genai';
 import { toast } from 'sonner';
-import { useLocalStorage } from './useLocalStorage';
 
 export interface GoogleAIModel {
   name: string;
@@ -28,8 +26,6 @@ export function useGoogleAI() {
     setError(null);
 
     try {
-      const genAI = new GoogleGenAI({ apiKey });
-      
       // Fetch available models
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
       
@@ -41,11 +37,11 @@ export function useGoogleAI() {
       
       // Filter and format models that support generateContent
       const availableModels: GoogleAIModel[] = data.models
-        .filter((model: any) => 
+        .filter((model: { name: string; supportedGenerationMethods?: string[] }) => 
           model.supportedGenerationMethods?.includes('generateContent') &&
           !model.name.includes('embedding') // Exclude embedding models
         )
-        .map((model: any) => ({
+        .map((model: { name: string; displayName?: string; description?: string; inputTokenLimit?: number; outputTokenLimit?: number; supportedGenerationMethods?: string[] }) => ({
           name: model.name.replace('models/', ''), // Remove 'models/' prefix
           displayName: model.displayName || model.name.replace('models/', ''),
           description: model.description,

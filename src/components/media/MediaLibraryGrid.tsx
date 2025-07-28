@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   Image as ImageIcon, 
   Video, 
@@ -7,13 +7,12 @@ import {
   Tag, 
   Download, 
   Eye,
-  Calendar,
-  HardDrive,
   Zap
 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
-import { MediaLibraryItem } from '../../hooks/useMediaLibrary';
+import { Checkbox } from '../ui/Checkbox';
+import type { MediaLibraryItem } from '../../hooks/useMediaLibrary';
 import { MediaOptimizer } from '../../utils/mediaOptimization';
 import { format } from 'date-fns';
 
@@ -81,13 +80,19 @@ export function MediaLibraryGrid({
             <thead>
               <tr className="border-b border-gray-700">
                 <th className="text-left p-2 sm:p-3 text-xs sm:text-sm text-gray-300">
-                  <input
-                    type="checkbox"
+                  <Checkbox
                     checked={selectedItems.length === items.length}
-                    onChange={() => {
+                    indeterminate={selectedItems.length > 0 && selectedItems.length < items.length}
+                    onCheckedChange={() => {
                       if (selectedItems.length === items.length) {
-                        items.forEach(item => onSelectItem(item.id));
+                        // Unselect all
+                        items.forEach(item => {
+                          if (selectedItems.includes(item.id)) {
+                            onSelectItem(item.id);
+                          }
+                        });
                       } else {
+                        // Select all
                         items.forEach(item => {
                           if (!selectedItems.includes(item.id)) {
                             onSelectItem(item.id);
@@ -95,7 +100,6 @@ export function MediaLibraryGrid({
                         });
                       }
                     }}
-                    className="w-3 h-3 sm:w-4 sm:h-4"
                   />
                 </th>
                 <th className="text-left p-2 sm:p-3 text-xs sm:text-sm text-gray-300">Preview</th>
@@ -119,11 +123,9 @@ export function MediaLibraryGrid({
                   }`}
                 >
                   <td className="p-2 sm:p-3">
-                    <input
-                      type="checkbox"
+                    <Checkbox
                       checked={selectedItems.includes(item.id)}
-                      onChange={() => onSelectItem(item.id)}
-                      className="w-3 h-3 sm:w-4 sm:h-4"
+                      onCheckedChange={() => onSelectItem(item.id)}
                     />
                   </td>
                   <td className="p-2 sm:p-3">
@@ -265,11 +267,9 @@ export function MediaLibraryGrid({
           >
             {/* Selection Checkbox */}
             <div className="absolute top-2 left-2 z-10">
-              <input
-                type="checkbox"
+              <Checkbox
                 checked={selectedItems.includes(item.id)}
-                onChange={() => onSelectItem(item.id)}
-                className="w-3 h-3 sm:w-4 sm:h-4"
+                onCheckedChange={() => onSelectItem(item.id)}
                 onClick={(e) => e.stopPropagation()}
               />
             </div>

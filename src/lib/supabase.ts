@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import type { MessageExample } from '../types';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -43,7 +44,7 @@ export type Database = {
           id: string;
           user_id: string;
           google_ai_api_key: string | null;
-          twitter_credentials: any | null;
+          twitter_credentials: Record<string, unknown> | null;
           created_at: string;
           updated_at: string;
         };
@@ -51,7 +52,7 @@ export type Database = {
           id?: string;
           user_id: string;
           google_ai_api_key?: string | null;
-          twitter_credentials?: any | null;
+          twitter_credentials?: Record<string, unknown> | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -59,7 +60,7 @@ export type Database = {
           id?: string;
           user_id?: string;
           google_ai_api_key?: string | null;
-          twitter_credentials?: any | null;
+          twitter_credentials?: Record<string, unknown> | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -73,11 +74,11 @@ export type Database = {
           system_prompt: string | null;
           bio: string[] | null;
           lore: string[] | null;
-          message_examples: any | null;
+          message_examples: MessageExample[][] | null;
           post_examples: string[] | null;
           adjectives: string[] | null;
           topics: string[] | null;
-          style_config: any | null;
+          style_config: { all?: string[]; chat?: string[]; post?: string[]; } | null;
           enabled: boolean;
           created_at: string;
           updated_at: string;
@@ -90,11 +91,11 @@ export type Database = {
           system_prompt?: string | null;
           bio?: string[] | null;
           lore?: string[] | null;
-          message_examples?: any | null;
+          message_examples?: MessageExample[][] | null;
           post_examples?: string[] | null;
           adjectives?: string[] | null;
           topics?: string[] | null;
-          style_config?: any | null;
+          style_config?: { all?: string[]; chat?: string[]; post?: string[]; } | null;
           enabled?: boolean;
           created_at?: string;
           updated_at?: string;
@@ -107,11 +108,11 @@ export type Database = {
           system_prompt?: string | null;
           bio?: string[] | null;
           lore?: string[] | null;
-          message_examples?: any | null;
+          message_examples?: MessageExample[][] | null;
           post_examples?: string[] | null;
           adjectives?: string[] | null;
           topics?: string[] | null;
-          style_config?: any | null;
+          style_config?: { all?: string[]; chat?: string[]; post?: string[]; } | null;
           enabled?: boolean;
           created_at?: string;
           updated_at?: string;

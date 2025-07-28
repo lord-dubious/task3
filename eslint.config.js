@@ -23,6 +23,20 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      // Type safety rules
+      '@typescript-eslint/no-explicit-any': 'error', // Disallow the `any` type
+      '@typescript-eslint/no-unused-vars': ['error', { 
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        ignoreRestSiblings: true 
+      }],
+      
+      // Import rules
+      'no-unused-vars': 'off', // Turn off base rule as it can report incorrect errors
+      '@typescript-eslint/consistent-type-imports': ['error', { 
+        prefer: 'type-imports',
+        fixStyle: 'separate-type-imports'
+      }],
     },
   }
 );

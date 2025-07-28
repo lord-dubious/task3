@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import * as Dialog from '@radix-ui/react-dialog';
 import { 
   Upload, 
   Search, 
@@ -43,6 +44,10 @@ export function MediaLibraryView() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFolder, setSelectedFolder] = useState<string>('all');
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedFileType, setSelectedFileType] = useState<'all' | 'image' | 'video'>('all');
+  const [showNewFolderModal, setShowNewFolderModal] = useState(false);
+  const [newFolderName, setNewFolderName] = useState('');
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
@@ -57,8 +62,20 @@ export function MediaLibraryView() {
       items = getMediaByFolder(selectedFolder);
     }
 
+    // Apply file type filter
+    if (selectedFileType !== 'all') {
+      items = items.filter(item => {
+        if (selectedFileType === 'image') {
+          return item.type.startsWith('image/');
+        } else if (selectedFileType === 'video') {
+          return item.type.startsWith('video/');
+        }
+        return true;
+      });
+    }
+
     return items;
-  }, [mediaItems, searchQuery, selectedFolder, searchMedia, getMediaByFolder]);
+  }, [mediaItems, searchQuery, selectedFolder, selectedFileType, searchMedia, getMediaByFolder]);
 
   const folders = React.useMemo(() => {
     const folderSet = new Set(mediaItems.map(item => item.folder));
@@ -87,7 +104,7 @@ export function MediaLibraryView() {
   };
 
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <div className="space-y-3 sm:space-y-4 lg:space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-3 sm:space-y-0">
         <div>
@@ -107,7 +124,7 @@ export function MediaLibraryView() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
         <MediaStatsCard
           title="Total Files"
           value={mediaItems.length}
@@ -147,18 +164,42 @@ export function MediaLibraryView() {
           </div>
           
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
-            <select
-              value={selectedFolder}
-              onChange={(e) => setSelectedFolder(e.target.value)}
-              className="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:border-purple-500 focus:outline-none"
+            {/* Filter Button */}
+            <Button
+              variant={showFilters ? 'primary' : 'ghost'}
+              size="sm"
+              onClick={() => setShowFilters(!showFilters)}
+              leftIcon={<Filter className="w-3 h-3 sm:w-4 sm:h-4" />}
+              className="text-xs sm:text-sm"
             >
-              <option value="all">All Folders</option>
-              {folders.map(folder => (
-                <option key={folder} value={folder}>
-                  {folder}
-                </option>
-              ))}
-            </select>
+              Filters
+            </Button>
+
+            {/* Folder Selection with New Folder Button */}
+            <div className="flex items-center space-x-2">
+              <FolderOpen className="w-4 h-4 text-gray-400" />
+              <select
+                value={selectedFolder}
+                onChange={(e) => setSelectedFolder(e.target.value)}
+                className="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:border-purple-500 focus:outline-none"
+              >
+                <option value="all">All Folders</option>
+                {folders.map(folder => (
+                  <option key={folder} value={folder}>
+                    {folder}
+                  </option>
+                ))}
+              </select>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowNewFolderModal(true)}
+                className="p-2"
+                title="Create new folder"
+              >
+                <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
+              </Button>
+            </div>
 
             <div className="flex items-center border border-gray-600 rounded-lg">
               <Button
@@ -180,6 +221,66 @@ export function MediaLibraryView() {
             </div>
           </div>
         </div>
+
+        {/* Filter Panel */}
+        <AnimatePresence>
+          {showFilters && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mt-4 p-4 bg-gray-800/50 rounded-lg border border-gray-700"
+            >
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex items-center space-x-2">
+                  <Tag className="w-4 h-4 text-purple-400" />
+                  <label className="text-sm font-medium text-gray-200">File Type:</label>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant={selectedFileType === 'all' ? 'primary' : 'ghost'}
+                      size="sm"
+                      onClick={() => setSelectedFileType('all')}
+                      className="text-xs"
+                    >
+                      All
+                    </Button>
+                    <Button
+                      variant={selectedFileType === 'image' ? 'primary' : 'ghost'}
+                      size="sm"
+                      onClick={() => setSelectedFileType('image')}
+                      leftIcon={<ImageIcon className="w-3 h-3" />}
+                      className="text-xs"
+                    >
+                      Images
+                    </Button>
+                    <Button
+                      variant={selectedFileType === 'video' ? 'primary' : 'ghost'}
+                      size="sm"
+                      onClick={() => setSelectedFileType('video')}
+                      leftIcon={<Video className="w-3 h-3" />}
+                      className="text-xs"
+                    >
+                      Videos
+                    </Button>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setSelectedFileType('all');
+                    setSelectedFolder('all');
+                    setSearchQuery('');
+                  }}
+                  leftIcon={<X className="w-3 h-3" />}
+                  className="text-xs"
+                >
+                  Clear Filters
+                </Button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {selectedItems.length > 0 && (
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-4 p-3 bg-purple-500/20 border border-purple-500/30 rounded-lg space-y-2 sm:space-y-0">
@@ -252,6 +353,68 @@ export function MediaLibraryView() {
           <p className="text-red-300 text-sm">{error}</p>
         </motion.div>
       )}
+
+      {/* New Folder Modal */}
+      <Dialog.Root open={showNewFolderModal} onOpenChange={setShowNewFolderModal}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
+          <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4 z-50 focus:outline-none">
+            <div className="flex items-center justify-between mb-4">
+              <Dialog.Title className="text-lg font-semibold text-white">
+                Create New Folder
+              </Dialog.Title>
+              <Dialog.Close asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="p-2"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </Dialog.Close>
+            </div>
+            <div className="space-y-4">
+              <Input
+                placeholder="Enter folder name..."
+                value={newFolderName}
+                onChange={(e) => setNewFolderName(e.target.value)}
+                leftIcon={<FolderOpen className="w-4 h-4" />}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && newFolderName.trim()) {
+                    // TODO: Implement folder creation functionality
+                    // This would typically call an API to create the folder
+                    setShowNewFolderModal(false);
+                    setNewFolderName('');
+                  }
+                }}
+              />
+              <div className="flex justify-end space-x-2">
+                <Dialog.Close asChild>
+                  <Button
+                    variant="ghost"
+                    onClick={() => setNewFolderName('')}
+                  >
+                    Cancel
+                  </Button>
+                </Dialog.Close>
+                <Button
+                  onClick={() => {
+                    if (newFolderName.trim()) {
+                      // TODO: Implement folder creation functionality
+                      // This would typically call an API to create the folder
+                      setShowNewFolderModal(false);
+                      setNewFolderName('');
+                    }
+                  }}
+                  disabled={!newFolderName.trim()}
+                >
+                  Create Folder
+                </Button>
+              </div>
+            </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
     </div>
   );
 }

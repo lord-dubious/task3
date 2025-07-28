@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
-import { Agent } from '../types';
+import type { Agent } from '../types';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 

@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from './useAuth';
 import { useSupabaseStorage } from './useSupabaseStorage';
-import { MediaOptimizer, OptimizedMedia } from '../utils/mediaOptimization';
+import type { OptimizedMedia } from '../utils/mediaOptimization';
+import { MediaOptimizer } from '../utils/mediaOptimization';
 import { toast } from 'sonner';
 
 export interface MediaLibraryItem {

@@ -5,7 +5,6 @@ import {
   ChevronLeft, 
   ChevronRight, 
   Image, 
-  Video,
   CheckCircle,
   XCircle,
   Clock,
@@ -15,7 +14,7 @@ import {
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths } from 'date-fns';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
-import { Tweet } from '../../hooks/useTweets';
+import type { Tweet } from '../../hooks/useTweets';
 
 interface TweetCalendarProps {
   tweets: Tweet[];
@@ -172,7 +171,7 @@ export function TweetCalendar({
                   </div>
                   
                   <div className="space-y-1">
-                    {dayEvents.slice(0, 2).map((event, index) => (
+                    {dayEvents.slice(0, 2).map((event) => (
                       <div
                         key={event.tweet.id}
                         className={`

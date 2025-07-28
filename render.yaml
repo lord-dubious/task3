@@ -1,0 +1,60 @@
+services:
+  - type: web
+    name: tweetscheduler-pro
+    runtime: node
+    plan: starter
+    region: oregon
+    branch: main
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: true
+    headers:
+      - path: /*
+        name: X-Robots-Tag
+        value: noindex
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: NODE_VERSION
+        value: "18"
+      - key: NPM_CONFIG_PRODUCTION
+        value: "false"
+      - key: VITE_SUPABASE_URL
+        sync: false
+      - key: VITE_SUPABASE_ANON_KEY
+        sync: false
+      - key: VITE_CLOUDFLARE_R2_ACCOUNT_ID
+        sync: false
+      - key: VITE_CLOUDFLARE_R2_ACCESS_KEY_ID
+        sync: false
+      - key: VITE_CLOUDFLARE_R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: VITE_CLOUDFLARE_R2_BUCKET_NAME
+        value: "tasker"
+      - key: VITE_CLOUDFLARE_R2_ENDPOINT
+        sync: false
+
+databases:
+  # If you need a PostgreSQL database for Supabase self-hosting
+  # - name: tweetscheduler-db
+  #   databaseName: tweetscheduler
+  #   user: tweetscheduler_user
+  #   plan: starter
+
+# Optional: Background services for scheduled tasks
+# - type: worker
+#   name: tweet-scheduler-worker
+#   runtime: node
+#   plan: starter
+#   buildCommand: npm ci
+#   startCommand: node scripts/scheduler-worker.js
+#   envVars:
+#     - key: NODE_VERSION
+#       value: "18"
+#     - key: SUPABASE_URL
+#       sync: false
+#     - key: SUPABASE_SERVICE_ROLE_KEY
+#       sync: false
+

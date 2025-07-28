@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Bot, Edit, Trash2, Power, PowerOff, Download } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
-import { Agent } from '../../types';
+import type { Agent } from '../../types';
 
 interface AgentListProps {
   agents: Agent[];

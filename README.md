@@ -14,6 +14,23 @@ AI-powered Twitter management platform with Cloudflare R2 storage integration.
 
 ## Quick Setup
 
+### Automated Setup (Recommended)
+
+Run the automated setup script to configure everything:
+
+```bash
+npm run setup
+```
+
+This will:
+- Check your Supabase project configuration
+- Deploy the Edge Function automatically
+- Update migration files with your project details
+- Apply database migrations
+- Test the setup
+
+### Manual Setup
+
 ### 1. Environment Variables
 
 Create a `.env` file with your credentials:
@@ -87,7 +104,7 @@ All uploaded media is automatically optimized:
 - **Storage**: Cloudflare R2 (S3-compatible)
 - **AI**: Google Gemini API
 - **Build Tool**: Vite
-- **Deployment**: Netlify
+- **Deployment**: Netlify & Render.com (see deployment guides below)
 
 ## Database Schema
 
@@ -99,12 +116,102 @@ The application uses several key tables:
 - `media_library` - Media file metadata and optimization stats
 - `user_settings` - User preferences and API keys
 
+## Scheduled Tweet Processing
+
+The application uses Supabase Edge Functions with `pg_cron` for automated tweet posting:
+
+### Setup Requirements
+
+1. **Enable Supabase Extensions**:
+   - Go to your Supabase project dashboard
+   - Navigate to "Database" → "Extensions"
+   - Enable `pg_cron` extension
+   - Enable `pg_net` extension
+
+2. **Deploy Edge Function**:
+   ```bash
+   supabase functions deploy post-tweets
+   ```
+
+3. **Configure Cron Job**:
+   - Update the migration file `20250701184904_pale_grass.sql`
+   - Replace `YOUR_EDGE_FUNCTION_URL` with your actual Edge Function URL
+   - Replace `YOUR_SUPABASE_ANON_KEY` with your project's anon key
+   - Run the migration
+
+### How It Works
+
+- **Automated Processing**: Cron job runs every 5 minutes
+- **Tweet Detection**: Finds tweets with `status = 'scheduled'` and `scheduled_for` in the past
+- **Twitter Integration**: Posts tweets using stored Twitter credentials
+- **Status Updates**: Updates tweet status to `posted` or `failed` with error details
+- **Manual Trigger**: Available in the UI for immediate processing
+
+### Monitoring
+
+- View cron job status in the Scheduling tab
+- Manual processing trigger available
+- Real-time status updates and error reporting
+- Comprehensive logging in Edge Function
+
 ## Security
 
 - All API keys stored locally in browser
 - Row Level Security (RLS) enabled on all database tables
 - Secure OAuth authentication via Supabase
 - Direct client-to-R2 uploads (no server intermediary)
+
+## 🚀 Deployment
+
+This application supports deployment on **both Netlify and Render.com** - choose your preferred platform!
+
+### 🌐 Option 1: Deploy to Netlify (Recommended)
+
+**Quick Deploy:**
+1. **Fork this repository** to your GitHub account
+2. **Connect to Netlify**: Go to [netlify.com](https://netlify.com) and create a new site from Git
+3. **Configure Environment Variables**: Set up your Supabase and Cloudflare R2 credentials
+4. **Deploy**: Netlify will automatically detect the `netlify.toml` and deploy your app
+
+**Features:**
+- ✅ **Automatic builds** with Node.js 18
+- ✅ **Static site hosting** with SPA routing
+- ✅ **Deploy previews** for pull requests
+- ✅ **Security headers** and performance optimization
+- ✅ **Custom domains** and automatic HTTPS
+
+📚 **[Complete Netlify Guide →](./NETLIFY_DEPLOYMENT.md)**
+
+### 🔧 Option 2: Deploy to Render.com
+
+**Quick Deploy:**
+1. **Fork this repository** to your GitHub account
+2. **Connect to Render**: Go to [render.com](https://render.com) and connect your GitHub repo
+3. **Configure Environment Variables**: Set up your Supabase and Cloudflare R2 credentials
+4. **Deploy**: Render will automatically detect the `render.yaml` and deploy your app
+
+**Features:**
+- ✅ **Automatic builds** with Node.js 18
+- ✅ **Static site hosting** with SPA routing
+- ✅ **Pull request previews** for testing
+- ✅ **Environment variable management**
+- ✅ **HTTPS and custom domains** support
+
+📚 **[Complete Render Guide →](./DEPLOYMENT.md)**
+
+### 🎯 Which Platform to Choose?
+
+| Feature | Netlify | Render |
+|---------|---------|--------|
+| **Free Tier** | 100GB bandwidth | 100GB bandwidth |
+| **Build Minutes** | 300/month | 500/month |
+| **Custom Domains** | ✅ Free | ✅ Free |
+| **Deploy Previews** | ✅ | ✅ |
+| **Edge Functions** | ✅ Advanced | ✅ Basic |
+| **Form Handling** | ✅ Built-in | ❌ |
+| **Analytics** | ✅ Built-in | ✅ Basic |
+
+Both platforms work great - choose based on your preferences!
 
 ## Contributing
 
