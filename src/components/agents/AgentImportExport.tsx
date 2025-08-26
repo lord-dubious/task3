@@ -12,7 +12,7 @@ import {
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import type { Agent } from '../../types';
-import { supabase } from '../../lib/supabase';
+
 
 export interface StyleConfig {
   all?: string[];
@@ -134,16 +134,7 @@ export function AgentImportExport({
   const handleImport = async () => {
     if (!importData) return;
 
-    // Check authentication before proceeding
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) {
-      setImportResults({
-        success: 0,
-        failed: selectedAgents.length,
-        errors: ['Authentication required. Please refresh the page and try again.']
-      });
-      return;
-    }
+    // TODO: Verify authentication with your own auth backend
 
     setIsImporting(true);
     setImportResults(null);

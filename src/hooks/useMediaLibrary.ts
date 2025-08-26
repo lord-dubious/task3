@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '../lib/supabase';
 import { useAuth } from './useAuth';
 import { useSupabaseStorage } from './useSupabaseStorage';
 import type { OptimizedMedia } from '../utils/mediaOptimization';
@@ -38,15 +37,10 @@ export function useMediaLibrary() {
       setLoading(true);
       setError(null);
 
-      const { data, error: fetchError } = await supabase
-        .from('media_library')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (fetchError) throw fetchError;
-
-      setMediaItems(data || []);
+      const res = await fetch('/api/media');
+      if (!res.ok) throw new Error('Failed to fetch media');
+      const data: MediaLibraryItem[] = await res.json();
+      setMediaItems(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch media');
     } finally {
@@ -99,14 +93,13 @@ export function useMediaLibrary() {
         tags
       };
 
-      const { data, error: insertError } = await supabase
-        .from('media_library')
-        .insert(mediaData)
-        .select()
-        .single();
-
-      if (insertError) throw insertError;
-
+      const res = await fetch('/api/media', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(mediaData),
+      });
+      if (!res.ok) throw new Error('Failed to save media');
+      const data: MediaLibraryItem = await res.json();
       setMediaItems(prev => [data, ...prev]);
       return data;
     } catch (err) {
@@ -153,13 +146,8 @@ export function useMediaLibrary() {
       await deleteFile(mediaItem.url);
 
       // Delete from database
-      const { error: deleteError } = await supabase
-        .from('media_library')
-        .delete()
-        .eq('id', id)
-        .eq('user_id', user.id);
-
-      if (deleteError) throw deleteError;
+      const res = await fetch(`/api/media/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete media');
 
       setMediaItems(prev => prev.filter(item => item.id !== id));
       return true;
@@ -180,16 +168,13 @@ export function useMediaLibrary() {
     try {
       setError(null);
 
-      const { data, error: updateError } = await supabase
-        .from('media_library')
-        .update({ tags, updated_at: new Date().toISOString() })
-        .eq('id', id)
-        .eq('user_id', user.id)
-        .select()
-        .single();
-
-      if (updateError) throw updateError;
-
+      const res = await fetch(`/api/media/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tags }),
+      });
+      if (!res.ok) throw new Error('Failed to update tags');
+      const data: MediaLibraryItem = await res.json();
       setMediaItems(prev => prev.map(item => item.id === id ? data : item));
       return true;
     } catch (err) {

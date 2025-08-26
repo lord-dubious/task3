@@ -1,23 +1,22 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '../lib/supabase';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
-export interface Tweet {
+export interface TweetDto {
   id: string;
-  user_id: string;
+  userId: string;
   content: string;
-  media_urls?: string[] | null;
-  scheduled_for?: string | null;
+  mediaUrls: string[];
+  scheduledFor?: string | null;
   status: 'draft' | 'scheduled' | 'posted' | 'failed';
-  twitter_account_id?: string | null;
-  agent_id?: string | null;
-  retry_count: number;
-  last_attempt_at?: string | null;
-  failure_reason?: string | null;
-  twitter_post_id?: string | null;
-  created_at: string;
-  updated_at: string;
+  twitterAccountId?: string | null;
+  agentId?: string | null;
+  retryCount: number;
+  lastAttemptAt?: string | null;
+  failureReason?: string | null;
+  twitterPostId?: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export function useTweets() {
@@ -36,15 +35,10 @@ export function useTweets() {
       setLoading(true);
       setError(null);
 
-      const { data, error: fetchError } = await supabase
-        .from('tweets')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (fetchError) throw fetchError;
-
-      setTweets(data || []);
+      const res = await fetch('/api/tweets');
+      if (!res.ok) throw new Error('Failed to fetch tweets');
+      const data: TweetDto[] = await res.json();
+      setTweets(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch tweets');
     } finally {
@@ -58,31 +52,22 @@ export function useTweets() {
 
   const createTweet = async (tweetData: {
     content: string;
-    media_urls?: string[];
-    scheduled_for?: string;
-    twitter_account_id?: string;
-    agent_id?: string;
+    mediaUrls?: string[];
+    scheduledFor?: string;
+    twitterAccountId?: string;
+    agentId?: string;
   }) => {
     if (!user) throw new Error('User not authenticated');
 
     try {
       setError(null);
-
-      const status = tweetData.scheduled_for ? 'scheduled' : 'draft';
-
-      const { data, error: createError } = await supabase
-        .from('tweets')
-        .insert({
-          ...tweetData,
-          user_id: user.id,
-          status,
-          retry_count: 0,
-        })
-        .select()
-        .single();
-
-      if (createError) throw createError;
-
+      const res = await fetch('/api/tweets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(tweetData),
+      });
+      if (!res.ok) throw new Error('Failed to create tweet');
+      const data: TweetDto = await res.json();
       setTweets(prev => [data, ...prev]);
       return data;
     } catch (err) {
@@ -93,22 +78,18 @@ export function useTweets() {
     }
   };
 
-  const updateTweet = async (id: string, updates: Partial<Tweet>) => {
+  const updateTweet = async (id: string, updates: Partial<TweetDto>) => {
     if (!user) throw new Error('User not authenticated');
 
     try {
       setError(null);
-
-      const { data, error: updateError } = await supabase
-        .from('tweets')
-        .update(updates)
-        .eq('id', id)
-        .eq('user_id', user.id)
-        .select()
-        .single();
-
-      if (updateError) throw updateError;
-
+      const res = await fetch(`/api/tweets/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+      if (!res.ok) throw new Error('Failed to update tweet');
+      const data: TweetDto = await res.json();
       setTweets(prev => prev.map(tweet => tweet.id === id ? data : tweet));
       return data;
     } catch (err) {
@@ -125,13 +106,8 @@ export function useTweets() {
     try {
       setError(null);
 
-      const { error: deleteError } = await supabase
-        .from('tweets')
-        .delete()
-        .eq('id', id)
-        .eq('user_id', user.id);
-
-      if (deleteError) throw deleteError;
+      const res = await fetch(`/api/tweets/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete tweet');
 
       setTweets(prev => prev.filter(tweet => tweet.id !== id));
     } catch (err) {

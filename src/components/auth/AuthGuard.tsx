@@ -10,9 +10,8 @@ interface AuthGuardProps {
 }
 
 export function AuthGuard({ children }: AuthGuardProps) {
-  const { user, loading } = useAuth();
+  const { user, loading, signInWithGoogle, signInWithTwitter } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
 
   if (loading) {
     return (
@@ -78,25 +77,19 @@ export function AuthGuard({ children }: AuthGuardProps) {
           >
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
-                onClick={() => {
-                  setAuthMode('signup');
-                  setShowAuthModal(true);
-                }}
+                onClick={signInWithGoogle}
                 size="lg"
                 className="px-8"
               >
-                Get Started Free
+                Sign in with Google
               </Button>
               <Button
-                onClick={() => {
-                  setAuthMode('signin');
-                  setShowAuthModal(true);
-                }}
+                onClick={signInWithTwitter}
                 variant="secondary"
                 size="lg"
                 className="px-8"
               >
-                Sign In
+                Sign in with Twitter
               </Button>
             </div>
             <p className="text-gray-500 text-sm">

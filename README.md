@@ -1,226 +1,192 @@
 # TweetScheduler Pro
 
-AI-powered Twitter management platform with Cloudflare R2 storage integration.
+A powerful AI-driven Twitter scheduling and management platform built with React, TypeScript, Express, and PostgreSQL.
 
-## Features
+## 🚀 Features
 
-- 🤖 **AI-Powered Content Generation** - Create engaging tweets with Google AI
-- 📅 **Smart Scheduling** - Schedule posts at optimal times
-- 🎭 **AI Agents** - Create custom AI personas for different content styles
-- 📸 **Media Management** - Upload and optimize images/videos with automatic compression
-- ☁️ **Cloudflare R2 Storage** - Zero egress fees for media delivery
-- 🔐 **Secure Authentication** - Google OAuth integration via Supabase
-- 📊 **Analytics Dashboard** - Track performance and engagement
+- 🤖 **AI-Powered Content Generation**: Create engaging tweets with advanced AI assistance
+- 📅 **Smart Scheduling**: Schedule posts at optimal times with pg-boss job queue
+- 🎯 **Multi-Account Management**: Manage multiple Twitter accounts from one dashboard
+- 📊 **Analytics & Insights**: Track performance and optimize your content strategy
+- 🎨 **Media Management**: Upload and organize images, videos, and GIFs
+- 🔄 **Automated Posting**: Set up recurring posts and content series
+- 📱 **Responsive Design**: Works seamlessly on desktop and mobile devices
+- 🔐 **OAuth Authentication**: Secure login with Google and Twitter
+- 🐦 **Real Twitter Integration**: Post directly to Twitter using twitter-api-v2
 
-## Quick Setup
+## 🛠 Tech Stack
 
-### Automated Setup (Recommended)
+- **Frontend**: React 18, TypeScript, Vite, Tailwind CSS
+- **Backend**: Express.js, Prisma ORM, PostgreSQL
+- **Authentication**: Passport.js (Google OAuth, Twitter OAuth)
+- **Job Queue**: pg-boss for reliable tweet scheduling
+- **Twitter API**: twitter-api-v2 for posting tweets
+- **Storage**: Cloudflare R2 for media files
+- **Deployment**: Render (Multi-service: Web, API, Worker)
 
-Run the automated setup script to configure everything:
+## 🚀 Quick Start
 
-```bash
-npm run setup
-```
+### Prerequisites
 
-This will:
-- Check your Supabase project configuration
-- Deploy the Edge Function automatically
-- Update migration files with your project details
-- Apply database migrations
-- Test the setup
+- Node.js 18+ and npm
+- PostgreSQL database (Neon recommended)
+- Cloudflare R2 account (for media storage)
+- Google OAuth credentials
+- Twitter API credentials
+- OpenAI API key (optional, for AI features)
 
-### Manual Setup
+### Installation
 
-### 1. Environment Variables
-
-Create a `.env` file with your credentials:
-
-```env
-# Supabase Configuration
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-
-# Cloudflare R2 Configuration (Pre-configured)
-VITE_CLOUDFLARE_R2_ACCOUNT_ID=your_account_id_here
-VITE_CLOUDFLARE_R2_ACCESS_KEY_ID=your_access_key_id_here
-VITE_CLOUDFLARE_R2_SECRET_ACCESS_KEY=your_secret_access_key_here
-VITE_CLOUDFLARE_R2_BUCKET_NAME=tasker
-VITE_CLOUDFLARE_R2_ENDPOINT=https://your_account_id.r2.cloudflarestorage.com
-```
-
-### 2. Create R2 Bucket
-
-1. Log into your Cloudflare dashboard
-2. Navigate to R2 Object Storage
-3. Create a new bucket named `tasker`
-4. Generate R2 API tokens with read/write permissions
-5. Copy your credentials to the .env file
-6. Test the connection in Settings → Cloudflare R2 Storage
-
-### 3. Install Dependencies
-
-```bash
-npm install
-```
-
-### 4. Run Development Server
-
-```bash
-npm run dev
-```
-
-## R2 Storage Benefits
-
-- **Zero Egress Fees**: No charges for file downloads/delivery
-- **Global CDN**: Fast media delivery worldwide
-- **S3 Compatible**: Uses proven AWS SDK
-- **Cost Effective**: Significantly cheaper than traditional cloud storage
-
-## Media Optimization
-
-All uploaded media is automatically optimized:
-
-- **Images**: Compressed to optimal quality while maintaining visual fidelity
-- **Automatic Resizing**: Scaled to appropriate dimensions for social media
-- **Format Conversion**: Converted to web-optimized formats
-- **Size Reduction**: Typically 40-70% smaller file sizes
-
-## AI Features
-
-### Content Generation
-- Generate tweets based on prompts and tone
-- Analyze uploaded images to create contextual content
-- Improve existing tweets with AI suggestions
-
-### AI Agents
-- Create custom AI personas with unique personalities
-- Define expertise areas, writing styles, and example posts
-- Generate content that matches specific brand voices
-
-## Tech Stack
-
-- **Frontend**: React + TypeScript + Tailwind CSS
-- **Backend**: Supabase (PostgreSQL + Auth + Edge Functions)
-- **Storage**: Cloudflare R2 (S3-compatible)
-- **AI**: Google Gemini API
-- **Build Tool**: Vite
-- **Deployment**: Netlify & Render.com (see deployment guides below)
-
-## Database Schema
-
-The application uses several key tables:
-
-- `profiles` - User profile information
-- `agents` - AI agent configurations
-- `tweets` - Tweet content and scheduling
-- `media_library` - Media file metadata and optimization stats
-- `user_settings` - User preferences and API keys
-
-## Scheduled Tweet Processing
-
-The application uses Supabase Edge Functions with `pg_cron` for automated tweet posting:
-
-### Setup Requirements
-
-1. **Enable Supabase Extensions**:
-   - Go to your Supabase project dashboard
-   - Navigate to "Database" → "Extensions"
-   - Enable `pg_cron` extension
-   - Enable `pg_net` extension
-
-2. **Deploy Edge Function**:
+1. **Clone the repository**
    ```bash
-   supabase functions deploy post-tweets
+   git clone <repository-url>
+   cd tweetscheduler-pro
    ```
 
-3. **Configure Cron Job**:
-   - Update the migration file `20250701184904_pale_grass.sql`
-   - Replace `YOUR_EDGE_FUNCTION_URL` with your actual Edge Function URL
-   - Replace `YOUR_SUPABASE_ANON_KEY` with your project's anon key
-   - Run the migration
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-### How It Works
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Fill in your environment variables (see .env.example for all options):
+   ```env
+   DATABASE_URL=postgresql://user:pass@host:5432/dbname
+   GOOGLE_CLIENT_ID=your_google_client_id
+   GOOGLE_CLIENT_SECRET=your_google_client_secret
+   TWITTER_CLIENT_ID=your_twitter_client_id
+   TWITTER_CLIENT_SECRET=your_twitter_client_secret
+   ENCRYPTION_KEY=your_32_char_encryption_key
+   CLOUDFLARE_R2_ACCOUNT_ID=your_account_id
+   CLOUDFLARE_R2_ACCESS_KEY_ID=your_access_key
+   CLOUDFLARE_R2_SECRET_ACCESS_KEY=your_secret_key
+   CLOUDFLARE_R2_BUCKET_NAME=your_bucket_name
+   CLOUDFLARE_R2_ENDPOINT=your_r2_endpoint
+   ```
 
-- **Automated Processing**: Cron job runs every 5 minutes
-- **Tweet Detection**: Finds tweets with `status = 'scheduled'` and `scheduled_for` in the past
-- **Twitter Integration**: Posts tweets using stored Twitter credentials
-- **Status Updates**: Updates tweet status to `posted` or `failed` with error details
-- **Manual Trigger**: Available in the UI for immediate processing
+4. **Set up the database**
+   ```bash
+   npm run prisma:migrate
+   npm run prisma:generate
+   ```
 
-### Monitoring
+5. **Start the development servers**
+   ```bash
+   # Terminal 1: Frontend
+   npm run dev
+   
+   # Terminal 2: API Server
+   npm run server
+   
+   # Terminal 3: Background Worker
+   npm run worker
+   ```
 
-- View cron job status in the Scheduling tab
-- Manual processing trigger available
-- Real-time status updates and error reporting
-- Comprehensive logging in Edge Function
+## 📁 Project Structure
 
-## Security
+```
+├── src/                    # Frontend React application
+│   ├── components/         # React components
+│   ├── hooks/             # Custom React hooks
+│   ├── generated/         # Generated Prisma client
+│   └── types/             # TypeScript definitions
+├── server/                # Backend Express application
+│   ├── auth/              # Authentication (Passport.js)
+│   ├── routes/            # API route handlers
+│   ├── services/          # Business logic services
+│   └── workers.ts         # pg-boss job workers
+├── prisma/                # Database schema and migrations
+└── scripts/               # Utility scripts
+```
 
-- All API keys stored locally in browser
-- Row Level Security (RLS) enabled on all database tables
-- Secure OAuth authentication via Supabase
-- Direct client-to-R2 uploads (no server intermediary)
+## 🔧 Key Features
+
+### Real Authentication
+- **Google OAuth**: Sign in with Google account
+- **Twitter OAuth**: Connect Twitter account for posting
+- **Session Management**: Secure session handling with PostgreSQL
+- **Protected Routes**: API endpoints protected by authentication
+
+### Twitter Integration
+- **Real API Calls**: Uses twitter-api-v2 for actual Twitter posting
+- **Media Upload**: Supports images, videos, and GIFs
+- **Error Handling**: Comprehensive error handling and retry logic
+- **Credential Management**: Secure storage of Twitter API keys
+
+### Job Queue System
+- **pg-boss**: Reliable PostgreSQL-based job queue
+- **Scheduled Jobs**: Automatic tweet posting at scheduled times
+- **Retry Logic**: Failed jobs are retried with exponential backoff
+- **Status Tracking**: Monitor job execution and failures
+
+### Media Management
+- **Server-side Upload**: Secure presigned URL generation
+- **Cloudflare R2**: Cost-effective storage with zero egress fees
+- **Media Library**: Organize and manage uploaded files
+- **User Isolation**: Each user's media is properly isolated
+
+## 🔐 Authentication Setup
+
+### Google OAuth
+1. Go to [Google Cloud Console](https://console.cloud.google.com)
+2. Create a new project or select existing
+3. Enable Google+ API
+4. Create OAuth 2.0 credentials
+5. Add authorized redirect URI: `http://localhost:3001/auth/google/callback`
+
+### Twitter OAuth
+1. Go to [Twitter Developer Portal](https://developer.twitter.com)
+2. Create a new app
+3. Get API Key and API Secret Key
+4. Set callback URL: `http://localhost:3001/auth/twitter/callback`
 
 ## 🚀 Deployment
 
-This application supports deployment on **both Netlify and Render.com** - choose your preferred platform!
+### Render Configuration
 
-### 🌐 Option 1: Deploy to Netlify (Recommended)
+The app is configured for multi-service deployment on Render:
 
-**Quick Deploy:**
-1. **Fork this repository** to your GitHub account
-2. **Connect to Netlify**: Go to [netlify.com](https://netlify.com) and create a new site from Git
-3. **Configure Environment Variables**: Set up your Supabase and Cloudflare R2 credentials
-4. **Deploy**: Netlify will automatically detect the `netlify.toml` and deploy your app
+1. **Web Service**: Serves the React frontend
+2. **API Service**: Runs the Express backend
+3. **Worker Service**: Runs the pg-boss background worker
 
-**Features:**
-- ✅ **Automatic builds** with Node.js 18
-- ✅ **Static site hosting** with SPA routing
-- ✅ **Deploy previews** for pull requests
-- ✅ **Security headers** and performance optimization
-- ✅ **Custom domains** and automatic HTTPS
+Update `render.yaml` with your environment variables and deploy.
 
-📚 **[Complete Netlify Guide →](./NETLIFY_DEPLOYMENT.md)**
+## 📝 Available Scripts
 
-### 🔧 Option 2: Deploy to Render.com
+- `npm run dev` - Start frontend development server
+- `npm run server` - Start backend API server
+- `npm run worker` - Start background job worker
+- `npm run build` - Build frontend for production
+- `npm run lint` - Run ESLint
+- `npm run prisma:generate` - Generate Prisma client
+- `npm run prisma:migrate` - Run database migrations
 
-**Quick Deploy:**
-1. **Fork this repository** to your GitHub account
-2. **Connect to Render**: Go to [render.com](https://render.com) and connect your GitHub repo
-3. **Configure Environment Variables**: Set up your Supabase and Cloudflare R2 credentials
-4. **Deploy**: Render will automatically detect the `render.yaml` and deploy your app
+## 🔄 Migration from Supabase
 
-**Features:**
-- ✅ **Automatic builds** with Node.js 18
-- ✅ **Static site hosting** with SPA routing
-- ✅ **Pull request previews** for testing
-- ✅ **Environment variable management**
-- ✅ **HTTPS and custom domains** support
+This project has been migrated from Supabase to a custom Express + PostgreSQL stack:
 
-📚 **[Complete Render Guide →](./DEPLOYMENT.md)**
+- ✅ **Removed**: All Supabase dependencies
+- ✅ **Added**: Express API with Prisma ORM
+- ✅ **Added**: Real authentication with Passport.js
+- ✅ **Added**: pg-boss for job scheduling
+- ✅ **Added**: twitter-api-v2 for real Twitter integration
+- ✅ **Added**: Server-side security for API keys
 
-### 🎯 Which Platform to Choose?
+See `MIGRATION_SUMMARY.md` for detailed migration information.
 
-| Feature | Netlify | Render |
-|---------|---------|--------|
-| **Free Tier** | 100GB bandwidth | 100GB bandwidth |
-| **Build Minutes** | 300/month | 500/month |
-| **Custom Domains** | ✅ Free | ✅ Free |
-| **Deploy Previews** | ✅ | ✅ |
-| **Edge Functions** | ✅ Advanced | ✅ Basic |
-| **Form Handling** | ✅ Built-in | ❌ |
-| **Analytics** | ✅ Built-in | ✅ Basic |
-
-Both platforms work great - choose based on your preferences!
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Test thoroughly
+4. Run tests and linting
 5. Submit a pull request
 
-## License
+## 📄 License
 
-MIT License - see LICENSE file for details
+MIT License - see LICENSE file for details.
