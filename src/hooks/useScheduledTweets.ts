@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { supabase } from '../lib/supabase';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
@@ -18,19 +17,14 @@ export function useScheduledTweets() {
     setError(null);
 
     try {
-      // Call the manual trigger function
-      const { data, error: functionError } = await supabase
-        .rpc('trigger_tweet_processing');
-
-      if (functionError) {
-        throw functionError;
-      }
+      const res = await fetch('/api/scheduler/process-now', { method: 'POST' });
+      if (!res.ok) throw new Error('Failed to trigger processing');
 
       toast.success('Tweet processing triggered', {
         description: 'Scheduled tweets are being processed manually'
       });
 
-      return data;
+      return true;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to trigger processing';
       setError(errorMessage);
@@ -48,20 +42,13 @@ export function useScheduledTweets() {
     }
 
     try {
-      // Clear any previous errors before attempting the operation
       setError(null);
-
-      const { data, error: statusError } = await supabase
-        .from('cron_job_status')
-        .select('*');
-
-      if (statusError) {
-        throw statusError;
-      }
-
-      return data;
+      const res = await fetch('/api/scheduler/status');
+      if (!res.ok) throw new Error('Failed to get scheduler status');
+      const json = await res.json();
+      return json.status ? [json.status] : [];
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to get cron status';
+      const errorMessage = err instanceof Error ? err.message : 'Failed to get scheduler status';
       setError(errorMessage);
       return null;
     }

@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '../lib/supabase';
 import type { Agent } from '../types';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
@@ -20,15 +19,10 @@ export function useAgents() {
       setLoading(true);
       setError(null);
 
-      const { data, error: fetchError } = await supabase
-        .from('agents')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (fetchError) throw fetchError;
-
-      setAgents(data || []);
+      const res = await fetch('/api/agents');
+      if (!res.ok) throw new Error('Failed to fetch agents');
+      const data: Agent[] = await res.json();
+      setAgents(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch agents');
     } finally {
@@ -40,27 +34,18 @@ export function useAgents() {
     fetchAgents();
   }, [fetchAgents]);
 
-  const createAgent = async (agentData: Omit<Agent, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
-    // Double-check authentication
-    const { data: { user: currentUser }, error: authError } = await supabase.auth.getUser();
-    if (authError || !currentUser) {
-      throw new Error('Authentication required. Please refresh the page and try again.');
-    }
+  const createAgent = async (agentData: Omit<Agent, 'id' | 'userId' | 'createdAt' | 'updatedAt'>) => {
+    if (!user) throw new Error('Authentication required');
 
     try {
       setError(null);
-
-      const { data, error: createError } = await supabase
-        .from('agents')
-        .insert({
-          ...agentData,
-          user_id: currentUser.id,
-        })
-        .select()
-        .single();
-
-      if (createError) throw createError;
-
+      const res = await fetch('/api/agents', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(agentData),
+      });
+      if (!res.ok) throw new Error('Failed to create agent');
+      const data: Agent = await res.json();
       setAgents(prev => [data, ...prev]);
       return data;
     } catch (err) {
@@ -76,17 +61,13 @@ export function useAgents() {
 
     try {
       setError(null);
-
-      const { data, error: updateError } = await supabase
-        .from('agents')
-        .update(updates)
-        .eq('id', id)
-        .eq('user_id', user.id)
-        .select()
-        .single();
-
-      if (updateError) throw updateError;
-
+      const res = await fetch(`/api/agents/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+      if (!res.ok) throw new Error('Failed to update agent');
+      const data: Agent = await res.json();
       setAgents(prev => prev.map(agent => agent.id === id ? data : agent));
       return data;
     } catch (err) {
@@ -102,15 +83,8 @@ export function useAgents() {
 
     try {
       setError(null);
-
-      const { error: deleteError } = await supabase
-        .from('agents')
-        .delete()
-        .eq('id', id)
-        .eq('user_id', user.id);
-
-      if (deleteError) throw deleteError;
-
+      const res = await fetch(`/api/agents/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete agent');
       setAgents(prev => prev.filter(agent => agent.id !== id));
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete agent';

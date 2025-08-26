@@ -16,25 +16,36 @@ services:
       - type: rewrite
         source: /*
         destination: /index.html
+
+  - type: web
+    name: tweetscheduler-api
+    runtime: node
+    plan: starter
+    region: oregon
+    branch: main
+    buildCommand: npm ci && npm run prisma:generate
+    startCommand: npm run server
     envVars:
       - key: NODE_VERSION
         value: "18"
-      - key: NPM_CONFIG_PRODUCTION
-        value: "false"
-      - key: VITE_SUPABASE_URL
+      - key: DATABASE_URL
         sync: false
-      - key: VITE_SUPABASE_ANON_KEY
+      - key: ENCRYPTION_KEY
         sync: false
-      - key: VITE_CLOUDFLARE_R2_ACCOUNT_ID
+
+  - type: worker
+    name: tweet-scheduler-worker
+    runtime: node
+    plan: starter
+    branch: main
+    buildCommand: npm ci && npm run prisma:generate
+    startCommand: npm run worker
+    envVars:
+      - key: NODE_VERSION
+        value: "18"
+      - key: DATABASE_URL
         sync: false
-      - key: VITE_CLOUDFLARE_R2_ACCESS_KEY_ID
-        sync: false
-      - key: VITE_CLOUDFLARE_R2_SECRET_ACCESS_KEY
-        sync: false
-      - key: VITE_CLOUDFLARE_R2_BUCKET_NAME
-        value: "tasker"
-      - key: VITE_CLOUDFLARE_R2_ENDPOINT
-        sync: false
+
 
 databases:
   # If you need a PostgreSQL database for Supabase self-hosting

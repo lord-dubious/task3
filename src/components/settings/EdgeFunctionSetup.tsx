@@ -12,7 +12,7 @@ import {
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { useNotifications } from '../../hooks/useNotifications';
-import { supabase } from '../../lib/supabase';
+
 
 export function EdgeFunctionSetup() {
   const [setupStatus, setSetupStatus] = useState<{
@@ -34,75 +34,15 @@ export function EdgeFunctionSetup() {
     setSetupStatus(prev => ({ ...prev, checking: true }));
 
     try {
-      // Check if cron job exists with better error handling
-      let extensionsEnabled = false;
-      let cronJobConfigured = false;
-
-      try {
-        const { data: cronData, error: cronError } = await supabase
-          .from('cron_job_status')
-          .select('*');
-
-        if (!cronError && cronData) {
-          extensionsEnabled = true;
-          cronJobConfigured = cronData.length > 0;
-        } else if (cronError) {
-          // Handle case where cron_job_status view doesn't exist
-          if (cronError.code === 'PGRST116' || cronError.message.includes('does not exist')) {
-            console.warn('cron_job_status view not found - migrations may not have run');
-            showError('Setup Required', 'Database migrations have not been run. Please run "npm run setup-db" first.');
-          } else {
-            console.warn('Error accessing cron_job_status:', cronError.message);
-          }
-
-          // Try alternative detection method for extensions
-          try {
-            const { error: extensionError } = await supabase.rpc('pg_cron_job_count');
-            extensionsEnabled = !extensionError;
-          } catch {
-            extensionsEnabled = false;
-          }
-        }
-      } catch (error) {
-        console.error('Failed to check cron job status:', error);
-        extensionsEnabled = false;
-        cronJobConfigured = false;
-      }
-
-      // Test edge function with proper status code checking
-      let edgeFunctionDeployed = false;
-      try {
-        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/post-tweets`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({})
-        });
-
-        // Only consider 2xx status codes as successful deployment
-        // 404 specifically indicates the function doesn't exist
-        if (response.status >= 200 && response.status < 300) {
-          edgeFunctionDeployed = true;
-        } else if (response.status === 404) {
-          // Function does not exist
-          edgeFunctionDeployed = false;
-        } else {
-          // Other error statuses (4xx, 5xx) indicate function exists but has issues
-          edgeFunctionDeployed = true;
-        }
-      } catch (error) {
-        // Network errors or fetch failures indicate function might not exist
-        console.warn('Failed to test edge function:', error);
-        edgeFunctionDeployed = false;
-      }
+      // Query our own scheduler status endpoint
+      const res = await fetch('/api/scheduler/status');
+      const ok = res.ok;
 
       setSetupStatus({
-        edgeFunctionDeployed,
-        cronJobConfigured,
-        extensionsEnabled,
-        checking: false
+        edgeFunctionDeployed: false,
+        cronJobConfigured: ok,
+        extensionsEnabled: ok,
+        checking: false,
       });
 
     } catch (error) {
@@ -117,26 +57,16 @@ export function EdgeFunctionSetup() {
 
   const testEdgeFunction = async () => {
     setIsTestingFunction(true);
-    
-    try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/post-tweets`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({})
-      });
 
-      const result = await response.json();
-      
+    try {
+      const response = await fetch('/api/scheduler/process-now', { method: 'POST' });
       if (response.ok) {
-        showSuccess('Edge Function Test', result.message || 'Function is working correctly');
+        showSuccess('Scheduler Triggered', 'Manual processing started');
       } else {
-        showError('Edge Function Test', result.error || 'Function returned an error');
+        showError('Scheduler Error', 'Failed to trigger');
       }
     } catch {
-      showError('Edge Function Test', 'Failed to connect to Edge Function');
+      showError('Scheduler Error', 'Failed to trigger');
     } finally {
       setIsTestingFunction(false);
     }
