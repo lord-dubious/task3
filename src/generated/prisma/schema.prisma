@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TweetStatus {
+  draft
+  scheduled
+  posted
+  failed
+}
+
+model User {
+  id        String         @id @default(cuid())
+  email     String         @unique
+  name      String?
+  avatarUrl String?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  tweets    Tweet[]
+  settings  UserSettings?
+  agents    Agent[]
+  media     MediaLibrary[]
+}
+
+model UserSettings {
+  id                String  @id @default(cuid())
+  userId            String  @unique
+  user              User    @relation(fields: [userId], references: [id])
+  twitterApiKey     String?
+  twitterApiSecret  String?
+  accessToken       String?
+  accessTokenSecret String?
+}
+
+model Tweet {
+  id               String      @id @default(cuid())
+  userId           String
+  user             User        @relation(fields: [userId], references: [id])
+  content          String
+  mediaUrls        String[]    @default([])
+  scheduledFor     DateTime?
+  status           TweetStatus @default(draft)
+  twitterAccountId String?
+  agentId          String?
+  retryCount       Int         @default(0)
+  lastAttemptAt    DateTime?
+  failureReason    String?
+  twitterPostId    String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+}
+
+model MediaLibrary {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id])
+  filename         String
+  originalFilename String
+  fileType         String
+  fileSize         Int
+  optimizedSize    Int
+  compressionRatio Float
+  dimensions       Json
+  url              String
+  folder           String
+  tags             String[] @default([])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Agent {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  name            String
+  username        String?
+  systemPrompt    String?
+  bio             String[]
+  lore            String[]
+  messageExamples Json
+  postExamples    String[]
+  adjectives      String[]
+  topics          String[]
+  styleConfig     Json
+  enabled         Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model SchedulerStatus {
+  id            String    @id @default(cuid())
+  lastRunAt     DateTime?
+  lastSuccessAt DateTime?
+  lastFailureAt DateTime?
+  lastError     String?
+  updatedAt     DateTime  @updatedAt
+}
