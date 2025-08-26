@@ -29,4 +29,8 @@ supabase/.temp
 supabase/.branches
 .env
 
-/src/generated/prisma
+# Prisma generated client (do not commit generated code)
+src/generated/
+src/generated/**
+src/generated/prisma/
+src/generated/prisma/**
