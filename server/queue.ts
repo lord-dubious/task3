@@ -16,7 +16,7 @@ async function startBoss() {
 }
 
 startBoss().catch((err) => {
-  // eslint-disable-next-line no-console
+   
   console.error('Failed to start PgBoss', err);
   process.exit(1);
 });
