@@ -2,6 +2,7 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as TwitterStrategy } from 'passport-twitter';
 import { prisma } from '../prisma';
+import { encryptCredentials } from '../utils/crypto';
 import type { User } from '../../src/generated/prisma';
 
 // Serialize user for session
@@ -93,17 +94,22 @@ if (process.env.TWITTER_CLIENT_ID && process.env.TWITTER_CLIENT_SECRET) {
         });
       }
 
-      // Store Twitter credentials
+      // Store Twitter credentials (encrypted)
+      const encryptedCredentials = encryptCredentials({
+        accessToken: token,
+        accessTokenSecret: tokenSecret,
+      });
+
       await prisma.userSettings.upsert({
         where: { userId: user.id },
         update: {
-          accessToken: token,
-          accessTokenSecret: tokenSecret,
+          accessToken: encryptedCredentials.accessToken,
+          accessTokenSecret: encryptedCredentials.accessTokenSecret,
         },
         create: {
           userId: user.id,
-          accessToken: token,
-          accessTokenSecret: tokenSecret,
+          accessToken: encryptedCredentials.accessToken!,
+          accessTokenSecret: encryptedCredentials.accessTokenSecret!,
         }
       });
 

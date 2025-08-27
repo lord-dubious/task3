@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { prisma } from '../prisma';
 import { requireAuth, type AuthenticatedRequest } from '../auth/middleware';
 import { twitterService } from '../services/twitter';
+import { encryptCredentials, decryptCredentials } from '../utils/crypto';
 
 const router = Router();
 
@@ -43,9 +44,12 @@ router.patch('/twitter-api', async (req: AuthenticatedRequest, res) => {
     });
 
     if (existingSettings?.accessToken && existingSettings?.accessTokenSecret) {
+      // Decrypt existing credentials for verification
+      const decryptedSettings = decryptCredentials(existingSettings);
+
       const isValid = await twitterService.verifyCredentials({
-        accessToken: existingSettings.accessToken,
-        accessTokenSecret: existingSettings.accessTokenSecret,
+        accessToken: decryptedSettings.accessToken!,
+        accessTokenSecret: decryptedSettings.accessTokenSecret!,
         twitterApiKey,
         twitterApiSecret,
       });
@@ -55,13 +59,22 @@ router.patch('/twitter-api', async (req: AuthenticatedRequest, res) => {
       }
     }
 
+    // Encrypt credentials before storing
+    const encryptedCredentials = encryptCredentials({
+      twitterApiKey,
+      twitterApiSecret
+    });
+
     const settings = await prisma.userSettings.upsert({
       where: { userId: req.user!.id },
-      update: { twitterApiKey, twitterApiSecret },
-      create: { 
-        userId: req.user!.id, 
-        twitterApiKey, 
-        twitterApiSecret 
+      update: {
+        twitterApiKey: encryptedCredentials.twitterApiKey,
+        twitterApiSecret: encryptedCredentials.twitterApiSecret
+      },
+      create: {
+        userId: req.user!.id,
+        twitterApiKey: encryptedCredentials.twitterApiKey!,
+        twitterApiSecret: encryptedCredentials.twitterApiSecret!
       }
     });
 
@@ -86,11 +99,14 @@ router.post('/test-twitter', async (req: AuthenticatedRequest, res) => {
       return res.status(400).json({ error: 'No Twitter account connected' });
     }
 
+    // Decrypt credentials for API calls
+    const decryptedSettings = decryptCredentials(settings);
+
     const result = await twitterService.verifyCredentials({
-      accessToken: settings.accessToken,
-      accessTokenSecret: settings.accessTokenSecret,
-      twitterApiKey: settings.twitterApiKey || undefined,
-      twitterApiSecret: settings.twitterApiSecret || undefined,
+      accessToken: decryptedSettings.accessToken!,
+      accessTokenSecret: decryptedSettings.accessTokenSecret!,
+      twitterApiKey: decryptedSettings.twitterApiKey || undefined,
+      twitterApiSecret: decryptedSettings.twitterApiSecret || undefined,
     });
 
     res.json(result);

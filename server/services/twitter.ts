@@ -1,5 +1,6 @@
 import { TwitterApi } from 'twitter-api-v2';
 import { prisma } from '../prisma';
+import { decryptCredentials } from '../utils/crypto';
 
 export interface TwitterCredentials {
   accessToken: string;
@@ -36,11 +37,14 @@ export class TwitterService {
       throw new Error('User has not connected their Twitter account');
     }
 
+    // Decrypt credentials before use
+    const decryptedSettings = decryptCredentials(settings);
+
     const credentials: TwitterCredentials = {
-      accessToken: settings.accessToken,
-      accessTokenSecret: settings.accessTokenSecret,
-      twitterApiKey: settings.twitterApiKey || undefined,
-      twitterApiSecret: settings.twitterApiSecret || undefined,
+      accessToken: decryptedSettings.accessToken!,
+      accessTokenSecret: decryptedSettings.accessTokenSecret!,
+      twitterApiKey: decryptedSettings.twitterApiKey || undefined,
+      twitterApiSecret: decryptedSettings.twitterApiSecret || undefined,
     };
 
     const client = this.getClient(credentials);
