@@ -32,6 +32,7 @@ model UserSettings {
   id                 String  @id @default(cuid())
   userId             String  @unique
   user               User    @relation(fields: [userId], references: [id])
+  // NOTE: All sensitive credential fields are encrypted at rest by the application layer
   twitterApiKey      String?
   twitterApiSecret   String?
   accessToken        String?
@@ -54,6 +55,8 @@ model Tweet {
   twitterPostId    String?
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
+
+  @@index([status, scheduledFor])
 }
 
 model MediaLibrary {
@@ -72,6 +75,8 @@ model MediaLibrary {
   tags              String[] @default([])
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+
+  @@index([tags], type: Gin)
 }
 
 model Agent {
@@ -91,6 +96,8 @@ model Agent {
   enabled         Boolean  @default(true)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+
+  @@index([enabled])
 }
 
 model SchedulerStatus {
