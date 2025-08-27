@@ -11,7 +11,8 @@
     "server": "tsx server/index.ts",
     "worker": "tsx server/queue.ts",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate deploy"
+    "prisma:migrate": "prisma migrate deploy",
+    "test": "node --test aatest/**/*.test.ts"
   },
   "dependencies": {
     "@0xindie/agent-twitter-client": "^1.0.0",

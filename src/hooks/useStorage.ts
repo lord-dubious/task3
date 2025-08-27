@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
-export function useSupabaseStorage() {
+export function useStorage() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
@@ -15,10 +15,7 @@ export function useSupabaseStorage() {
       return null;
     }
 
-    if (!R2_BUCKET_NAME) {
-      setError('R2 bucket name not configured');
-      return null;
-    }
+
 
     try {
       setUploading(true);

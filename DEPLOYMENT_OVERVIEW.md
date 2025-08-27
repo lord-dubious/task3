@@ -49,16 +49,12 @@ This repository includes configuration files for deploying to **both Netlify and
 Both platforms require the same environment variables:
 
 ```bash
-# Supabase Configuration
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-
 # Cloudflare R2 Configuration
-VITE_CLOUDFLARE_R2_ACCOUNT_ID=your_account_id
-VITE_CLOUDFLARE_R2_ACCESS_KEY_ID=your_access_key
-VITE_CLOUDFLARE_R2_SECRET_ACCESS_KEY=your_secret_key
-VITE_CLOUDFLARE_R2_BUCKET_NAME=tasker
-VITE_CLOUDFLARE_R2_ENDPOINT=https://your_account_id.r2.cloudflarestorage.com
+CLOUDFLARE_R2_ACCOUNT_ID=your_account_id
+CLOUDFLARE_R2_ACCESS_KEY_ID=your_access_key
+CLOUDFLARE_R2_SECRET_ACCESS_KEY=your_secret_key
+CLOUDFLARE_R2_BUCKET_NAME=tasker
+CLOUDFLARE_R2_ENDPOINT=https://your_account_id.r2.cloudflarestorage.com
 ```
 
 ## 📋 Build Configuration (Both Platforms)

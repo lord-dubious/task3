@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from './useAuth';
-import { useSupabaseStorage } from './useSupabaseStorage';
+import { useStorage } from './useStorage';
 import type { OptimizedMedia } from '../utils/mediaOptimization';
 import { MediaOptimizer } from '../utils/mediaOptimization';
 import { toast } from 'sonner';
@@ -28,7 +28,7 @@ export function useMediaLibrary() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
-  const { uploadFile, deleteFile } = useSupabaseStorage();
+  const { uploadFile, deleteFile } = useStorage();
 
   const fetchMediaItems = useCallback(async () => {
     if (!user) return;

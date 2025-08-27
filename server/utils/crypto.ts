@@ -45,12 +45,11 @@ export function encrypt(text: string): string {
     const key = deriveKey(masterKey, salt);
     
     // Create cipher
-    const cipher = crypto.createCipherGCM(ALGORITHM, key, iv);
+    const cipher = crypto.createCipheriv(ALGORITHM, key, iv);
     cipher.setAAD(salt); // Use salt as additional authenticated data
 
     // Encrypt the text
-    let encrypted = cipher.update(text, 'utf8', 'hex');
-    encrypted += cipher.final('hex');
+    const encryptedBuf = Buffer.concat([cipher.update(text, 'utf8'), cipher.final()]);
 
     // Get the authentication tag
     const tag = cipher.getAuthTag();
@@ -60,7 +59,7 @@ export function encrypt(text: string): string {
       salt,
       iv,
       tag,
-      Buffer.from(encrypted, 'hex')
+      encryptedBuf
     ]);
 
     return combined.toString('base64');
@@ -93,13 +92,13 @@ export function decrypt(encryptedData: string): string {
     const key = deriveKey(masterKey, salt);
     
     // Create decipher
-    const decipher = crypto.createDecipherGCM(ALGORITHM, key, iv);
+    const decipher = crypto.createDecipheriv(ALGORITHM, key, iv);
     decipher.setAuthTag(tag);
     decipher.setAAD(salt); // Use salt as additional authenticated data
 
     // Decrypt the data
-    let decrypted = decipher.update(encrypted, undefined, 'utf8');
-    decrypted += decipher.final('utf8');
+    const decryptedBuf = Buffer.concat([decipher.update(encrypted), decipher.final()]);
+    const decrypted = decryptedBuf.toString('utf8');
 
     return decrypted;
   } catch (error) {
